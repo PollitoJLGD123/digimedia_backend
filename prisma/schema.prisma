@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model contactanos {
+  id                       Int      @id @default(autoincrement())
+  nombre                   String?  @db.VarChar(250)
+  email                    String?  @db.VarChar(250)
+  servicio                 String?  @db.VarChar(250)
+  numero                   String?  @db.VarChar(9)
+  mensaje                  String?  @db.Text
+  emailMarck               String?  @db.VarChar(10)
+  new                      String?  @db.VarChar(10)
+  production               String?  @db.VarChar(10)
+  estado                   String?  @db.VarChar(50)
+  fecha_hora               DateTime @default(now()) @db.Timestamp(0)
+  fecha_hora_actualizacion DateTime @default(now()) @db.Timestamp(0)
+}
+
+model libroreclamacion {
+  idReclamacion            Int    @id @default(autoincrement())
+  nombre                   String @db.VarChar(100)
+  apellido                 String @db.VarChar(100)
+  documento                String @db.VarChar(100)
+  numeroDocumento          String @db.VarChar(100)
+  email                    String @db.VarChar(100)
+  celular                  String @db.VarChar(20)
+  direccion                String @db.VarChar(250)
+  distrito                 String @db.VarChar(250)
+  ciudad                   String @db.VarChar(250)
+  tipoReclamo              String @db.VarChar(20)
+  servicioContratado       String @db.VarChar(250)
+  reclamoPerson            String @db.VarChar(1050)
+  checkReclamoForm         String @db.VarChar(10)
+  aceptaPoliticaPrivacidad String @db.VarChar(10)
+}
+
+model modalbranding {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(100)
+  telefono String @db.VarChar(9)
+  correo   String @db.VarChar(200)
+}
+
+model modaldesing {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(100)
+  telefono String @db.VarChar(9)
+  correo   String @db.VarChar(200)
+}
+
+model modalgestion {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(100)
+  telefono String @db.VarChar(9)
+  correo   String @db.VarChar(200)
+}
+
+model modalmarketing {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(100)
+  telefono String @db.VarChar(9)
+  correo   String @db.VarChar(200)
+}
+
+model personcamino5 {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(250)
+  email    String @db.VarChar(250)
+  telefono String @db.VarChar(20)
+}
+
+model personcampa_as3 {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(250)
+  telefono String @db.VarChar(20)
+  email    String @db.VarChar(250)
+
+  @@map("personcampañas3")
+}
+
+model persondigi1 {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(250)
+  telefono String @db.VarChar(20)
+  email    String @db.VarChar(250)
+  service  String @db.VarChar(250)
+}
+
+model personredes4 {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(250)
+  telefono String @db.VarChar(20)
+  email    String @db.VarChar(250)
+}
+
+model personweb2 {
+  id       Int    @id @default(autoincrement())
+  nombre   String @db.VarChar(250)
+  email    String @db.VarChar(250)
+  telefono String @db.VarChar(20)
+}
+
+model posting_blog {
+  id        Int       @id @default(autoincrement())
+  titulo    String?   @db.VarChar(300)
+  contenido String?   @db.Text
+  link      String?   @db.Text
+  fecha     DateTime? @db.DateTime(0)
+}
+
+model usuarios {
+  id         Int    @id @default(autoincrement())
+  usuario    String @db.VarChar(250)
+  contrasena String @db.VarChar(250)
+  nombre     String @db.VarChar(250)
+  rol        String @db.VarChar(30)
+}
