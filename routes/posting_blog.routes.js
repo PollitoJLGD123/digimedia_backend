@@ -1,10 +1,8 @@
 const express = require("express")
 const app = express()
 
-const controller = require("../controllers/contactanos.controller")
+const controller = require("../controllers/posting_blog.controller")
 
 app.get("/", controller.get)
-app.post("/", controller.get)
-
 
 module.exports = app
