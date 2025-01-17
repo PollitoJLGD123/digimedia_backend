@@ -36,7 +36,7 @@ CREATE TABLE `contactanos` (
   `fecha_hora` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_hora_actualizacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +73,7 @@ CREATE TABLE `libroreclamacion` (
   `checkReclamoForm` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `aceptaPoliticaPrivacidad` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`idReclamacion`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -82,6 +82,7 @@ CREATE TABLE `libroreclamacion` (
 
 LOCK TABLES `libroreclamacion` WRITE;
 /*!40000 ALTER TABLE `libroreclamacion` DISABLE KEYS */;
+INSERT INTO `libroreclamacion` VALUES (1,'a','a','a','a','a','a','a','a','a','a','0','0','0','0');
 /*!40000 ALTER TABLE `libroreclamacion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,137 +190,6 @@ INSERT INTO `modalmarketing` VALUES (1,'Daniela Infantes','999351599','danielami
 UNLOCK TABLES;
 
 --
--- Table structure for table `personcamino5`
---
-
-DROP TABLE IF EXISTS `personcamino5`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `personcamino5` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(250) NOT NULL,
-  `email` varchar(250) NOT NULL,
-  `telefono` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `personcamino5`
---
-
-LOCK TABLES `personcamino5` WRITE;
-/*!40000 ALTER TABLE `personcamino5` DISABLE KEYS */;
-INSERT INTO `personcamino5` VALUES (2,'Daniela Infantes','danielamij251@gmail.com','999 351 599'),(3,'carloss','informestami01@gmail.com','978 883 199'),(4,'Juan carlos','yuntasproducciones@gmail.com','912849782'),(5,'Daniela Infantes','danielamij251@gmail.com','999 351 599'),(6,'Daniela Infantes','danielamij251@gmail.com','999351599'),(7,'sebastian','taodrake01@gmail.com','940759137'),(8,'sebastian','taodrake01@gmail.com','940759137'),(9,'sebastian','sebastian.clover.52@gmail.com','940759137'),(10,'jennyfer Jesus ','hornavillarjenni@gmail.com','943004092'),(11,'Antony Aranda','axellaziness@gmail.com','970339137'),(12,'hoy','asdad@hotmail.com','987654321'),(13,'hoy2','asdad@hotmail.com','987654321');
-/*!40000 ALTER TABLE `personcamino5` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `personcampañas3`
---
-
-DROP TABLE IF EXISTS `personcampañas3`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `personcampañas3` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(250) NOT NULL,
-  `telefono` varchar(20) NOT NULL,
-  `email` varchar(250) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `personcampañas3`
---
-
-LOCK TABLES `personcampañas3` WRITE;
-/*!40000 ALTER TABLE `personcampañas3` DISABLE KEYS */;
-INSERT INTO `personcampañas3` VALUES (1,'Daniela Infantes','999351599','danielamij251@gmail.com'),(2,'Daniela Infantes','999351599','danielamij251@gmail.com'),(3,'Daniela Infantes','999351599','danielamij251@gmail.com'),(4,'Daniela Infantes','999 351 599','danielamij251@gmail.com'),(5,'Daniela Infantes','999351599','danielamij251@gmail.com'),(6,'Daniela Infantes','999351599','danielamij251@gmail.com'),(7,'carloss','936910425','ventasneonhouse@gmail.com'),(8,'Daniela Infantes','999 351 599','danielamij251@gmail.com'),(9,'carloss','912 849 782','yuntasproducciones@gmail.com'),(10,'Juan carlos','912849782','yuntasproducciones@gmail.com'),(11,'Diego MF','900265655','dmarquezf11@gmail.com'),(12,'hoy','987654321','asdad@hotmail.com'),(13,'hoy','987654321','asdad@hotmail.com'),(14,'hoy','987654321','asdad@hotmail.com'),(15,'hoy','987654321','asdad@hotmail.com'),(16,'hoy','987654321','asdad@hotmail.com');
-/*!40000 ALTER TABLE `personcampañas3` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `persondigi1`
---
-
-DROP TABLE IF EXISTS `persondigi1`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `persondigi1` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(250) NOT NULL,
-  `telefono` varchar(20) NOT NULL,
-  `email` varchar(250) NOT NULL,
-  `service` varchar(250) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `persondigi1`
---
-
-LOCK TABLES `persondigi1` WRITE;
-/*!40000 ALTER TABLE `persondigi1` DISABLE KEYS */;
-INSERT INTO `persondigi1` VALUES (17,'sebastian','940759137','sebastian.clover.52@gmail.com','0'),(18,'johao montoya','910376683','johaomontoya01@gmail.com','0'),(19,'Daniela Infantes','999351599','danielamij251@gmail.com','1'),(20,'Daniela Infantes','999355516','danielamij251@gmail.com','1'),(21,'Daniela Infantes','999351599','danielamij251@gmail.com','0'),(22,'Daniela Infantes','999351599','danielamij251@gmail.com','0'),(23,'Gabriela Chinga Pastor','991494279','gabychinga@gmail.com','0'),(24,'Victor Miguel Granda Herrera','966956176','grandahvictor@gmail.com','0'),(25,'Victor Miguel Granda Herrera','966956176','grandahvictor@gmail.com','0'),(26,'Daniela Infantes','999351599','danielamij251@gmail.com','0'),(27,'sebastian','940759137','sebastian.clover.52@gmail.com','0'),(28,'dikalz','931805941','dikalzeeuu@gmail.com','0'),(29,'Daniela Infantes','999351599','danielamij251@gmail.com','1'),(30,'Daniela Infantes','999351599','danielamij251@gmail.com','0'),(31,'Daniela Infantes','999351599','danielamij251@gmail.com','0'),(32,'Gabriela Chinga Pastor','991494279','gabychinga@gmail.com','0'),(33,'Levanoi','989898989','dikalzeeuu@gmail.com','2'),(34,'Daniela Infantes','999351599','danielamij251@gmail.com','0'),(35,'asds','999888777','dikalzeeuu@gmail.com','1'),(37,'Diaklz','931805941','dikalz@gmail.com','Diseño y Desarrollo Web'),(38,'sdasd sadas ','931805941','dikalzeeuu@gmail.com','Diseño y Desarrollo Web'),(39,'sdasd sadsa ','994673564','123@gmail.com','Diseño y Desarrollo Web'),(40,'sdasd','931805941','asdsd@gmail.com','Gestión de Redes Sociales'),(41,'sadasd','931805941','asdasd@gmail.com','Marketing y Gestión Digital'),(42,'123','931805941','diegolevanososa@gmail.com','Diseño y Desarrollo Web'),(43,'123','931805941','123@gmail.com','Diseño y Desarrollo Web'),(44,'Ssndkska','931805941','Ajjsa@gmail.com','Diseño y Desarrollo Web'),(45,'2323','931805941','122@gmail.com','Diseño y Desarrollo Web'),(46,'12112','931805941','123@gmail.com','Diseño y Desarrollo Web'),(47,'diego','931805941','123@gmail.com','Diseño y Desarrollo Web'),(48,'Diego Bautista López','954368018','diego.bautistamlp@gmail.com','Diseño y Desarrollo Web'),(49,'Diego Bautista López','954368018','diego.bautistamlp@gmail.com','Diseño y Desarrollo Web'),(50,'Diego Bautista López','954368018','diego.bautistamlp@gmail.com','Gestión de Redes Sociales'),(51,'asdasd','954368018','diego.bautis@gmail.com','Diseño y Desarrollo Web'),(52,'Diego Bautista López','954368018','diego.bautistamlp@gmail.com','Diseño y Desarrollo Web'),(53,'Diego Bautista López','913746209','diego.bautistamlp@gmail.com','Diseño y Desarrollo Web'),(54,'Diego Bautista López','954368018','diego.bautistamlp@gmail.com','Diseño y Desarrollo Web'),(55,'Diego Bautista López','954368018','diego.bautistamlp@gmail.com','Gestión de Redes Sociales'),(56,'Diego Bautista López','954368018','diego.bautistamlp@gmail.com','Diseño y Desarrollo Web'),(57,'Alexia Villa-Gracía','926843547','avcm030820@gmail.com','Marketing y Gestión Digital'),(58,'Franck candela','913469852','candelafernandezf@gmail.com','Diseño y Desarrollo Web');
-/*!40000 ALTER TABLE `persondigi1` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `personredes4`
---
-
-DROP TABLE IF EXISTS `personredes4`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `personredes4` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(250) NOT NULL,
-  `telefono` varchar(20) NOT NULL,
-  `email` varchar(250) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `personredes4`
---
-
-LOCK TABLES `personredes4` WRITE;
-/*!40000 ALTER TABLE `personredes4` DISABLE KEYS */;
-INSERT INTO `personredes4` VALUES (1,'Daniela Infantes','999351599','danielamij251@gmail.com'),(2,'Daniela Infantes','999351599','danielamij251@gmail.com'),(3,'Daniela Infantes','999351599','danielamij251@gmail.com'),(4,'Daniela Infantes','999351599','danielamij251@gmail.com'),(5,'Rosa Jhannis ','936910425','ventasneonhouse@gmail.com'),(6,'Juan carlos','936910425','yuntasproducciones@gmail.com'),(7,'juka','978 883 199','informestami01@gmail.com'),(8,'sebastian','940759137','sebastian.clover.52@gmail.com'),(9,'hoy','987654351','asdad@hotmail.com');
-/*!40000 ALTER TABLE `personredes4` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `personweb2`
---
-
-DROP TABLE IF EXISTS `personweb2`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `personweb2` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(250) NOT NULL,
-  `email` varchar(250) NOT NULL,
-  `telefono` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `personweb2`
---
-
-LOCK TABLES `personweb2` WRITE;
-/*!40000 ALTER TABLE `personweb2` DISABLE KEYS */;
-INSERT INTO `personweb2` VALUES (5,'Daniela Infantes','danielamij251@gmail.com','999351599'),(6,'Daniela Infantes','danielamij251@gmail.com','999351599'),(7,'Daniela Infantes','danielamij251@gmail.com','999351599'),(8,'Daniela Infantes','danielamij251@gmail.com','999351599'),(9,'Daniela Infantes','danielamij251@gmail.com','999351599'),(10,'Daniela Infantes','danielamij251@gmail.com','999351599'),(11,'Daniela','danielamij251@gmail.com','999351599'),(12,'Daniela Infantes','danielamij251@gmail.com','999351599'),(13,'carloss','informestami01@gmail.com','978 883 199'),(14,'Daniela Infantes','danielamij251@gmail.com','999 351 599'),(15,'carloss','informestami01@gmail.com','978 883 199'),(16,'Daniela Infantes','danielamij251@gmail.com','999351599'),(17,'carloss','tmlighting@hotmail.com','936910425'),(18,'Juan','dmarquezf11@gmail.com','900265655'),(19,'johao montoya','kodabarbitas87@gmail.com','910376683'),(20,'asdasdad','dadasd@hotmail.com','987654321'),(21,'asdada','dadasd@hotmail.com','997742033'),(22,'dada','brayan.alaya@hotmail.com','987654321'),(23,'asdad','asdad@hotmail.com','987654321'),(24,'asdad','asdad@hotmail.com','987654321'),(25,'cerveza artesanal helada1','asdad@hotmail.com','987654321'),(26,'sdadad','asdad@hotmail.com','987654321'),(27,'hoy','asdad@hotmail.com','987354321');
-/*!40000 ALTER TABLE `personweb2` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `posting_blog`
 --
 
@@ -333,7 +203,7 @@ CREATE TABLE `posting_blog` (
   `link` text,
   `fecha` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -360,7 +230,7 @@ CREATE TABLE `usuarios` (
   `nombre` varchar(250) NOT NULL,
   `rol` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -382,4 +252,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-09 17:13:48
+-- Dump completed on 2025-01-17 10:55:07
