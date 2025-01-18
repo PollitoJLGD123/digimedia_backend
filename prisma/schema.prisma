@@ -68,44 +68,6 @@ model modalmarketing {
   correo   String @db.VarChar(200)
 }
 
-model personcamino5 {
-  id       Int    @id @default(autoincrement())
-  nombre   String @db.VarChar(250)
-  email    String @db.VarChar(250)
-  telefono String @db.VarChar(20)
-}
-
-model personcampa_as3 {
-  id       Int    @id @default(autoincrement())
-  nombre   String @db.VarChar(250)
-  telefono String @db.VarChar(20)
-  email    String @db.VarChar(250)
-
-  @@map("personcampañas3")
-}
-
-model persondigi1 {
-  id       Int    @id @default(autoincrement())
-  nombre   String @db.VarChar(250)
-  telefono String @db.VarChar(20)
-  email    String @db.VarChar(250)
-  service  String @db.VarChar(250)
-}
-
-model personredes4 {
-  id       Int    @id @default(autoincrement())
-  nombre   String @db.VarChar(250)
-  telefono String @db.VarChar(20)
-  email    String @db.VarChar(250)
-}
-
-model personweb2 {
-  id       Int    @id @default(autoincrement())
-  nombre   String @db.VarChar(250)
-  email    String @db.VarChar(250)
-  telefono String @db.VarChar(20)
-}
-
 model posting_blog {
   id        Int       @id @default(autoincrement())
   titulo    String?   @db.VarChar(300)
