@@ -1,16 +1,18 @@
-const express = require("express")
-const app = express()
+const express = require("express");
+const { saveContact, getContacts, deleteContact, updateContactStatus } = require("../controllers/contactanos.controller");
 
-const controller = require("../controllers/contactanos.controller")
+const router = express.Router();
 
-//Api para mandar toda la informacion de tipo GET con paginación de 20 en 20
-//Api para guardar información en el backend ( Nombre, Email, Servicio, numero y mensaje )
-//Api para actualizar información el Estado de 0 a 1
-//Api para eliminar un registro dependiendo del iD ue llegue del frontend por query
+// Ruta para guardar contacto
+router.post("/contacts", saveContact);
 
-app.get("/", controller.get)
-app.post("/", controller.create)
-app.put("/", controller.update)
-app.delete("/", controller.delete)
+// Ruta para obtener contactos con paginación
+router.get("/contacts", getContacts);
 
-module.exports = app
+// Ruta para eliminar un contacto por ID
+router.delete("/contacts/:id", deleteContact);
+
+// Ruta para actualizar el estado de un contacto (de 0 a 1)
+router.patch("/contacts/:id", updateContactStatus);
+
+module.exports = router;
