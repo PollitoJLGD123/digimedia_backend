@@ -1,10 +1,9 @@
-const express = require("express")
-const app = express()
+const express = require("express");
+const { saveContact } = require("../controllers/contactanos.controller");
 
-const controller = require("../controllers/contactanos.controller")
+const router = express.Router();
 
-app.get("/", controller.get)
-app.post("/", controller.get)
+// Ruta para guardar contacto
+router.post("/contact", saveContact);
 
-
-module.exports = app
+module.exports = router;
