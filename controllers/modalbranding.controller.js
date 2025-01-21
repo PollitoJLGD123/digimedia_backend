@@ -1,5 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = require("../orm")
+const { isNumeric, isEmpty } = require("validator")
+const bcrypt = require("bcryptjs")
 
 
 module.exports = {
@@ -111,4 +113,26 @@ module.exports = {
 
     
     //para el delete
+    delete: async (req, res) => {
+
+        const id = req.body.id ?? ""
+
+        if (!isNumeric(id)) {
+            return res.json({ status: 400, message: "No pasó la validación" })
+        }
+
+        await prisma.modalbranding.delete({
+            where: {
+                id: parseInt(id)
+            }
+        }).then(data => {
+            return res.json({ status: 200,
+                message: "Eliminado con éxito",
+                data: data })
+        }).catch(error => {
+            console.log(error);
+            return res.json({ status: 500, message: "Server error" })
+        })
+
+    },
 };

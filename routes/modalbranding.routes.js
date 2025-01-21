@@ -12,4 +12,7 @@ app.get("/", controller.get)
 // Ruta POST para guardar información
 app.post("/", controller.create);
 
+//Ruta DELETE para eliminar
+app.delete("/", controller.delete);
+
 module.exports = app
