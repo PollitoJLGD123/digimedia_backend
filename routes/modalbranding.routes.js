@@ -9,5 +9,7 @@ const controller = require("../controllers/modalbranding.controller")
 
 app.get("/", controller.get)
 
+// Ruta POST para guardar información
+app.post("/", controller.create);
 
 module.exports = app
