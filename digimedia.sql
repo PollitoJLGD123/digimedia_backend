@@ -253,3 +253,50 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-01-17 10:55:07
+
+
+-- Primero creamos la tabla de servicios
+CREATE TABLE `servicios` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `descripcion` varchar(250) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- Insertamos los servicios existentes
+INSERT INTO `servicios` (nombre, descripcion) VALUES
+  ('Branding', 'Servicios de branding y diseño de marca'),
+  ('Design', 'Servicios de diseño gráfico y web'),
+  ('Gestión', 'Servicios de gestión de proyectos'),
+  ('Marketing', 'Servicios de marketing digital');
+
+-- Creamos la nueva tabla modalservicios
+CREATE TABLE `modalservicios` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `telefono` varchar(9) NOT NULL,
+  `correo` varchar(200) NOT NULL,
+  `id_servicio` int NOT NULL,
+  `fecha_registro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`id_servicio`) REFERENCES `servicios`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+-- Migramos los datos de las tablas existentes
+INSERT INTO modalservicios (nombre, telefono, correo, id_servicio)
+SELECT nombre, telefono, correo, 1 FROM modalbranding;
+
+INSERT INTO modalservicios (nombre, telefono, correo, id_servicio)
+SELECT nombre, telefono, correo, 2 FROM modaldesing;
+
+INSERT INTO modalservicios (nombre, telefono, correo, id_servicio)
+SELECT nombre, telefono, correo, 3 FROM modalgestion;
+
+INSERT INTO modalservicios (nombre, telefono, correo, id_servicio)
+SELECT nombre, telefono, correo, 4 FROM modalmarketing;
+
+-- Una vez migrados los datos, eliminamos las tablas antiguas
+DROP TABLE IF EXISTS modalmarketing;
+DROP TABLE IF EXISTS modalgestion;
+DROP TABLE IF EXISTS modaldesing;
+DROP TABLE IF EXISTS modalbranding;
