@@ -83,6 +83,9 @@ module.exports = {
         const usuario = req.body.usuario ?? ""
         const password = req.body.password ?? ""
 
+        console.log(req.body);
+        
+
         if (isEmpty(usuario) || isEmpty(password)) {
             return res.json({ status: 400, message: "No pasó la validación" })
         }
@@ -106,9 +109,6 @@ module.exports = {
         }).catch(error => {
             return res.json({ status: 400, message: "Server error" })
         })
-
-
-
     },
 
     updatePassword: async (req, res) => {

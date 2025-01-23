@@ -12,7 +12,7 @@ app.get("/", authMiddle ,controller.get)
 //login
 app.post("/login", controller.login)
 
-//Api para guardar información en el backend ( Nombre, Usuario, Password, rol)
+//Api para guardar información en el backend ( Nombre, Usuario, Password)
 app.post("/", controller.create)
 
 //avtualizar contraseña
