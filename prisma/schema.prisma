@@ -39,7 +39,21 @@ model libroreclamacion {
   checkReclamoForm         String @db.VarChar(10)
   aceptaPoliticaPrivacidad String @db.VarChar(10)
 }
+model servicios {
+  id          Int             @id @default(autoincrement())
+  nombre      String         @db.VarChar(100)
+  descripcion String?        @db.VarChar(250)
+  solicitudes modalservicios[]
+}
 
+model modalservicios {
+  id          Int       @id @default(autoincrement())
+  nombre      String    @db.VarChar(100)
+  telefono    String    @db.VarChar(9)
+  correo      String    @db.VarChar(200)
+  id_servicio Int
+  servicio    servicios @relation(fields: [id_servicio], references: [id])
+}
 model modalbranding {
   id       Int    @id @default(autoincrement())
   nombre   String @db.VarChar(100)

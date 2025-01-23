@@ -7,10 +7,12 @@ const controller = require("../controllers/modalmarketing.controller")
 const authMiddle = require("../middlewares/jwt.middleware")
 
 //Api para mandar toda la informacion de tipo GET con paginación de 20 en 20
-//Api para guardar información del backend ( Nombre, Email, numero )
+app.get("/", authMiddle, controller.get)
+
+//Api para guardar información en el backend ( Nombre, Email, numero )
+app.post("/", authMiddle, controller.create);
+
 //Api para eliminar un registro dependiendo del iD ue llegue del frontend por query
-
-app.get("/", controller.get)
-
+app.delete("/", authMiddle, controller.delete);
 
 module.exports = app

@@ -11,11 +11,14 @@ module.exports = {
         const skip = (page - 1) * limit;
 
         await prisma.$transaction([
-            prisma.modalmarketing.findMany({
-                skip: skip, 
-                take: limit
+            prisma.modalservicios.findMany({
+                skip: skip,
+                take: limit,
+                include: {
+                    servicio: true
+                }
             }),
-            prisma.modalmarketing.count()
+            prisma.modalservicios.count()
         ]).then(data => {
             return res.json({
                 data: data[0],
@@ -31,61 +34,38 @@ module.exports = {
                 error: "Error al obtener los datos",
                 details: error.message
             });
-        })
+        });
     },
 
     // POST para guardar información
     create: async (req, res) => {
         try {
-            // Validar body vacío
-            if (!req.body || Object.keys(req.body).length === 0) {
+            const { nombre, telefono, correo, id_servicio } = req.body;
+
+            // Validaciones
+            if (!nombre || !telefono || !correo || !id_servicio) {
                 return res.status(400).json({
-                    error: "El body de la petición está vacío",
-                    tip: "Asegúrate de enviar un JSON con los campos: nombre, telefono, correo"
-                });
-            }
-
-            const { nombre, telefono, correo } = req.body;
-
-            // Validar campos requeridos
-            const missingFields = [];
-            if (!nombre) missingFields.push('nombre');
-            if (!telefono) missingFields.push('telefono');
-            if (!correo) missingFields.push('correo');
-
-            if (missingFields.length > 0) {
-                return res.status(400).json({
-                    error: "Campos faltantes",
-                    missingFields,
-                    receivedData: req.body
+                    error: "Todos los campos son requeridos",
+                    requiredFields: ['nombre', 'telefono', 'correo', 'id_servicio']
                 });
             }
 
             // Validar longitudes
-            if (nombre.length > 100) {
+            if (nombre.length > 100 || telefono.length > 9 || correo.length > 200) {
                 return res.status(400).json({
-                    error: "El nombre excede los 100 caracteres permitidos"
+                    error: "Longitud de campos excedida"
                 });
             }
 
-            if (telefono.length > 9) {
-                return res.status(400).json({
-                    error: "El teléfono excede los 9 caracteres permitidos"
-                });
-            }
-
-            if (correo.length > 200) {
-                return res.status(400).json({
-                    error: "El correo excede los 200 caracteres permitidos"
-                });
-            }
-
-            // Crear registro
-            const newRecord = await prisma.modalmarketing.create({
+            const newRecord = await prisma.modalservicios.create({
                 data: {
                     nombre,
                     telefono,
-                    correo
+                    correo,
+                    id_servicio: parseInt(id_servicio)
+                },
+                include: {
+                    servicio: true
                 }
             });
 
@@ -107,22 +87,22 @@ module.exports = {
         const id = req.body.id ?? "";
 
         if (!isNumeric(id)) {
-            return res.json({ status: 400, message: "No pasó la validación" })
+            return res.json({ status: 400, message: "ID inválido" });
         }
 
-        await prisma.modalmarketing.delete({
+        await prisma.modalservicios.delete({
             where: {
                 id: parseInt(id)
             }
         }).then(data => {
-            return res.json({ 
+            return res.json({
                 status: 200,
                 message: "Eliminado con éxito",
-                data: data 
-            })
+                data: data
+            });
         }).catch(error => {
             console.log(error);
-            return res.json({ status: 500, message: "Server error" })
-        })
+            return res.json({ status: 500, message: "Server error" });
+        });
     }
 };
