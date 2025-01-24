@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ContactanosController;
 use App\Http\Controllers\Api\ModalesController;
 use App\Http\Controllers\Api\ReclamacionesController;
 use App\Http\Controllers\Api\ServiciosController;
+use App\Http\Controllers\Api\ModalServiciosController;
 use Illuminate\Support\Facades\Route;
 
 $urlApi = env("APP_API");
@@ -49,5 +50,14 @@ Route::post($urlApi . '/servicios', [ServiciosController::class, "create"]);
 // Ruta para eliminar un contacto por ID
 Route::delete($urlApi . '/servicios/{id}', [ServiciosController::class, "delete"]);
 
+
+// Api de Modales de contacto
+// Ruta para obtener contactos con paginación (de 20 en 20)
+Route::get($urlApi . '/modalservicios', [ModalServiciosController::class, "get"]);
+// Usar validacion para  los datos con VALIDATE de laravel
+// Api para guardar información en el backend (nombre)
+Route::post($urlApi . '/modalservicios', [ModalServiciosController::class, "create"]);
+// Ruta para eliminar un contacto por ID
+Route::delete($urlApi . '/modalservicios/{id}', [ModalServiciosController::class, "delete"]);
 
 
