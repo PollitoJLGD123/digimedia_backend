@@ -49,6 +49,16 @@ Route::post('/servicios', [ServiciosController::class, "create"]);
 // Ruta para eliminar un contacto por ID
 Route::delete('/servicios/{id}', [ServiciosController::class, "delete"]);
 
-
+//login de usuario
+Route::post('/user/login', [UserController::class, "login"]);
+// Ruta para obtener usuarios con paginación (de 20 en 20)
+Route::get('/user', [UserController::class, "getAllByPage"]);
+// Ruta para crear un usuario con datos (name, email, password)
 Route::post('/user', [UserController::class, "create"]);
+// Ruta para crear un usuario con datos (name) y id por parametros
+Route::put('/user/{id}', [UserController::class, "update"]);
+// Ruta para actualizar contraseña de un usuario con datos (password) y id por parametros
+Route::put('/user/pass/{id}', [UserController::class, "updatePass"]);
+// Ruta para eliminar un usuario con id por parametros
+Route::delete('/user/{id}', [UserController::class, "delete"]);
 
