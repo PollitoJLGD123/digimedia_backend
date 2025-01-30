@@ -27,3 +27,4 @@ class libroreclamacion extends Model
 
     public $timestamps = false;
 }
+//others
