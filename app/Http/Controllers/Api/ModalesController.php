@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
 use App\Mail\MailService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -11,36 +13,36 @@ use Illuminate\Support\Facades\Mail;
 class ModalesController extends Controller
 {
     public function get(Request $request)
-{
-    $page = $request->query('page', 1); // Página actual, por defecto 1
-    $limit = 20; // Número de registros por página
-    $offset = ($page - 1) * $limit;
+    {
+        $page = $request->query('page', 1); // Página actual, por defecto 1
+        $limit = 20; // Número de registros por página
+        $offset = ($page - 1) * $limit;
 
-    try {
-        // Obtener los registros paginados y el total de elementos
-        $data = DB::table('modalservicios')
-            ->skip($offset)
-            ->take($limit)
-            ->get();
+        try {
+            // Obtener los registros paginados y el total de elementos
+            $data = DB::table('modalservicios')
+                ->skip($offset)
+                ->take($limit)
+                ->get();
 
-        $totalItems = DB::table('modalservicios')->count();
+            $totalItems = DB::table('modalservicios')->count();
 
-        return response()->json([
-            'data' => $data,
-            'pagination' => [
-                'currentPage' => $page,
-                'totalPages' => ceil($totalItems / $limit),
-                'totalItems' => $totalItems,
-                'itemsPerPage' => $limit
-            ]
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'error' => 'Error al obtener los datos',
-            'details' => $e->getMessage()
-        ], 500);
+            return response()->json([
+                'data' => $data,
+                'pagination' => [
+                    'currentPage' => $page,
+                    'totalPages' => ceil($totalItems / $limit),
+                    'totalItems' => $totalItems,
+                    'itemsPerPage' => $limit
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error al obtener los datos',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
-}
 
     // Método para crear un nuevo registro en modalservicios
     public function create(Request $request)
@@ -54,17 +56,21 @@ class ModalesController extends Controller
                 'servicio_id' => 'required|integer|exists:modalservicios,servicio_id', // Validar que el servicio_id exista
             ]);
 
-            // $title = "titulo";
-            // $image = "titulo";
-            // $mensaje2 = nl2br($menssage);
-            Mail::to("brayan.alaya@hotmail")->send(new MailService("meessage", "title", "image","subject"));
+            // Enviar el primer correo inmediatamente
+            dispatch(new SendEmailJob(0, $request->servicio_id, $request->correo));
+
+            // Enviar el segundo correo después de 1 minuto
+            dispatch(new SendEmailJob(1, $request->servicio_id, $request->correo))->delay(Carbon::now()->addMinutes(3));
+
+            // Enviar el tercer correo después de 2 minutos
+            dispatch(new SendEmailJob(2, $request->servicio_id,$request->correo))->delay(Carbon::now()->addMinutes(6));
+
             // Insertar el registro en la tabla
             $newRecord = DB::table('modalservicios')->insertGetId([
                 'nombre' => $validatedData['nombre'],
                 'telefono' => $validatedData['telefono'],
                 'correo' => $validatedData['correo'],
                 'servicio_id' => $validatedData['servicio_id'], // Guardar el servicio_id
-
             ]);
 
 
