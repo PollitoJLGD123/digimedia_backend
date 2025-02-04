@@ -63,6 +63,8 @@ Route::delete('/modalservicios/{id}', [ModalServiciosController::class, "delete"
 Route::post('/user/login', [UserController::class, "login"]);
 // Ruta para obtener usuarios con paginación (de 20 en 20)
 Route::get('/user', [UserController::class, "getAllByPage"]);
+// Ruta para obtener usuario por id
+Route::get('/user/{id}', [UserController::class, "getById"]);
 // Ruta para crear un usuario con datos (name, email, password)
 Route::post('/user', [UserController::class, "create"]);
 // Ruta para crear un usuario con datos (name) y id por parametros

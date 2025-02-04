@@ -14,23 +14,34 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
 {
+
+    public function getById($id) {
+        
+        $validate = Validator::make(["id" => $id], [
+            "id" => "required|numeric",
+        ]);
+
+        if ($validate->fails()) return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
+
+        $user = User::where("id", $id)->get();
+
+        return response()->json([
+            "status" => 200,
+            "data" => $user
+        ]);
+    }
+
     public function getAllByPage(Request $request)
     {
 
-        $page = 1;
-        $perPage = 2;
+        $users = User::orderBy('id', 'desc')->paginate(20);
 
-        $validate = Validator::make($request->all(), [
-            "page" => "required|numeric"
+        return response()->json([
+            "status" => 200,
+            'data' => $users->items(),
+            'total' => $users->total(),
+            'page' => $users->currentPage()
         ]);
-
-        if (!$validate->fails()) {
-            $page = intval($request->query("page"));
-        }
-
-        $users = User::orderBy('created_at', 'desc')->forPage($page, $perPage)->get();
-
-        return response()->json(["status" => 200, "data" => $users]);
     }
 
     public function login(Request $request)
@@ -82,13 +93,13 @@ class UserController extends Controller
         $validate = Validator::make(["id" => $request->id], [
             "id" => "required|numeric",
         ]);
+
         if ($validate->fails()) return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
 
         $validate = Validator::make($request->all(), [
             "name" => "required|string|max:255",
         ]);
         if ($validate->fails()) return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
-
 
         $response = User::where(["id" => intval($id)])->update(["name" => $request->name]);
 
@@ -106,7 +117,7 @@ class UserController extends Controller
         $validate = Validator::make($request->all(), [
             "password" => "required|string|min:4",
         ]);
-        if ($validate->fails()) return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
+        if ($validate->fails()) return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors(), "data" => $request->all()]);
 
         $response = User::where(["id" => intval($id)])->update(["password" => Hash::make($request->password)]);
 
@@ -115,11 +126,14 @@ class UserController extends Controller
 
     public function delete(Request $request, $id)
     {
- 
+
         $validate = Validator::make(["id" => $id], [
             "id" => "required|numeric",
         ]);
+
         if ($validate->fails()) return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
+
+        if (intval($id) == 1) return response()->json(["status" => 422, "message" => "El admin no puede ser eliminado"]);
 
         $response = User::where(["id" => intval($id)])->delete();
 

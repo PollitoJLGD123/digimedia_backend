@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\MailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class ModalesController extends Controller
 {
@@ -43,48 +45,53 @@ class ModalesController extends Controller
 
     // Método para crear un nuevo registro en modalservicios
     public function create(Request $request)
-{
-    try {
-        // Validar los datos del request
-        $validatedData = $request->validate([
-            'nombre' => 'required|string|max:100',
-            'telefono' => 'required|string|max:9',
-            'correo' => 'required|email|max:200|unique:modalservicios',
-            'servicio_id' => 'required|integer|exists:modalservicios,servicio_id', // Validar que el servicio_id exista
-        ]);
+    {
+        try {
+            // Validar los datos del request
+            $validatedData = $request->validate([
+                'nombre' => 'required|string|max:100',
+                'telefono' => 'required|string|max:9',
+                'correo' => 'required|email|max:200',
+                'servicio_id' => 'required|integer|exists:modalservicios,servicio_id', // Validar que el servicio_id exista
+            ]);
 
-        // Insertar el registro en la tabla
-        $newRecord = DB::table('modalservicios')->insertGetId([
-            'nombre' => $validatedData['nombre'],
-            'telefono' => $validatedData['telefono'],
-            'correo' => $validatedData['correo'],
-            'servicio_id' => $validatedData['servicio_id'], // Guardar el servicio_id
-            
-        ]);
-
-        // Respuesta exitosa
-        return response()->json([
-            'message' => 'Registro creado exitosamente',
-            'data' => [
-                'id' => $newRecord,
+            // $title = "titulo";
+            // $image = "titulo";
+            // $mensaje2 = nl2br($menssage);
+            Mail::to("brayan.alaya@hotmail")->send(new MailService("meessage", "title", "image","subject"));
+            // Insertar el registro en la tabla
+            $newRecord = DB::table('modalservicios')->insertGetId([
                 'nombre' => $validatedData['nombre'],
                 'telefono' => $validatedData['telefono'],
                 'correo' => $validatedData['correo'],
-                'servicio_id' => $validatedData['servicio_id'],
-            ]
-        ], 201);
-    } catch (\Illuminate\Validation\ValidationException $error) {
-        return response()->json([
-            'error' => 'Error en la validación',
-            'details' => $error->errors()
-        ], 400);
-    } catch (\Exception $error) {
-        return response()->json([
-            'error' => 'Error al crear el registro',
-            'details' => $error->getMessage()
-        ], 500);
+                'servicio_id' => $validatedData['servicio_id'], // Guardar el servicio_id
+
+            ]);
+
+
+            // Respuesta exitosa
+            return response()->json([
+                'message' => 'Registro creado exitosamente',
+                'data' => [
+                    'id' => $newRecord,
+                    'nombre' => $validatedData['nombre'],
+                    'telefono' => $validatedData['telefono'],
+                    'correo' => $validatedData['correo'],
+                    'servicio_id' => $validatedData['servicio_id'],
+                ]
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $error) {
+            return response()->json([
+                'error' => 'Error en la validación',
+                'details' => $error->errors()
+            ], 400);
+        } catch (\Exception $error) {
+            return response()->json([
+                'error' => 'Error al crear el registro',
+                'details' => $error->getMessage()
+            ], 500);
+        }
     }
-}
 
 
     // Método para eliminar un registro por ID
