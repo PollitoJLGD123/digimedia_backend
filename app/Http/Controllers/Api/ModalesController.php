@@ -10,38 +10,37 @@ use Illuminate\Support\Facades\Mail;
 
 class ModalesController extends Controller
 {
-    // Método para obtener contactos con paginación
     public function get(Request $request)
-    {
-        $page = $request->query('page', 1); // Página actual, por defecto 1
-        $limit = 20; // Número de registros por página
-        $offset = ($page - 1) * $limit;
+{
+    $page = $request->query('page', 1); // Página actual, por defecto 1
+    $limit = 20; // Número de registros por página
+    $offset = ($page - 1) * $limit;
 
-        try {
-            // Obtener los registros paginados y el total de elementos
-            $data = DB::table('modalservicios')
-                ->skip($offset)
-                ->take($limit)
-                ->get();
+    try {
+        // Obtener los registros paginados y el total de elementos
+        $data = DB::table('modalservicios')
+            ->skip($offset)
+            ->take($limit)
+            ->get();
 
-            $totalItems = DB::table('modalservicios')->count();
+        $totalItems = DB::table('modalservicios')->count();
 
-            return response()->json([
-                'data' => $data,
-                'pagination' => [
-                    'currentPage' => $page,
-                    'totalPages' => ceil($totalItems / $limit),
-                    'totalItems' => $totalItems,
-                    'itemsPerPage' => $limit
-                ]
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Error al obtener los datos',
-                'details' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'data' => $data,
+            'pagination' => [
+                'currentPage' => $page,
+                'totalPages' => ceil($totalItems / $limit),
+                'totalItems' => $totalItems,
+                'itemsPerPage' => $limit
+            ]
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error al obtener los datos',
+            'details' => $e->getMessage()
+        ], 500);
     }
+}
 
     // Método para crear un nuevo registro en modalservicios
     public function create(Request $request)

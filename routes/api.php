@@ -47,6 +47,8 @@ Route::get('/servicios', [ServiciosController::class, "get"]);
 // Usar validacion para  los datos con VALIDATE de laravel
 // Api para guardar información en el backend (nombre)
 Route::post('/servicios', [ServiciosController::class, "create"]);
+// Ruta para actualizar el estado de un contacto (de 0 a 1)
+Route::put('/servicios/{id}', [ServiciosController::class, "update"]);
 // Ruta para eliminar un contacto por ID
 Route::delete('/servicios/{id}', [ServiciosController::class, "delete"]);
 
@@ -56,6 +58,8 @@ Route::get('/modalservicios', [ModalServiciosController::class, "get"]);
 // Usar validacion para  los datos con VALIDATE de laravel
 // Api para guardar información en el backend (nombre)
 Route::post('/modalservicios', [ModalServiciosController::class, "create"]);
+// Ruta para actualizar el estado de un contacto (de 0 a 1)
+Route::put('/modalservicios/{id}', [ModalServiciosController::class, "update"]);
 // Ruta para eliminar un contacto por ID
 Route::delete('/modalservicios/{id}', [ModalServiciosController::class, "delete"]);
 
