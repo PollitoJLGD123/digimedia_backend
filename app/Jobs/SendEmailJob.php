@@ -21,8 +21,8 @@ class SendEmailJob implements ShouldQueue
     {
 
         $this->indice = $indice;
-        $this->$servicio_id = $servicio_id;
-        $this->$mailto = $mailto;
+        $this->servicio_id = $servicio_id;
+        $this->mailto = $mailto;
     }
 
     /**
@@ -30,6 +30,7 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
+        
 
         $imagenes_main = [
             // Desarrollo y Diseño
@@ -142,12 +143,34 @@ class SendEmailJob implements ShouldQueue
             ]
         ];
 
-        Mail::to($this->mailto)->send(new MailService(
-            $menssage[$this->servicio_id - 1][$this->indice],
-            $title[$this->servicio_id - 1][$this->indice],
-            $imagenes_main[$this->servicio_id - 1][$this->indice],
-            $subject[$this->servicio_id - 1][$this->indice]
-        ));
+        try {
+            // Validar índices
+            if (!isset($this->servicio_id) || $this->servicio_id < 1 || $this->servicio_id > 4) {
+                throw new \Exception("servicio_id inválido");
+            }
+    
+            $serviceIndex = $this->servicio_id - 1;
+            $messageIndex = $this->indice;
+    
+            // Validar existencia de datos
+            if (!isset($menssage[$serviceIndex][$messageIndex]) ||
+                !isset($title[$serviceIndex][$messageIndex]) ||
+                !isset($imagenes_main[$serviceIndex][$messageIndex]) ||
+                !isset($subject[$serviceIndex][$messageIndex])) {
+                throw new \Exception("Índices no válidos para los arrays de contenido");
+            }
+    
+            // Un solo envío de email con datos validados
+            Mail::to($this->mailto)->send(new MailService(
+                strval($menssage[$serviceIndex][$messageIndex]),
+                strval($title[$serviceIndex][$messageIndex]),
+                strval($imagenes_main[$serviceIndex][$messageIndex]),
+                strval($subject[$serviceIndex][$messageIndex])
+            ));
+    
+        } catch (\Exception $e) {
+            Log::error("Error en SendEmailJob: {$this->servicio_id} - " . $e->getMessage());
+        }
 
     }
 
