@@ -9,7 +9,7 @@
     <meta name="x-apple-disable-message-reformatting">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="telephone=no" name="format-detection">
-    <title>Email-DigiMedia</title>
+    <title>{{ $title }}</title>
     <style type="text/css">
         #outlook a {
             padding: 0;
@@ -413,15 +413,19 @@
                                                             <tr style="border-collapse:collapse">
                                                                 <td class="es-m-txt-l" align="left"
                                                                     style="Margin:0;padding-bottom:5px;padding-top:20px;padding-left:20px;padding-right:20px">
+                                                                    @if(is_string($title))
                                                                     <h2
                                                                         style="Margin:0;line-height:26px;mso-line-height-rule:exactly;font-family:roboto, 'helvetica neue' , helvetica, arial, sans-serif;font-size:22px;font-style:normal;font-weight:normal;color:#a601b8">
-                                                                        <strong>{{ $title }}</strong>
+                                                                        <strong>{!! $title !!}</strong>
                                                                     </h2>
+                                                                    @endif
                                                                 </td>
                                                             </tr>
+                                                            @if(is_string($message))
                                                             <tr style="border-collapse:collapse">
-                                                                {{ $message}}
+                                                                {!! $message !!}
                                                             </tr>
+                                                            @endif
                                                         </table>
                                                     </td>
                                                 </tr>
@@ -449,6 +453,7 @@
                                                         <table
                                                             style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-position:center top"
                                                             width="100%" cellspacing="0" cellpadding="0">
+                                                            @if(is_string($image))
                                                             <tr style="border-collapse:collapse">
                                                                 <td align="center" style="padding:0;Margin:0;font-size:0px"><img class="adapt-img"
                                                                         src="{{ $image }}"
@@ -456,6 +461,7 @@
                                                                         style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
                                                                         width="560"></td>
                                                             </tr>
+                                                            @endif
                                                         </table>
                                                     </td>
                                                 </tr>

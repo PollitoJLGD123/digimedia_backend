@@ -14,19 +14,20 @@ class ModalesController extends Controller
 {
     public function get(Request $request)
     {
-        $page = $request->query('page', 1); // Página actual, por defecto 1
-        $limit = 20; // Número de registros por página
+        $page = $request->query('page', 1);
+        $limit = 20;
         $offset = ($page - 1) * $limit;
-
+    
         try {
-            // Obtener los registros paginados y el total de elementos
+            // Agregar orderBy para ordenar descendentemente
             $data = DB::table('modalservicios')
+                ->orderBy('fecha_registro', 'DESC')
                 ->skip($offset)
                 ->take($limit)
                 ->get();
-
+    
             $totalItems = DB::table('modalservicios')->count();
-
+    
             return response()->json([
                 'data' => $data,
                 'pagination' => [
@@ -53,7 +54,7 @@ class ModalesController extends Controller
                 'nombre' => 'required|string|max:100',
                 'telefono' => 'required|string|max:9',
                 'correo' => 'required|email|max:200',
-                'servicio_id' => 'required|integer|exists:modalservicios,servicio_id', // Validar que el servicio_id exista
+                'servicio_id' => 'required|integer|min:1|max:4', // Validar rango válido
             ]);
 
             // Enviar el primer correo inmediatamente
