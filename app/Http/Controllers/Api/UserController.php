@@ -6,17 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
 
-    public function getById($id) {
-        
+    public function getById($id)
+    {
+
         $validate = Validator::make(["id" => $id], [
             "id" => "required|numeric",
         ]);
@@ -55,14 +55,13 @@ class UserController extends Controller
         if ($validate->fails()) return response()->json(["status" => 422, "message" => "fallo de validacion", "errores" => $validate->errors()]);
 
 
-        $credentials = ['email' => $request->email, 'password' => $request->password];
+        $user = User::where('email', $request->email)->first();
 
-
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(["status" => 409, "message" => "Credenciales incorrectas"]);
         }
 
-        return response()->json(["status" => 200, "token" => compact('token')["token"], "data" => User::where("email", $request->email)->first()]);
+        return response()->json(["status" => 200, "token" => $user->createToken('auth_token')->plainTextToken, "data" => User::where("email", $request->email)->first()]);
     }
 
     public function create(Request $request)
@@ -138,5 +137,12 @@ class UserController extends Controller
         $response = User::where(["id" => intval($id)])->delete();
 
         if ($response) return response()->json(["status" => 200, "message" => "Registro eliminado correctamente"]);
+    }
+
+    public function logout(Request $request)
+    {
+
+        $request->user()->tokens()->delete(); // Revoca todos los tokens del usuario
+        return response()->json(["status" => 200, 'message' => 'Tokens revoked']);
     }
 }
