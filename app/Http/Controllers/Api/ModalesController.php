@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 
 class ModalesController extends Controller
 {
+    //PARA RECIBIR LOS MODALES CON LA INFO DE LOS SERVICIOS
     public function get(Request $request)
     {
         $page = $request->query('page', 1);
@@ -19,9 +20,10 @@ class ModalesController extends Controller
         $offset = ($page - 1) * $limit;
 
         try {
-            // Agregar orderBy para ordenar descendentemente
             $data = DB::table('modalservicios')
-                ->orderBy('fecha_registro', 'DESC')
+                ->join('servicios', 'modalservicios.servicio_id', '=', 'servicios.id') 
+                ->select('modalservicios.*', 'servicios.nombre as servicio_nombre')
+                ->orderBy('modalservicios.fecha_registro', 'DESC')
                 ->skip($offset)
                 ->take($limit)
                 ->get();
@@ -44,6 +46,7 @@ class ModalesController extends Controller
             ], 500);
         }
     }
+
 
     // Método para crear un nuevo registro en modalservicios
     public function create(Request $request)
