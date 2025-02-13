@@ -69,7 +69,7 @@ class ModalesController extends Controller
             // Enviar el primer correo inmediatamente
             dispatch(new SendEmailJob(0, $request->servicio_id, $request->correo));
             // Enviar el segundo correo después de 1 minuto
-            dispatch(new SendEmailJob(1, $request->servicio_id, $request->correo))->delay(Carbon::now()->addMinutes(2));
+            dispatch(new SendEmailJob(1, $request->servicio_id, $request->correo))->delay(Carbon::now()->addMinutes(60 * 24));
             // Enviar el tercer correo después de 2 minutos
             dispatch(new SendEmailJob(2, $request->servicio_id, $request->correo))->delay(Carbon::now()->addMinutes(4));
 
