@@ -78,8 +78,8 @@ class UserController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->admin = 0;
         $user->password = Hash::make($request->password);
-        $user->remember_token = Hash::make(Str::random(25));
 
         $response = $user->save();
 

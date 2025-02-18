@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ReclamacionesController;
 use App\Http\Controllers\Api\ServiciosController;
 use App\Http\Controllers\Api\ModalServiciosController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Middleware\isAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,20 +56,20 @@ Route::delete('/servicios/{id}', [ServiciosController::class, "delete"])->middle
 //login de usuario
 Route::post('/user/login', [UserController::class, "login"]);
 // Ruta para obtener usuarios con paginación (de 20 en 20)
-Route::get('/user', [UserController::class, "getAllByPage"])->middleware('auth:sanctum');
+Route::get('/user', [UserController::class, "getAllByPage"])->middleware(isAdmin::class)->middleware('auth:sanctum');
 // Cerra sesion de usuario
 Route::get('/user/logout', [UserController::class, "logout"])->middleware('auth:sanctum');
 // Route::middleware(['auth:sanctum', 'token.expiration'])->get('/user', [UserController::class, "getAllByPage"]);
 // Ruta para obtener usuario por id
-Route::get('/user/{id}', [UserController::class, "getById"])->middleware('auth:sanctum');
+Route::get('/user/{id}', [UserController::class, "getById"])->middleware(isAdmin::class)->middleware('auth:sanctum');
 // Ruta para crear un usuario con datos (name, email, password)
-Route::post('/user', [UserController::class, "create"])->middleware('auth:sanctum');
+Route::post('/user', [UserController::class, "create"])->middleware(isAdmin::class)->middleware('auth:sanctum');
 // Ruta para crear un usuario con datos (name) y id por parametros
-Route::put('/user/{id}', [UserController::class, "update"])->middleware('auth:sanctum');
+Route::put('/user/{id}', [UserController::class, "update"])->middleware(isAdmin::class)->middleware('auth:sanctum');
 // Ruta para actualizar contraseña de un usuario con datos (password) y id por parametros
-Route::put('/user/pass/{id}', [UserController::class, "updatePass"])->middleware('auth:sanctum');
+Route::put('/user/pass/{id}', [UserController::class, "updatePass"])->middleware(isAdmin::class)->middleware('auth:sanctum');
 // Ruta para eliminar un usuario con id por parametros
-Route::delete('/user/{id}', [UserController::class, "delete"])->middleware('auth:sanctum');
+Route::delete('/user/{id}', [UserController::class, "delete"])->middleware(isAdmin::class)->middleware('auth:sanctum');
 
 
 // // Api de Modales de contacto

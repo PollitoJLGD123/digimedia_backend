@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable    
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'admin',
     ];
 
     /**
@@ -47,13 +48,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function getJWTIdentifier()
+    public function isAdmin()
     {
-        return $this->getKey();  // Retorna la clave primaria del modelo (ID)
+        return $this->admin;
     }
 
-    public function getJWTCustomClaims()
-    {
-        return [];  // Puedes agregar cualquier dato adicional que desees incluir en el token
-    }
 }
