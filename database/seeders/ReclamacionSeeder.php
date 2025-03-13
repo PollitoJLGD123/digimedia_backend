@@ -1,0 +1,70 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+
+class ReclamacionSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $reclamaciones = [
+            [
+                'nombre' => 'Carlos',
+                'apellido' => 'Mendoza Vargas',
+                'documento' => 'DNI',
+                'numeroDocumento' => '45781236',
+                'email' => 'carlos.mendoza@gmail.com',
+                'celular' => '987654321',
+                'direccion' => 'Av. Los Álamos 453, Dpto 302',
+                'distrito' => 'San Borja',
+                'ciudad' => 'Lima',
+                'tipoReclamo' => 'RECLAMO',
+                'servicioContratado' => 'OTROS...',
+                'reclamoPerson' => 'Reclao por el servicio el dia 15/2/2022',
+                'checkReclamoForm' => true,
+                'aceptaPoliticaPrivacidad' => true,
+            ],
+            [
+                'nombre' => 'María',
+                'apellido' => 'Gómez Rodríguez',
+                'documento' => 'CE',
+                'numeroDocumento' => 'CE001234567',
+                'email' => 'maria.gomez@outlook.com',
+                'celular' => '912345678',
+                'direccion' => 'Jr. Huancavelica 287',
+                'distrito' => 'Miraflores',
+                'ciudad' => 'Lima',
+                'tipoReclamo' => 'QUEJA',
+                'servicioContratado' => 'TECHNOLOGY',
+                'reclamoPerson' => 'Servicio malo',
+                'checkReclamoForm' => true,
+                'aceptaPoliticaPrivacidad' => true,
+            ],
+            [
+                'nombre' => 'José Luis',
+                'apellido' => 'Paredes Santillán',
+                'documento' => 'RUC',
+                'numeroDocumento' => '20512345678',
+                'email' => 'administracion@empresaperu.com',
+                'celular' => '976543210',
+                'direccion' => 'Av. Javier Prado Este 1492',
+                'distrito' => 'La Molina',
+                'ciudad' => 'Lima',
+                'tipoReclamo' => 'RECLAMO',
+                'servicioContratado' => 'TECHNOLOGY',
+                'reclamoPerson' => 'Necesito un reembolso',
+                'checkReclamoForm' => true,
+                'aceptaPoliticaPrivacidad' => true,
+            ],
+        ];
+
+        DB::table('reclamaciones')->insert($reclamaciones);
+    }
+}
