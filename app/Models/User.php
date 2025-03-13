@@ -53,4 +53,9 @@ class User extends Authenticatable
         return $this->admin;
     }
 
+    public function empleado()
+    {
+        return $this->hasOne(Empleado::class, 'id_user', 'id');
+    }
+
 }
