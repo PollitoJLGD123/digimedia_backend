@@ -85,7 +85,8 @@ class UserController extends Controller
                 "name" => $user->name,
                 "email" => $user->email,
             ]
-        ], 200);    }
+        ], 200);
+    }
 
     public function create(Request $request)
     {
