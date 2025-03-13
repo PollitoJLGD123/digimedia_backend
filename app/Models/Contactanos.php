@@ -14,16 +14,11 @@ class Contactanos extends Model
 
     // Columnas rellenables
     protected $fillable = [
+        'id_contactanos',
         'nombre',
         'email',
         'numero',
         'mensaje',
         'estado',
-    ];
-
-    // Ocultar columnas al retornar JSON (opcional)
-    protected $hidden = [
-        'created_at',
-        'updated_at',
     ];
 }

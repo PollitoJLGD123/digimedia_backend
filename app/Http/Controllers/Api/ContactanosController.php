@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contactanos;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class ContactanosController extends Controller
@@ -19,15 +20,19 @@ class ContactanosController extends Controller
     public function create(Request $request)
     {
         // Validación de datos
-        $validated = $request->validate([
+        $validated = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'numero' => 'required|string|max:20',
             'mensaje' => 'required|string|max:500',
         ]);
 
+        if($validated->fails()){
+            return response()->json(['errors' => $validated->errors()], 400);
+        }
+
         // Crear un nuevo contacto
-        $contacto = Contactanos::create($validated);
+        $contacto = Contactanos::create($request->all());
 
         return response()->json([
             'message' => 'Contacto guardado exitosamente',
@@ -38,7 +43,7 @@ class ContactanosController extends Controller
     /* Actualizar el estado de un contacto (de 0 a 1) */
     public function update(Request $request, $id)
     {
-        $contacto = Contactanos::find($id);
+        $contacto = Contactanos::findOrFail($id);
 
         if (!$contacto) {
             return response()->json(['error' => 'Contacto no encontrado'], 404);

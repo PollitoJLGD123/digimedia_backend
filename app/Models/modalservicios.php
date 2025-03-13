@@ -10,20 +10,18 @@ class modalservicios extends Model
     protected $table = 'modalservicios';
 
     protected $fillable = [
+        'id_modalservicio',
         'nombre',
         'telefono',
         'correo',
-        'servicio_id'
+        'id_servicio'
     ];
 
     protected $dates = ['fecha_registro'];
-    public $timestamps = false; 
+    public $timestamps = false;
 
-    /**
-     * Relación con servicios
-     */
     public function servicio(): BelongsTo
     {
-        return $this->belongsTo(Servicios::class, 'servicio_id');
+        return $this->belongsTo(Servicios::class, 'id_servicio');
     }
 }

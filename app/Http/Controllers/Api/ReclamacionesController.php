@@ -5,13 +5,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\libroreclamacion;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Constraint\IsFalse;
+use Illuminate\Support\Facades\Validator;
 
 class ReclamacionesController extends Controller
 {
     /* Obtener reclamaciones con paginación de 20 en 20 */
     public function get(Request $request)
     {
-        $reclamaciones = libroReclamacion::orderBy('id', 'desc')->paginate(20);
+        $reclamaciones = libroReclamacion::orderBy('id_reclamacion', 'desc')->paginate(20);
         return response()->json($reclamaciones, 200);
     }
 
@@ -19,7 +21,7 @@ class ReclamacionesController extends Controller
     public function create(Request $request)
     {
         // Validación de datos
-        $validated = $request->validate([
+        $validated = Validator::make($request->all(), [
             'nombre' => 'required|string|max:100',
             'apellido' => 'required|string|max:100',
             'documento' => 'required|string|max:100',
@@ -36,8 +38,12 @@ class ReclamacionesController extends Controller
             'aceptaPoliticaPrivacidad' => 'required|string|max:10',
         ]);
 
+        if($validated->fails()){
+            return response()->json(['errors' => $validated->errors()], 400);
+        }
+
         // Crear una nueva reclamación
-        $reclamacion = libroReclamacion::create($validated);
+        $reclamacion = libroReclamacion::create($request->all());
 
         return response()->json([
             'message' => 'Reclamación guardada exitosamente',
@@ -48,7 +54,7 @@ class ReclamacionesController extends Controller
     /* Eliminar una reclamación por ID */
     public function delete($id)
     {
-        $reclamacion = libroReclamacion::find($id);
+        $reclamacion = libroReclamacion::findOrFail($id);
 
         if (!$reclamacion) {
             return response()->json(['error' => 'Reclamación no encontrada'], 404);

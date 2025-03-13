@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmailJob;
-use App\Mail\MailService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 class ModalesController extends Controller
 {
@@ -21,7 +19,7 @@ class ModalesController extends Controller
 
         try {
             $data = DB::table('modalservicios')
-                ->join('servicios', 'modalservicios.servicio_id', '=', 'servicios.id') 
+                ->join('servicios', 'modalservicios.id_servicio', '=', 'servicios.id_servicio')
                 ->select('modalservicios.*', 'servicios.nombre as servicio_nombre')
                 ->orderBy('modalservicios.fecha_registro', 'DESC')
                 ->skip($offset)
@@ -57,7 +55,7 @@ class ModalesController extends Controller
                 'nombre' => 'required|string|max:100',
                 'telefono' => 'required|string|max:9',
                 'correo' => 'required|email|max:200',
-                'servicio_id' => 'required|integer|min:1|max:4', // Validar rango válido
+                'id_servicio' => 'required|integer|min:1|max:4', // Validar rango válido
             ]);
 
             // Insertar el registro en la tabla
@@ -65,16 +63,16 @@ class ModalesController extends Controller
                 'nombre' => $validatedData['nombre'],
                 'telefono' => $validatedData['telefono'],
                 'correo' => $validatedData['correo'],
-                'servicio_id' => intval($validatedData['servicio_id']), // Guardar el servicio_id
+                'id_servicio' => intval($validatedData['id_servicio']), // Guardar el servicio_id
             ]);
 
 
             // Enviar el primer correo inmediatamente
-            dispatch(new SendEmailJob(0, $request->servicio_id, $request->correo));
+            dispatch(new SendEmailJob(0, $request->id_servicio, $request->correo));
             // Enviar el segundo correo después de 1 minuto
-            dispatch(new SendEmailJob(1, $request->servicio_id, $request->correo))->delay(Carbon::now()->addMinutes(60 * 24));
+            dispatch(new SendEmailJob(1, $request->id_servicio, $request->correo))->delay(Carbon::now()->addMinutes(60 * 24));
             // Enviar el tercer correo después de 2 minutos
-            dispatch(new SendEmailJob(2, $request->servicio_id, $request->correo))->delay(Carbon::now()->addMinutes(4));
+            dispatch(new SendEmailJob(2, $request->id_servicio, $request->correo))->delay(Carbon::now()->addMinutes(4));
 
             // Respuesta exitosa
             return response()->json([

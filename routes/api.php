@@ -22,7 +22,7 @@ Route::put('/contactanos/{id}', [ContactanosController::class, "update"])->middl
 Route::delete('/contactanos/{id}', [ContactanosController::class, "delete"])->middleware('auth:sanctum');
 
 
-// Api Libro de reclamaciones  
+// Api Libro de reclamaciones
 // Ruta para obtener contactos con paginación (de 20 en 20)
 Route::get('/reclamaciones', [ReclamacionesController::class, "get"])->middleware('auth:sanctum');
 // Usar validacion para  los datos con VALIDATE de laravel
