@@ -16,14 +16,19 @@ class UserController extends Controller
 
     public function getById($id)
     {
-
         $validate = Validator::make(["id" => $id], [
             "id" => "required|numeric",
         ]);
 
-        if ($validate->fails()) return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
+        if ($validate->fails()) {
+            return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
+        }
 
-        $user = User::where("id", $id)->get();
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(["status" => 404, "message" => "Usuario no encontrado"]);
+        }
 
         return response()->json([
             "status" => 200,
@@ -188,23 +193,39 @@ class UserController extends Controller
 
     public function delete(Request $request, $id)
     {
+        Log::info("Intentando eliminar usuario con ID: $id");
+
         $validate = Validator::make(["id" => $id], [
             "id" => "required|numeric",
         ]);
 
         if ($validate->fails()) {
+            Log::error("Error de validación al eliminar usuario:", $validate->errors()->toArray()); 
             return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
         }
 
         if (intval($id) == 1) {
+            Log::warning("Intento de eliminar al usuario admin con ID: $id"); 
             return response()->json(["status" => 422, "message" => "El admin no puede ser eliminado"]);
         }
 
-        $response = User::where(["id" => intval($id)])->delete();
-
-        if ($response) {
-            return response()->json(["status" => 200, "message" => "Registro eliminado correctamente"]);
+        $user = User::find($id);
+        if (!$user) {
+            Log::error("Usuario no encontrado con ID: $id");
+            return response()->json(["status" => 404, "message" => "Usuario no encontrado"]);
         }
+
+        $user->delete();
+        Log::info("Usuario eliminado con ID: $id");
+
+        $userExists = User::where('id', $id)->exists();
+        if ($userExists) {
+            Log::error("El usuario con ID: $id todavía existe después de la eliminación"); 
+            return response()->json(["status" => 500, "message" => "Error al eliminar el registro"]);
+        }
+
+        Log::info("Usuario con ID: $id eliminado correctamente y verificado"); 
+        return response()->json(["status" => 200, "message" => "Registro eliminado correctamente"]);
     }
 
     public function logout(Request $request)
