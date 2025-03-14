@@ -11,7 +11,8 @@ class Empleado extends Model
 
     protected $table = 'empleados';
     protected $primaryKey = 'id_empleado';
-
+    public $timestamps = false;
+    
     protected $fillable = [
         'nombre',
         'apellido',
