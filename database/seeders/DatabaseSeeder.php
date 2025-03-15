@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
             ServicioSeeder::class,
             ContactanosSeeder::class,
             ReclamacionSeeder::class,
-            ModalservicioSeeder::class
+            ModalservicioSeeder::class,
+            RolSeeder::class,
+            EmpleadoSeeder::class,
         ]);
     }
 }
