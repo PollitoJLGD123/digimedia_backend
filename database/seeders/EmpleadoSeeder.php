@@ -34,7 +34,7 @@ class EmpleadoSeeder extends Seeder
             ],
             [
                 'nombre' => 'Juan Carlos',
-                'apellido' => 'Parimango',
+                'apellido' => 'Molina Orrego',
                 'email' => 'juancarlosnhl2023@outlook.es',
                 'dni' => '75481526',
                 'telefono' => '936910425',
