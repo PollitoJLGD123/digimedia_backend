@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/empleados/{id}', [EmpleadoController::class, "update"]);
         Route::put('/empleados/pass/{id}', [EmpleadoController::class, "updatePass"]);
         Route::delete('/empleados/{id}', [EmpleadoController::class, "delete"]);
+        
     });
     
     Route::middleware('role:ventas,marketing,administrador')->group(function () {
@@ -61,6 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 //publicas
+
 Route::post('/contactanos', [ContactanosController::class, "create"]);
 Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
 Route::post('/modal', [ModalesController::class, "create"]);
