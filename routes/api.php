@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ServiciosController;
 use App\Http\Controllers\Api\ModalServiciosController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\EmpleadoController;
 use App\Http\Middleware\isAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/contactanos/{id}', [ContactanosController::class, "update"]);
         Route::delete('/reclamaciones/{id}', [ReclamacionesController::class, "delete"]);
         Route::delete('/modal/{id}', [ModalesController::class, "delete"]);
+
+        // Rutas - empleados
+        Route::get('/empleados', [EmpleadoController::class, "getAllByPage"]);
+        Route::get('/empleados/{id}', [EmpleadoController::class, "getById"]);
+        Route::post('/empleados', [EmpleadoController::class, "create"]);
+        Route::put('/empleados/{id}', [EmpleadoController::class, "update"]);
+        Route::put('/empleados/pass/{id}', [EmpleadoController::class, "updatePass"]);
+        Route::delete('/empleados/{id}', [EmpleadoController::class, "delete"]);
     });
     
     Route::middleware('role:ventas,marketing,administrador')->group(function () {
