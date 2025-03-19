@@ -68,7 +68,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 //publicas
-
 Route::post('/contactanos', [ContactanosController::class, "create"]);
 Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
 Route::post('/modal', [ModalesController::class, "create"]);

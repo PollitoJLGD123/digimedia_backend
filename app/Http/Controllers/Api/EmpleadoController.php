@@ -24,7 +24,7 @@ class EmpleadoController extends Controller
             return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
         }
 
-        $empleado = Empleado::where('id_empleado', $id)->first();
+        $empleado = Empleado::with('rol')->where('id_empleado', $id)->first();
 
         if (!$empleado) {
             return response()->json(["status" => 404, "message" => "Empleado no encontrado"]);
@@ -38,18 +38,24 @@ class EmpleadoController extends Controller
 
     public function getAllByPage(Request $request)
     {
-        Log::info("Solicitud recibida para obtener empleados paginados"); // Log para depuración
+        Log::info("Solicitud recibida para obtener empleados paginados"); 
 
         try {
-            $empleados = Empleado::orderBy('id_empleado', 'desc')->paginate(20);
+            $empleados = Empleado::with('rol')->orderBy('id_empleado', 'desc')->paginate(20);
 
-            Log::info("Empleados obtenidos correctamente:", $empleados->toArray()); // Log para éxito
-        Log::info("Solicitud recibida para obtener empleados paginados"); // Log para depuración
+            Log::info("Empleados obtenidos correctamente:", $empleados->toArray()); 
 
-        try {
-            $empleados = Empleado::orderBy('id_empleado', 'desc')->paginate(20);
-
-            Log::info("Empleados obtenidos correctamente:", $empleados->toArray()); // Log para éxito
+            $empleados->getCollection()->transform(function ($empleado) {
+                return [
+                    'id_empleado' => $empleado->id_empleado,
+                    'nombre' => $empleado->nombre,
+                    'apellido' => $empleado->apellido,
+                    'email' => $empleado->email,
+                    'dni' => $empleado->dni,
+                    'telefono' => $empleado->telefono,
+                    'rol' => $empleado->rol->nombre, 
+                ];
+            });
 
             return response()->json([
                 "status" => 200,
@@ -58,21 +64,7 @@ class EmpleadoController extends Controller
                 'page' => $empleados->currentPage()
             ]);
         } catch (\Exception $e) {
-            Log::error("Error al obtener empleados:", ["error" => $e->getMessage()]); // Log para errores
-            return response()->json([
-                "status" => 500,
-                "message" => "Error interno del servidor",
-                "error" => $e->getMessage()
-            ], 500);
-        }
-            return response()->json([
-                "status" => 200,
-                'data' => $empleados->items(),
-                'total' => $empleados->total(),
-                'page' => $empleados->currentPage()
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Error al obtener empleados:", ["error" => $e->getMessage()]); // Log para errores
+            Log::error("Error al obtener empleados:", ["error" => $e->getMessage()]); 
             return response()->json([
                 "status" => 500,
                 "message" => "Error interno del servidor",
