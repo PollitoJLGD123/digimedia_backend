@@ -50,17 +50,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/empleados/{id}', [EmpleadoController::class, "update"]);
         Route::put('/empleados/pass/{id}', [EmpleadoController::class, "updatePass"]);
         Route::delete('/empleados/{id}', [EmpleadoController::class, "delete"]);
+        Route::put('/reclamaciones/{id}', [ReclamacionesController::class, "update"]);
+        Route::get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
+        Route::get('/contactanos/{id}', [ContactanosController::class, "getById"]);
 
         //Rutas - Roles
         Route::get('/roles', [RolController::class, "index"]);
-
-
-
-        Route::put('/reclamaciones/{id}', [ReclamacionesController::class, "update"]);
-
-        Route::get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
-
-        Route::get('/contactanos/{id}', [ContactanosController::class, "getById"]);
     });
 
     Route::middleware('role:ventas,marketing,administrador')->group(function () {
