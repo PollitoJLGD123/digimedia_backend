@@ -41,7 +41,7 @@ class EmpleadoController extends Controller
         Log::info("Solicitud recibida para obtener empleados paginados"); 
 
         try {
-            $empleados = Empleado::with('rol')->orderBy('id_empleado', 'desc')->paginate(20);
+            $empleados = Empleado::with('rol')->orderBy('id_empleado', 'asc')->paginate(20);
 
             Log::info("Empleados obtenidos correctamente:", $empleados->toArray()); 
 
@@ -217,7 +217,6 @@ class EmpleadoController extends Controller
             return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
         }
 
-        $empleado = Empleado::where('id_empleado', $id)->first();
         $empleado = Empleado::where('id_empleado', $id)->first();
 
         if (!$empleado) {
