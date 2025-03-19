@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\libroreclamacion;
 use Illuminate\Http\Request;
-use PHPUnit\Framework\Constraint\IsFalse;
 use Illuminate\Support\Facades\Validator;
 
 class ReclamacionesController extends Controller
@@ -13,8 +12,21 @@ class ReclamacionesController extends Controller
     /* Obtener reclamaciones con paginación de 20 en 20 */
     public function get(Request $request)
     {
-        $reclamaciones = libroReclamacion::orderBy('id_reclamacion', 'desc')->paginate(20);
+        $reclamaciones = libroReclamacion::orderBy('id_reclamacion', 'asc')->paginate(20);
         return response()->json($reclamaciones, 200);
+    }
+
+    public function getById($id){
+        $reclamacion = libroreclamacion::find($id);
+
+        if (!$reclamacion) {
+            return response()->json(['error' => 'Contacto no encontrado'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $reclamacion
+        ], 200);
     }
 
     /* Guardar una reclamación */
@@ -34,8 +46,9 @@ class ReclamacionesController extends Controller
             'tipoReclamo' => 'required|string|max:20',
             'servicioContratado' => 'required|string|max:250',
             'reclamoPerson' => 'required|string|max:1050',
-            'checkReclamoForm' => 'required|string|max:10',
-            'aceptaPoliticaPrivacidad' => 'required|string|max:10',
+            'checkReclamoForm' => 'required|boolean',
+            'aceptaPoliticaPrivacidad' => 'required|boolean',
+            'fechaIncidente' => 'required|date',
         ]);
 
         if($validated->fails()){
@@ -51,16 +64,35 @@ class ReclamacionesController extends Controller
         ], 201);
     }
 
-    /* Eliminar una reclamación por ID */
+    public function update(Request $request, $id){
+        $reclamacion = libroreclamacion::find($id);
+
+        if (!$reclamacion) {
+            return response()->json(['error' => 'Reclamo no encontrado'], 404);
+        }
+
+        $validated = $request->validate([
+            'estado' => 'required|in:PENDIENTE,ATENDIDO',
+        ]);
+
+        $reclamacion->update([
+            'estadoReclamo' => $request->estado,
+        ]);
+
+        return response()->json([
+            'message' => 'Estado actualizado exitosamente',
+            'data' => $reclamacion,
+        ], 200);
+    }
+
     public function delete($id)
     {
-        $reclamacion = libroReclamacion::findOrFail($id);
+        $reclamacion = libroReclamacion::find($id);
 
         if (!$reclamacion) {
             return response()->json(['error' => 'Reclamación no encontrada'], 404);
         }
 
-        // Eliminar la reclamación
         $reclamacion->delete();
 
         return response()->json(['message' => 'Reclamación eliminada exitosamente'], 200);

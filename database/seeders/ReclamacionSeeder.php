@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 
 class ReclamacionSeeder extends Seeder
@@ -30,6 +31,9 @@ class ReclamacionSeeder extends Seeder
                 'reclamoPerson' => 'Reclao por el servicio el dia 15/2/2022',
                 'checkReclamoForm' => true,
                 'aceptaPoliticaPrivacidad' => true,
+                'fechaIncidente' => Carbon::now(),
+                'fechaReclamo' => Carbon::now(),
+                'estadoReclamo' => 'PENDIENTE'
             ],
             [
                 'nombre' => 'María',
@@ -46,6 +50,9 @@ class ReclamacionSeeder extends Seeder
                 'reclamoPerson' => 'Servicio malo',
                 'checkReclamoForm' => true,
                 'aceptaPoliticaPrivacidad' => true,
+                'fechaIncidente' => Carbon::now(),
+                'fechaReclamo' => Carbon::now(),
+                'estadoReclamo' => 'PENDIENTE'
             ],
             [
                 'nombre' => 'José Luis',
@@ -62,6 +69,9 @@ class ReclamacionSeeder extends Seeder
                 'reclamoPerson' => 'Necesito un reembolso',
                 'checkReclamoForm' => true,
                 'aceptaPoliticaPrivacidad' => true,
+                'fechaIncidente' => Carbon::now(),
+                'fechaReclamo' => Carbon::now(),
+                'estadoReclamo' => 'PENDIENTE'
             ],
         ];
 

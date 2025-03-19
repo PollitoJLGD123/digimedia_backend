@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class libroreclamacion extends Model
 {
     protected $table = 'reclamaciones';
-
+    protected $primaryKey = 'id_reclamacion';
     protected $fillable = [
-        'id_reclamacion',
         'nombre',
         'apellido',
         'documento',
@@ -23,8 +22,10 @@ class libroreclamacion extends Model
         'servicioContratado',
         'reclamoPerson',
         'checkReclamoForm',
-        'aceptaPoliticaPrivacidad'
+        'aceptaPoliticaPrivacidad',
+        'fechaReclamo',
+        'fechaIncidente',
+        'estadoReclamo',
     ];
-
     public $timestamps = false;
 }

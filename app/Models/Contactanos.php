@@ -8,17 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Contactanos extends Model
 {
     use HasFactory;
-
-    // Tabla asociada
     protected $table = 'contactanos';
-
-    // Columnas rellenables
+    protected $primaryKey = 'id_contactanos';
     protected $fillable = [
-        'id_contactanos',
         'nombre',
         'email',
         'numero',
         'mensaje',
+        'fecha',
         'estado',
     ];
+    public $timestamps = false;
 }
