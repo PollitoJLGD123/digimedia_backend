@@ -10,6 +10,8 @@ class servicios extends Model
 {
     protected $table = 'servicios';
 
+    protected $primaryKey = 'id_servicio';
+
     protected $fillable = [
         'id_servicio',
         'nombre',
@@ -17,10 +19,7 @@ class servicios extends Model
     ];
 
     public $timestamps = false;
-
-    /**
-     * Relación con modalservicios
-     */
+    
     public function modalservicios(): HasMany
     {
         return $this->hasMany(ModalServicios::class, 'id_servicio', 'id_servicio');

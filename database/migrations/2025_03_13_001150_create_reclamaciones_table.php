@@ -27,6 +27,9 @@ return new class extends Migration
             $table->text('reclamoPerson');
             $table->boolean('checkReclamoForm')->default(false);
             $table->boolean('aceptaPoliticaPrivacidad')->default(false);
+            $table->date('fechaIncidente');
+            $table->timestamp('fechaReclamo')->useCurrent();
+            $table->enum('estadoReclamo', ['PENDIENTE', 'ATENDIDO'])->default('PENDIENTE');
         });
     }
 

@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/user/logout', [UserController::class, "logout"]);
-    
+
     //Para administradores
     Route::middleware('role:administrador')->group(function () {
         // Rutas - usuarios
@@ -31,12 +31,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/user/{id}', [UserController::class, "update"]);
         Route::put('/user/pass/{id}', [UserController::class, "updatePass"]);
         Route::delete('/user/{id}', [UserController::class, "delete"]);
-        
+
         // Rutas - servicios
         Route::post('/servicios', [ServiciosController::class, "create"]);
         Route::put('/servicios/{id}', [ServiciosController::class, "update"]);
         Route::delete('/servicios/{id}', [ServiciosController::class, "delete"]);
-        
+
         // Rutas - contactanos
         Route::delete('/contactanos/{id}', [ContactanosController::class, "delete"]);
         Route::put('/contactanos/{id}', [ContactanosController::class, "update"]);
@@ -50,6 +50,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/empleados/{id}', [EmpleadoController::class, "update"]);
         Route::put('/empleados/pass/{id}', [EmpleadoController::class, "updatePass"]);
         Route::delete('/empleados/{id}', [EmpleadoController::class, "delete"]);
+        Route::put('/reclamaciones/{id}', [ReclamacionesController::class, "update"]);
+        Route::get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
+        Route::get('/contactanos/{id}', [ContactanosController::class, "getById"]);
 
         //Rutas - Roles
         Route::get('/roles', [RolController::class, "index"]);
@@ -57,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         
     });
-    
+
     Route::middleware('role:ventas,marketing,administrador')->group(function () {
         // ver datos sin eliminar
         Route::get('/contactanos', [ContactanosController::class, "get"]);

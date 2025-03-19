@@ -9,8 +9,9 @@ class modalservicios extends Model
 {
     protected $table = 'modalservicios';
 
+    protected $primaryKey = 'id_modalservicio';
+
     protected $fillable = [
-        'id_modalservicio',
         'nombre',
         'telefono',
         'correo',

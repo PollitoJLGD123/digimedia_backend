@@ -19,21 +19,21 @@ class ContactanosSeeder extends Seeder
                 'email' => 'juan@gmail.com',
                 'numero' => '987654321',
                 'mensaje' => 'Me interesa obtener más información sobre sus servicios.',
-                'estado' => 'pendiente',
+                'estado' => 0,
             ],
             [
                 'nombre' => 'Juan Rodriguez',
                 'email' => 'juan2@gmail.com',
                 'numero' => '987654322',
                 'mensaje' => 'Me interesa obtener más información sobre sus servicios.',
-                'estado' => 'pendiente',
+                'estado' => 1,
             ],
             [
                 'nombre' => 'Juan Nuñez',
                 'email' => 'juan3@gmail.com',
                 'numero' => '987654323',
                 'mensaje' => 'Me interesa obtener más información sobre sus servicios.',
-                'estado' => 'revisado',
+                'estado' => 1,
             ]
         ];
 
