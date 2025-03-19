@@ -24,7 +24,7 @@ class EmpleadoController extends Controller
             return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
         }
 
-        $empleado = Empleado::find($id);
+        $empleado = Empleado::where('id_empleado', $id)->first();
 
         if (!$empleado) {
             return response()->json(["status" => 404, "message" => "Empleado no encontrado"]);
@@ -38,14 +38,27 @@ class EmpleadoController extends Controller
 
     public function getAllByPage(Request $request)
     {
-        $empleados = Empleado::orderBy('id', 'desc')->paginate(20);
+        Log::info("Solicitud recibida para obtener empleados paginados"); // Log para depuración
 
-        return response()->json([
-            "status" => 200,
-            'data' => $empleados->items(),
-            'total' => $empleados->total(),
-            'page' => $empleados->currentPage()
-        ]);
+        try {
+            $empleados = Empleado::orderBy('id_empleado', 'desc')->paginate(20);
+
+            Log::info("Empleados obtenidos correctamente:", $empleados->toArray()); // Log para éxito
+
+            return response()->json([
+                "status" => 200,
+                'data' => $empleados->items(),
+                'total' => $empleados->total(),
+                'page' => $empleados->currentPage()
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Error al obtener empleados:", ["error" => $e->getMessage()]); // Log para errores
+            return response()->json([
+                "status" => 500,
+                "message" => "Error interno del servidor",
+                "error" => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function create(Request $request)
@@ -101,7 +114,6 @@ class EmpleadoController extends Controller
         }
     }
 
-
     public function update(Request $request, $id)
     {
         $validate = Validator::make(["id" => $id], [
@@ -112,7 +124,7 @@ class EmpleadoController extends Controller
             return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
         }
 
-        $empleado = Empleado::find($id);
+        $empleado = Empleado::where('id_empleado', $id)->first();
 
         if (!$empleado) {
             return response()->json(["status" => 404, "message" => "Empleado no encontrado"]);
@@ -121,14 +133,34 @@ class EmpleadoController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => 'sometimes|string|max:255',
             'apellido' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:empleados,email,' . $id,
-            'dni' => 'sometimes|string|max:20|unique:empleados,dni,' . $id,
+            'email' => 'sometimes|string|email|max:255|unique:empleados,email,' . $id . ',id_empleado|unique:users,email,' . $empleado->id_user,
+            'dni' => 'sometimes|string|max:20|unique:empleados,dni,' . $id . ',id_empleado',
             'telefono' => 'nullable|string|max:20',
             'id_rol' => 'sometimes|exists:roles,id_rol',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        if ($request->has('email') && $request->email != $empleado->email) {
+            $user = User::find($empleado->id_user);
+            if ($user) {
+                $user->email = $request->email;
+                $user->save();
+            }
+        }
+
+        // actualizar nombre o apellido, actualiza name de users
+        if (($request->has('nombre') && $request->nombre != $empleado->nombre) || 
+            ($request->has('apellido') && $request->apellido != $empleado->apellido)) {
+            $user = User::find($empleado->id_user);
+            if ($user) {
+                $nombre = $request->has('nombre') ? $request->nombre : $empleado->nombre;
+                $apellido = $request->has('apellido') ? $request->apellido : $empleado->apellido;
+                $user->name = $nombre . ' ' . $apellido;
+                $user->save();
+            }
         }
 
         $empleado->update($request->all());
@@ -150,7 +182,7 @@ class EmpleadoController extends Controller
             return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
         }
 
-        $empleado = Empleado::find($id);
+        $empleado = Empleado::where('id_empleado', $id)->first();
 
         if (!$empleado) {
             return response()->json(["status" => 404, "message" => "Empleado no encontrado"]);
@@ -174,7 +206,7 @@ class EmpleadoController extends Controller
             return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
         }
 
-        $empleado = Empleado::find($id);
+        $empleado = Empleado::where('id_empleado', $id)->first();
 
         if (!$empleado) {
             return response()->json(["status" => 404, "message" => "Empleado no encontrado"]);
