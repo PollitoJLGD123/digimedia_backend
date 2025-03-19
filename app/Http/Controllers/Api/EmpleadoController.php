@@ -198,32 +198,46 @@ class EmpleadoController extends Controller
 
     public function delete(Request $request, $id)
     {
+        Log::info("Intentando eliminar empleado con ID: $id");
+
         $validate = Validator::make(["id" => $id], [
             "id" => "required|numeric",
         ]);
 
         if ($validate->fails()) {
-            return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
+            Log::error("Validación fallida: ", $validate->errors()->toArray());
+            return response()->json([
+                "status" => 422,
+                "message" => "Error de validación",
+                "errors" => $validate->errors()
+            ], 422);
         }
 
         $empleado = Empleado::where('id_empleado', $id)->first();
 
         if (!$empleado) {
-            return response()->json(["status" => 404, "message" => "Empleado no encontrado"]);
+            Log::error("Empleado no encontrado con ID: $id");
+            return response()->json([
+                "status" => 404,
+                "message" => "Empleado no encontrado"
+            ], 404);
         }
 
-        // elimina user vinculado
+        Log::info("Empleado encontrado: ", $empleado->toArray());
+
         $user = User::find($empleado->id_user);
         if ($user) {
+            Log::info("Eliminando usuario vinculado con ID: " . $user->id);
             $user->delete();
         }
 
-        // elimina empleado
+        Log::info("Eliminando empleado con ID: $id");
         $empleado->delete();
 
+        Log::info("Empleado eliminado correctamente");
         return response()->json([
             "status" => 200,
             "message" => "Empleado eliminado correctamente"
-        ]);
+        ], 200);
     }
 }
