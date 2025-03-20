@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Empleado;
 use App\Models\User;
-use App\Models\Rol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CredencialesEmpleadoMail;
 
 class EmpleadoController extends Controller
 {
@@ -38,12 +39,12 @@ class EmpleadoController extends Controller
 
     public function getAllByPage(Request $request)
     {
-        Log::info("Solicitud recibida para obtener empleados paginados"); 
+        Log::info("Solicitud recibida para obtener empleados paginados");
 
         try {
             $empleados = Empleado::with('rol')->orderBy('id_empleado', 'asc')->paginate(20);
 
-            Log::info("Empleados obtenidos correctamente:", $empleados->toArray()); 
+            Log::info("Empleados obtenidos correctamente:", $empleados->toArray());
 
             $empleados->getCollection()->transform(function ($empleado) {
                 return [
@@ -53,7 +54,7 @@ class EmpleadoController extends Controller
                     'email' => $empleado->email,
                     'dni' => $empleado->dni,
                     'telefono' => $empleado->telefono,
-                    'rol' => $empleado->rol->nombre, 
+                    'rol' => $empleado->rol->nombre,
                 ];
             });
 
@@ -64,7 +65,7 @@ class EmpleadoController extends Controller
                 'page' => $empleados->currentPage()
             ]);
         } catch (\Exception $e) {
-            Log::error("Error al obtener empleados:", ["error" => $e->getMessage()]); 
+            Log::error("Error al obtener empleados:", ["error" => $e->getMessage()]);
             return response()->json([
                 "status" => 500,
                 "message" => "Error interno del servidor",
@@ -90,10 +91,13 @@ class EmpleadoController extends Controller
 
         DB::beginTransaction();
         try {
+
+            $password = $this->createPassword($request->dni, $request->nombre, $request->apellido);
+
             $user = User::create([
                 'name' => $request->nombre . ' ' . $request->apellido,
                 'email' => $request->email,
-                'password' => Hash::make('1234'), 
+                'password' => Hash::make($password),
             ]);
 
             $empleado = Empleado::create([
@@ -107,6 +111,8 @@ class EmpleadoController extends Controller
             ]);
 
             DB::commit();
+
+            Mail::to($user->email)->send(new CredencialesEmpleadoMail($user, $password));
 
             return response()->json([
                 "status" => 200,
@@ -124,6 +130,27 @@ class EmpleadoController extends Controller
                 "error" => $e->getMessage()
             ], 500);
         }
+    }
+
+    private function createPassword(string $dni, string $nombre, string $apellidos)
+    {
+
+        $apellidoIniciales = strtoupper(substr($nombre, 0, 2));
+        $nombreIniciales = strtolower(substr($apellidos, 0, 2));
+        $dniParte = substr($dni, -3);
+
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+
+        $password= "{$apellidoIniciales}{$dniParte}";
+
+        for ($i = 0; $i < 5; $i++) {
+            $password .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        $password .= $nombreIniciales;
+
+        return $password;
     }
 
     public function update(Request $request, $id)
@@ -167,7 +194,7 @@ class EmpleadoController extends Controller
         }
 
         // Si se actualiza el nombre o apellido, también actualizar el name en users
-        if (($request->has('nombre') && $request->nombre != $empleado->nombre) || 
+        if (($request->has('nombre') && $request->nombre != $empleado->nombre) ||
             ($request->has('apellido') && $request->apellido != $empleado->apellido)) {
             $user = User::find($empleado->id_user);
             if ($user) {
@@ -187,7 +214,7 @@ class EmpleadoController extends Controller
         }
 
         // actualizar nombre o apellido, actualiza name de users
-        if (($request->has('nombre') && $request->nombre != $empleado->nombre) || 
+        if (($request->has('nombre') && $request->nombre != $empleado->nombre) ||
             ($request->has('apellido') && $request->apellido != $empleado->apellido)) {
             $user = User::find($empleado->id_user);
             if ($user) {
