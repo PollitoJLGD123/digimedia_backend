@@ -74,3 +74,5 @@ Route::post('/empleados/verify-password', [EmpleadoController::class, 'verifyPas
 Route::post('/contactanos', [ContactanosController::class, "create"]);
 Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
 Route::post('/modal', [ModalesController::class, "create"]);
+Route::post('/reset_password', action: [AuthController::class, "forgotPassword"]);
+Route::post('/update_password', action: [AuthController::class, "updatePassword"]);

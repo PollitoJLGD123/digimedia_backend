@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ForgotPassword;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -94,7 +97,7 @@ class AuthController extends Controller
 
         // obtener rol del empleado realacionado al usuario
         $empleado = $user->empleado;
-        
+
         if (!$empleado || !$empleado->rol) {
             return response()->json([
                 'status' => 'error',
@@ -107,7 +110,7 @@ class AuthController extends Controller
 
         // quitar tokens anteriores
         $user->tokens()->delete();
-        
+
         // token incluyendo rol (capcidad)
         $token = $user->createToken('auth_token', $abilities)->plainTextToken;
 
@@ -131,7 +134,75 @@ class AuthController extends Controller
         ]);
     }
 
-    //obtener usuario autenticado con su rol
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'El usuario no existe'
+            ], 404);
+        }
+
+        $token = Str::random(60);
+
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $user->email],
+            [
+                'token' => $token,
+                'created_at' => now()
+            ]
+        );
+
+        Mail::to($user->email)->send(new ForgotPassword($user, $token));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Token de restablecimiento de contraseña enviado'
+        ]);
+    }
+
+    public function updatePassword(Request $request){
+        $validator = Validator::make($request->all(), [
+            'token' => 'required|string',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 400);
+        }
+
+        $tokenUser = DB::table('password_reset_tokens')->where('token', $request->token)->first();
+
+        if (!$tokenUser) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token inválido'
+            ], 404);
+        }
+
+        $user = User::where('email', $tokenUser->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Usuario no encontrado'
+            ], 404);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        DB::table('password_reset_tokens')->where('token', $request->token)->delete();
+
+        return response()->json(['message' => 'Contraseña actualizada correctamente, ingresa desde el login'], 200);
+    }
+
     public function me(Request $request)
     {
         $user = $request->user();
