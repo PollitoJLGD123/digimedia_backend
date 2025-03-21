@@ -56,6 +56,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         //Rutas - Roles
         Route::get('/roles', [RolController::class, "index"]);
+
+
     });
 
     Route::middleware('role:ventas,marketing,administrador')->group(function () {
@@ -68,6 +70,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 //publicas
+Route::post('/empleados/verify-password', [EmpleadoController::class, 'verifyPassword']);
 Route::post('/contactanos', [ContactanosController::class, "create"]);
 Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
 Route::post('/modal', [ModalesController::class, "create"]);

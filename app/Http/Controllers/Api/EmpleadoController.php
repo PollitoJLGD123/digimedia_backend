@@ -258,6 +258,46 @@ class EmpleadoController extends Controller
         return $userController->updatePass($request, $userId);
     }
 
+    public function verifyPassword(Request $request)
+    {
+        try {
+            Log::info('Datos recibidos: ' . json_encode($request->all()));
+            Log::info('Token: ' . $request->bearerToken());
+
+            $request->validate([
+                'currentPassword' => 'required',
+                'id_empleado' => 'required|exists:empleados,id_empleado'
+            ]);
+
+            $empleado = Empleado::with('user')->findOrFail($request->id_empleado);
+            
+            if (!$empleado->user) {
+                return response()->json([
+                    'valid' => false,
+                    'message' => 'No se encontró el usuario asociado al empleado'
+                ], 404);
+            }
+            
+            if (!Hash::check($request->currentPassword, $empleado->user->password)) {
+                return response()->json([
+                    'valid' => false,
+                    'message' => 'La contraseña actual es incorrecta'
+                ], 400);
+            }
+
+            return response()->json([
+                'valid' => true,
+                'message' => 'Contraseña verificada correctamente'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error en verifyPassword: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Ocurrió un error al procesar la solicitud',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function delete(Request $request, $id)
     {
         Log::info("Intentando eliminar empleado con ID: $id");
