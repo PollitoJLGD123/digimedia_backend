@@ -39,7 +39,7 @@ class ContactanosController extends Controller
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'numero' => 'required|string|max:20',
-            'mensaje' => 'required|string|max:500',
+            'mensaje' => 'required|string|max:1050',
         ]);
 
         if($validated->fails()){
