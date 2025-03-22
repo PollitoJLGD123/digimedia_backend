@@ -33,13 +33,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/user/{id}', [UserController::class, "delete"]);
 
         // Rutas - servicios
-        Route::post('/servicios', [ServiciosController::class, "create"]);
-        Route::put('/servicios/{id}', [ServiciosController::class, "update"]);
         Route::delete('/servicios/{id}', [ServiciosController::class, "delete"]);
 
         // Rutas - contactanos
         Route::delete('/contactanos/{id}', [ContactanosController::class, "delete"]);
-        Route::put('/contactanos/{id}', [ContactanosController::class, "update"]);
         Route::delete('/reclamaciones/{id}', [ReclamacionesController::class, "delete"]);
         Route::delete('/modal/{id}', [ModalesController::class, "delete"]);
 
@@ -50,9 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/empleados/{id}', [EmpleadoController::class, "update"]);
         Route::put('/empleados/pass/{id}', [EmpleadoController::class, "updatePass"]);
         Route::delete('/empleados/{id}', [EmpleadoController::class, "delete"]);
-        Route::put('/reclamaciones/{id}', [ReclamacionesController::class, "update"]);
-        Route::get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
-        Route::get('/contactanos/{id}', [ContactanosController::class, "getById"]);
+
 
         //Rutas - Roles
         Route::get('/roles', [RolController::class, "index"]);
@@ -66,6 +61,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/reclamaciones', [ReclamacionesController::class, "get"]);
         Route::get('/modal', [ModalesController::class, "get"]);
         Route::get('/servicios', [ServiciosController::class, "get"]);
+
+        //getById
+        Route::get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
+        Route::get('/contactanos/{id}', [ContactanosController::class, "getById"]);
+        
+        // actualizar datos
+        Route::put('/contactanos/{id}', [ContactanosController::class, "update"]);
+        Route::put('/servicios/{id}', [ServiciosController::class, "update"]);
+        Route::put('/reclamaciones/{id}', [ReclamacionesController::class, "update"]);
+
+        //creación (depende :v)
+        Route::post('/servicios', [ServiciosController::class, "create"]);
+
     });
 });
 
