@@ -79,28 +79,34 @@ class AuthController extends Controller
         }
     }
 
-    //Login
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
         ]);
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['Las credenciales proporcionadas son incorrectas.'],
-            ]);
+        if (!$user) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Esta cuenta no está registrada en Digimedia.'
+            ], 404);
         }
 
-        // obtener rol del empleado realacionado al usuario
-        $empleado = $user->empleado;
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'El email o la contraseña son incorrectos.'
+            ], 401);
+        }
 
+
+        $empleado = $user->empleado;
         if (!$empleado || !$empleado->rol) {
             return response()->json([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'El usuario no tiene un rol asignado'
             ], 403);
         }
@@ -110,18 +116,18 @@ class AuthController extends Controller
 
         // quitar tokens anteriores
         $user->tokens()->delete();
-
         // token incluyendo rol (capcidad)
         $token = $user->createToken('auth_token', $abilities)->plainTextToken;
 
         return response()->json([
-            'status' => 'success',
-            'user' => $user,
+            'status'   => 'success',
+            'user'     => $user,
             'empleado' => $empleado,
-            'rol' => $rol->nombre,
-            'token' => $token,
+            'rol'      => $rol->nombre,
+            'token'    => $token,
         ]);
     }
+
 
     //logout
     public function logout(Request $request)
