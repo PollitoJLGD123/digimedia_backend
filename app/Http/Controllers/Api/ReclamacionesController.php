@@ -9,10 +9,9 @@ use Illuminate\Support\Facades\Validator;
 
 class ReclamacionesController extends Controller
 {
-    /* Obtener reclamaciones con paginación de 20 en 20 */
     public function get(Request $request)
     {
-        $reclamaciones = libroReclamacion::orderBy('id_reclamacion', 'asc')->paginate(20);
+        $reclamaciones = libroReclamacion::orderBy('id_reclamacion', 'asc')->paginate(4);
         return response()->json($reclamaciones, 200);
     }
 
@@ -44,7 +43,7 @@ class ReclamacionesController extends Controller
             'distrito' => 'required|string|max:250',
             'ciudad' => 'required|string|max:250',
             'tipoReclamo' => 'required|string|max:20',
-            'id_servicio' => 'required|number',
+            'id_servicio' => 'required|integer|min:1|max:4',
             'reclamoPerson' => 'required|string|max:1050',
             'checkReclamoForm' => 'required|boolean',
             'aceptaPoliticaPrivacidad' => 'required|boolean',

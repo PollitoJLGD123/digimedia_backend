@@ -13,7 +13,7 @@ class ModalesController extends Controller
 {
     public function get(Request $request)
     {
-        $modals = modalservicios::with('servicio')->orderBy('id_modalservicio', 'asc')->paginate(20);
+        $modals = modalservicios::with('servicio')->orderBy('id_modalservicio', 'asc')->paginate(4);
 
         return response()->json($modals, 200);
     }
