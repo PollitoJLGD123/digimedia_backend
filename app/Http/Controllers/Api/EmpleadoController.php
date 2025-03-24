@@ -42,7 +42,7 @@ class EmpleadoController extends Controller
         Log::info("Solicitud recibida para obtener empleados paginados");
 
         try {
-            $empleados = Empleado::with('rol')->orderBy('id_empleado', 'asc')->paginate(20);
+            $empleados = Empleado::with('rol')->orderBy('id_empleado', 'asc')->paginate(5);
 
             Log::info("Empleados obtenidos correctamente:", $empleados->toArray());
 
