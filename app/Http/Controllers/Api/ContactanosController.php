@@ -13,7 +13,7 @@ class ContactanosController extends Controller
 {
     public function get(Request $request)
     {
-        $contactos = Contactanos::paginate(20);
+        $contactos = Contactanos::paginate(4);
         return response()->json($contactos, 200);
     }
 
