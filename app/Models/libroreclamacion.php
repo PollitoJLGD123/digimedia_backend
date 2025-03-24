@@ -19,7 +19,7 @@ class libroreclamacion extends Model
         'distrito',
         'ciudad',
         'tipoReclamo',
-        'servicioContratado',
+        'id_servicio',
         'reclamoPerson',
         'checkReclamoForm',
         'aceptaPoliticaPrivacidad',
@@ -28,4 +28,8 @@ class libroreclamacion extends Model
         'estadoReclamo',
     ];
     public $timestamps = false;
+
+    public function servicio(){
+        return $this->hasOne(servicios::class, 'id_servicio','id_servicio');
+    }
 }

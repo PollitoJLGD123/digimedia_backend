@@ -175,8 +175,6 @@ class EmpleadoController extends Controller
             'apellido' => 'sometimes|string|max:255',
             'email' => 'sometimes|string|email|max:255|unique:empleados,email,' . $id . ',id_empleado|unique:users,email,' . $empleado->id_user,
             'dni' => 'sometimes|string|max:20|unique:empleados,dni,' . $id . ',id_empleado',
-            'email' => 'sometimes|string|email|max:255|unique:empleados,email,' . $id . ',id_empleado|unique:users,email,' . $empleado->id_user,
-            'dni' => 'sometimes|string|max:20|unique:empleados,dni,' . $id . ',id_empleado',
             'telefono' => 'nullable|string|max:20',
             'id_rol' => 'sometimes|exists:roles,id_rol',
         ]);
@@ -270,14 +268,14 @@ class EmpleadoController extends Controller
             ]);
 
             $empleado = Empleado::with('user')->findOrFail($request->id_empleado);
-            
+
             if (!$empleado->user) {
                 return response()->json([
                     'valid' => false,
                     'message' => 'No se encontró el usuario asociado al empleado'
                 ], 404);
             }
-            
+
             if (!Hash::check($request->currentPassword, $empleado->user->password)) {
                 return response()->json([
                     'valid' => false,

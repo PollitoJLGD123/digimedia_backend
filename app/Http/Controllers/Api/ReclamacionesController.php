@@ -44,7 +44,7 @@ class ReclamacionesController extends Controller
             'distrito' => 'required|string|max:250',
             'ciudad' => 'required|string|max:250',
             'tipoReclamo' => 'required|string|max:20',
-            'servicioContratado' => 'required|string|max:250',
+            'id_servicio' => 'required|number',
             'reclamoPerson' => 'required|string|max:1050',
             'checkReclamoForm' => 'required|boolean',
             'aceptaPoliticaPrivacidad' => 'required|boolean',

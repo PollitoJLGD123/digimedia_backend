@@ -12,8 +12,8 @@
 
     <p>
         <a href="{{ url('http://127.0.0.1:3000/login/res?token=' . $token) }}"
-           style="display: inline-block; padding: 10px 15px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">
-           Restablecer contraseña
+            style="display: inline-block; padding: 10px 15px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">
+            Restablecer contraseña
         </a>
     </p>
 

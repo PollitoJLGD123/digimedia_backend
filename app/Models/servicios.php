@@ -19,9 +19,13 @@ class servicios extends Model
     ];
 
     public $timestamps = false;
-    
+
     public function modalservicios(): HasMany
     {
-        return $this->hasMany(ModalServicios::class, 'id_servicio', 'id_servicio');
+        return $this->hasMany(modalservicios::class, 'id_servicio', 'id_servicio');
+    }
+
+    public function reclamacion(){
+        return $this->belongsTo(libroreclamacion::class, 'id_servicio');
     }
 }

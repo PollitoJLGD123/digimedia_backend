@@ -8,21 +8,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class modalservicios extends Model
 {
     protected $table = 'modalservicios';
-
     protected $primaryKey = 'id_modalservicio';
 
     protected $fillable = [
         'nombre',
         'telefono',
         'correo',
-        'id_servicio'
+        'id_servicio',
+        'fecha',
+        'estado'
     ];
 
-    protected $dates = ['fecha_registro'];
     public $timestamps = false;
 
     public function servicio(): BelongsTo
     {
-        return $this->belongsTo(Servicios::class, 'id_servicio');
+        return $this->belongsTo(servicios::class, 'id_servicio');
     }
 }

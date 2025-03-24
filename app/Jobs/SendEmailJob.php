@@ -30,7 +30,7 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-        
+
 
         $imagenes_main = [
             // Desarrollo y Diseño
@@ -148,10 +148,10 @@ class SendEmailJob implements ShouldQueue
             if (!isset($this->servicio_id) || $this->servicio_id < 1 || $this->servicio_id > 4) {
                 throw new \Exception("servicio_id inválido");
             }
-    
+
             $serviceIndex = $this->servicio_id - 1;
             $messageIndex = $this->indice;
-    
+
             // Validar existencia de datos
             if (!isset($menssage[$serviceIndex][$messageIndex]) ||
                 !isset($title[$serviceIndex][$messageIndex]) ||
@@ -159,7 +159,7 @@ class SendEmailJob implements ShouldQueue
                 !isset($subject[$serviceIndex][$messageIndex])) {
                 throw new \Exception("Índices no válidos para los arrays de contenido");
             }
-    
+
             // Un solo envío de email con datos validados
             Mail::to($this->mailto)->send(new MailService(
                 strval($menssage[$serviceIndex][$messageIndex]),
@@ -167,7 +167,7 @@ class SendEmailJob implements ShouldQueue
                 strval($imagenes_main[$serviceIndex][$messageIndex]),
                 strval($subject[$serviceIndex][$messageIndex])
             ));
-    
+
         } catch (\Exception $e) {
             Log::error("Error en SendEmailJob: {$this->servicio_id} - " . $e->getMessage());
         }

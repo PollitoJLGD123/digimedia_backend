@@ -38,7 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Rutas - contactanos
         Route::delete('/contactanos/{id}', [ContactanosController::class, "delete"]);
         Route::delete('/reclamaciones/{id}', [ReclamacionesController::class, "delete"]);
-        Route::delete('/modal/{id}', [ModalesController::class, "delete"]);
+
 
         // Rutas - empleados
         Route::get('/empleados', [EmpleadoController::class, "getAllByPage"]);
@@ -59,17 +59,19 @@ Route::middleware('auth:sanctum')->group(function () {
         // ver datos sin eliminar
         Route::get('/contactanos', [ContactanosController::class, "get"]);
         Route::get('/reclamaciones', [ReclamacionesController::class, "get"]);
-        Route::get('/modal', [ModalesController::class, "get"]);
+        Route::get('/modales', [ModalesController::class, "get"]);
         Route::get('/servicios', [ServiciosController::class, "get"]);
 
         //getById
         Route::get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
         Route::get('/contactanos/{id}', [ContactanosController::class, "getById"]);
-        
+        Route::get('/modales/{id}', [ModalesController::class, "getById"]);
+
         // actualizar datos
         Route::put('/contactanos/{id}', [ContactanosController::class, "update"]);
         Route::put('/servicios/{id}', [ServiciosController::class, "update"]);
         Route::put('/reclamaciones/{id}', [ReclamacionesController::class, "update"]);
+        Route::put('/modales/{id}', [ModalesController::class, "update"]);
 
         //creación (depende :v)
         Route::post('/servicios', [ServiciosController::class, "create"]);
@@ -81,6 +83,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/empleados/verify-password', [EmpleadoController::class, 'verifyPassword']);
 Route::post('/contactanos', [ContactanosController::class, "create"]);
 Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
-Route::post('/modal', [ModalesController::class, "create"]);
+Route::post('/modales', [ModalesController::class, "create"]);
 Route::post('/reset_password', action: [AuthController::class, "forgotPassword"]);
 Route::post('/update_password', action: [AuthController::class, "updatePassword"]);
+Route::delete('/modales/{id}', [ModalesController::class, "delete"]);

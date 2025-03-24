@@ -16,21 +16,27 @@ class ModalservicioSeeder extends Seeder
         $modalServicios = [
             [
                 'nombre' => 'Ana Torres',
-                'telefono' => '987654321',
+                'telefono' => '983354321',
                 'correo' => 'ana@gmail.com',
                 'id_servicio' => 1,
             ],
             [
-                'nombre' => 'Ana Rodriguez',
-                'telefono' => '987654322',
-                'correo' => 'ana2@gmail.com',
+                'nombre' => 'Lorena Rodriguez',
+                'telefono' => '987384322',
+                'correo' => 'lorena@gmail.com',
                 'id_servicio' => 2,
             ],
             [
-                'nombre' => 'Anita Santos',
+                'nombre' => 'Jose Santos',
                 'telefono' => '987654323',
-                'correo' => 'ana3@gmail.com',
+                'correo' => 'jose@gmail.com',
                 'id_servicio' => 3,
+            ],
+            [
+                'nombre' => 'Luis Romero',
+                'telefono' => '981154323',
+                'correo' => 'luisito@gmail.com',
+                'id_servicio' => 4,
             ],
         ];
 
