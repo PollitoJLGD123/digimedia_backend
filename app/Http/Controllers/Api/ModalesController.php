@@ -42,7 +42,7 @@ class ModalesController extends Controller
             dispatch(new SendEmailJob(1, $request->id_servicio, $request->correo))->delay(Carbon::now()->addMinutes(60 * 24));
             // Enviar el tercer correo después de 2 minutos
             dispatch(new SendEmailJob(2, $request->id_servicio, $request->correo))->delay(Carbon::now()->addMinutes(4));
-            // Respuesta exitosa
+
             return response()->json([
                 'message' => 'Registro creado exitosamente',
                 'data' => [
