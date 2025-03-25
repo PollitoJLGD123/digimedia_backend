@@ -30,8 +30,6 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-
-
         $imagenes_main = [
             // Desarrollo y Diseño
             [

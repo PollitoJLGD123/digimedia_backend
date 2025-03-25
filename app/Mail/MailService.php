@@ -24,7 +24,7 @@ class MailService extends Mailable
         $this->image = is_string($image) ? $image : '';
     }
 
-    public function build()
+    /*public function build()
     {
         return $this->subject('Envio de Informacion Digimedia')
                     ->view('mails.mail')
@@ -33,5 +33,5 @@ class MailService extends Mailable
                         'title' => $this->$title,
                         'image' => $this->$image,
                     ]);
-    }
+    }*/
 }
