@@ -3,14 +3,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restablecimiento de Contraseña</title>
+    <title>Restablecimiento de Contraseña - DIGIMEDIA MARKETING</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #8A4FFF;
+            --primary-dark: #7340E0;
+            --primary-light: #F0EBFF;
+            --text-on-primary: #FFFFFF;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --background-light: #F8F6FF;
+            --warning-color: #ef4444;
+            --warning-dark: #b91c1c;
+            --warning-light: #fee2e2;
+        }
         
         body {
             font-family: 'Poppins', Arial, sans-serif;
             line-height: 1.6;
-            color: #333333;
+            color: var(--text-primary);
             background-color: #f5f5f5;
             margin: 0;
             padding: 0;
@@ -18,26 +31,26 @@
         
         .email-container {
             max-width: 600px;
-            margin: 0 auto;
+            margin: 20px auto;
             background-color: #ffffff;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(138, 79, 255, 0.1);
         }
         
         .email-header {
-            background-color: #4f46e5;
+            background-color: #8A4FFF;
             padding: 30px;
             text-align: center;
         }
         
         .email-header img {
-            max-width: 180px;
+            max-width: 220px;
             height: auto;
         }
         
         .email-header h1 {
-            color: #ffffff;
+            color: var(--text-on-primary);
             margin: 20px 0 0;
             font-weight: 600;
             font-size: 24px;
@@ -51,69 +64,71 @@
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #333333;
+            color: #8A4FFF;
         }
         
         .message {
             margin-bottom: 30px;
-            color: #555555;
+            color: var(--text-secondary);
             font-size: 16px;
         }
         
         .reset-box {
-            background-color: #f8fafc;
-            border-radius: 8px;
-            padding: 25px;
+            background-color: var(--background-light);
+            border-radius: 12px;
+            padding: 30px;
             margin-bottom: 30px;
-            border-left: 4px solid #4f46e5;
+            border-left: 4px solid #8A4FFF;
             text-align: center;
         }
         
         .reset-icon {
-            background-color: #4f46e5;
-            width: 70px;
-            height: 70px;
+            background-color: #8A4FFF;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            margin: 0 auto 25px;
+            box-shadow: 0 4px 12px rgba(138, 79, 255, 0.25);
         }
         
         .reset-icon svg {
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             fill: #ffffff;
         }
         
         .reset-text {
             font-size: 16px;
-            color: #555555;
-            margin-bottom: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
         }
         
         .cta-button {
             display: inline-block;
-            background-color: #4f46e5;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 24px;
-            border-radius: 6px;
+            background-color: #8A4FFF;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            padding: 14px 30px;
+            border-radius: 8px;
             font-weight: 600;
             text-align: center;
             margin: 10px 0;
             transition: background-color 0.3s;
+            box-shadow: 0 4px 10px rgba(138, 79, 255, 0.2);
         }
         
         .cta-button:hover {
-            background-color: #4338ca;
+            background-color: #7340E0;
         }
         
         .security-note {
-            background-color: #fee2e2;
-            border-radius: 8px;
-            padding: 15px;
-            border-left: 4px solid #ef4444;
+            background-color: var(--warning-light);
+            border-radius: 12px;
+            padding: 18px;
+            border-left: 4px solid var(--warning-color);
             margin: 30px 0;
         }
         
@@ -121,15 +136,15 @@
             display: flex;
             align-items: center;
             font-weight: 600;
-            color: #b91c1c;
-            margin-bottom: 5px;
+            color: var(--warning-dark);
+            margin-bottom: 8px;
         }
         
         .security-note-title svg {
-            width: 18px;
-            height: 18px;
-            fill: #ef4444;
-            margin-right: 8px;
+            width: 20px;
+            height: 20px;
+            fill: var(--warning-color);
+            margin-right: 10px;
         }
         
         .security-note-content {
@@ -138,10 +153,10 @@
         }
         
         .email-footer {
-            background-color: #f8fafc;
+            background-color: var(--background-light);
             padding: 25px 30px;
             text-align: center;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid #E9E4FF;
         }
         
         .company-info {
@@ -162,11 +177,23 @@
         .social-link img {
             width: 24px;
             height: 24px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .social-link:hover img {
+            opacity: 1;
         }
         
         .copyright {
             font-size: 12px;
             color: #94a3b8;
+        }
+        
+        .digimedia-signature {
+            margin-top: 20px;
+            font-weight: 600;
+            color: #8A4FFF;
         }
         
         @media only screen and (max-width: 600px) {
@@ -191,7 +218,7 @@
 <body>
     <div class="email-container">
         <div class="email-header">
-            <img src="https://via.placeholder.com/180x50/4f46e5/ffffff?text=EMPRESA" alt="Logo de la empresa">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-v2gYpX1AexbpAeLB3A5QD7xRprduZF.png" alt="DIGIMEDIA MARKETING">
             <h1>Restablecimiento de Contraseña</h1>
         </div>
         
@@ -199,15 +226,17 @@
             <div class="greeting">Hola {{ $nombre }},</div>
             
             <p class="message">
-                Hemos recibido una solicitud para restablecer la contraseña de tu cuenta. Si no has sido tú quien ha solicitado este cambio, puedes ignorar este mensaje.
+                Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en DIGIMEDIA MARKETING. Si no has sido tú quien ha solicitado este cambio, puedes ignorar este mensaje.
             </p>
             
             <div class="reset-box">
-                <div class="reset-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                    </svg>
-                </div>
+                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto 25px;">
+                    <tr>
+                        <td style="background-color: #8A4FFF; width: 80px; height: 80px; border-radius: 50%; text-align: center; box-shadow: 0 4px 12px rgba(138, 79, 255, 0.25);">
+                            <img src="https://cdn-icons-png.flaticon.com/128/2889/2889676.png" alt="Reset icon" width="40" height="40" style="width: 40px; height: 40px; filter: brightness(0) invert(1); display: block; margin: 0 auto;">
+                        </td>
+                    </tr>
+                </table>
                 
                 <div class="reset-text">
                     Para restablecer tu contraseña, haz clic en el botón de abajo:
@@ -235,37 +264,38 @@
             </p>
             
             <p class="message">
-                Saludos,<br>
-                <strong>El equipo de soporte</strong>
+                Saludos,
+                <div class="digimedia-signature">El equipo de DIGIMEDIA MARKETING</div>
             </p>
         </div>
         
         <div class="email-footer">
             <div class="company-info">
-                Empresa S.A. de C.V.<br>
+                DIGIMEDIA MARKETING<br>
                 Av. Principal #123, Ciudad<br>
                 +52 (123) 456-7890
             </div>
             
             <div class="social-links">
                 <a href="#" class="social-link">
-                    <img src="https://via.placeholder.com/24/4f46e5/ffffff?text=F" alt="Facebook">
+                    <img src="https://cdn-icons-png.flaticon.com/128/733/733547.png" alt="Facebook">
                 </a>
                 <a href="#" class="social-link">
-                    <img src="https://via.placeholder.com/24/4f46e5/ffffff?text=T" alt="Twitter">
+                    <img src="https://cdn-icons-png.flaticon.com/128/733/733579.png" alt="Twitter">
                 </a>
                 <a href="#" class="social-link">
-                    <img src="https://via.placeholder.com/24/4f46e5/ffffff?text=I" alt="Instagram">
+                    <img src="https://cdn-icons-png.flaticon.com/128/2111/2111463.png" alt="Instagram">
                 </a>
                 <a href="#" class="social-link">
-                    <img src="https://via.placeholder.com/24/4f46e5/ffffff?text=L" alt="LinkedIn">
+                    <img src="https://cdn-icons-png.flaticon.com/128/3536/3536505.png" alt="LinkedIn">
                 </a>
             </div>
             
             <div class="copyright">
-                &copy; {{ date('Y') }} Empresa. Todos los derechos reservados.
+                &copy; {{ date('Y') }} DIGIMEDIA MARKETING. Todos los derechos reservados.
             </div>
         </div>
     </div>
 </body>
 </html>
+
