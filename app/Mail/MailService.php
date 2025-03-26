@@ -13,39 +13,25 @@ class MailService extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-
     public $message;
     public $title;
     public $image;
-    public $subject;
 
-    public function __construct($message, $title, $image, $subject)
+    public function __construct($message, $title, $image)
     {
         $this->message = is_string($message) ? $message : '';
         $this->title = is_string($title) ? $title : '';
         $this->image = is_string($image) ? $image : '';
-        $this->subject = is_string($subject) ? strip_tags($subject) : '';
     }
 
-    public function envelope(): Envelope
+    /*public function build()
     {
-        return new Envelope(
-            subject: $this->subject,
-        );
-    }
-
-    public function content(): Content
-    {
-        return new Content(
-            view: 'mails.mail',
-            with: [
-                'message' => $this->message,
-                'title' => $this->title,
-                'image' => $this->image
-            ]
-        );
-    }
+        return $this->subject('Envio de Informacion Digimedia')
+                    ->view('mails.mail')
+                    ->with([
+                        'message' => $this->$message,
+                        'title' => $this->$title,
+                        'image' => $this->$image,
+                    ]);
+    }*/
 }

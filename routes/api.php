@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // Rutas - contactanos
         Route::delete('/contactanos/{id}', [ContactanosController::class, "delete"]);
         Route::delete('/reclamaciones/{id}', [ReclamacionesController::class, "delete"]);
+        Route::delete('/modales/{id}', [ModalesController::class, "delete"]);
 
 
         // Rutas - empleados
@@ -86,4 +87,3 @@ Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
 Route::post('/modales', [ModalesController::class, "create"]);
 Route::post('/reset_password', action: [AuthController::class, "forgotPassword"]);
 Route::post('/update_password', action: [AuthController::class, "updatePassword"]);
-Route::delete('/modales/{id}', [ModalesController::class, "delete"]);
