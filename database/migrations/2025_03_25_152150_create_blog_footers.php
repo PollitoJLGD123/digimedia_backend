@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('url_image1')->nullable();
             $table->text('url_image2')->nullable();
             $table->text('url_image3')->nullable();
-            $table->timestamps();
         });
     }
 

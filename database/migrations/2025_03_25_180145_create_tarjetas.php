@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tarjetas', function (Blueprint $table) {
             $table->id('id_tarjeta');
+            $table->string('titulo');
             $table->text('descripcion');
             $table->foreignId(column: 'id_blog_body')->references('id_blog_body')->on('blog_bodies')->onDelete('cascade');
         });
