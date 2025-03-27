@@ -37,7 +37,7 @@ class CardSeeder extends Seeder
                 'titulo' => 'MARKETING Y GESTIÓN DIGITAL',
                 'descripcion' => 'Una estrategia SEO optimiza contenido y estructura web, utilizando palabras clave y enlaces para mejorar la visibilidad y atraer tráfico orgánico. ¡Descubre cómo podemos potenciar tu presencia hoy mismo!',
                 'url_image' => 'fondo_blog.png',
-                'id_plantilla' => 4,
+                'id_plantilla' => 3,
                 'id_blog' => 4
             ],
         ];

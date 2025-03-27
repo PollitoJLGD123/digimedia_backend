@@ -14,7 +14,7 @@ class CardController extends Controller
     {
         try{
 
-            $cards = Card::with('blog')->orderBy('id_card', 'asc')->all();
+            $cards = Card::all();
             return response()->json($cards, 200);
 
         }catch(\Exception $ex){

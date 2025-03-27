@@ -12,7 +12,7 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::with('head','body','footer')->orderBy('id_blog', 'asc')->all();
+        $blogs = Blog::all();
         return response()->json($blogs, 200);
     }
 
