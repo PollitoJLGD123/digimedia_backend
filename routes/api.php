@@ -4,12 +4,20 @@ use App\Http\Controllers\Api\ContactanosController;
 use App\Http\Controllers\Api\ModalesController;
 use App\Http\Controllers\Api\ReclamacionesController;
 use App\Http\Controllers\Api\ServiciosController;
-use App\Http\Controllers\Api\ModalServiciosController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EmpleadoController;
 use App\Http\Controllers\Api\RolController;
+use App\Http\Controllers\Api\BlogController;
+use App\Http\Controllers\Api\CardController;
+use App\Http\Controllers\Api\BlogBodyController;
+use App\Http\Controllers\Api\BlogFooterController;
+use App\Http\Controllers\Api\BlogHeadController;
+use App\Http\Controllers\Api\TarjetaController;
+use App\Http\Controllers\Api\CommendTarjetaController;
+
 use App\Http\Middleware\isAdmin;
+use App\Models\CommendTarjeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -77,6 +85,22 @@ Route::middleware('auth:sanctum')->group(function () {
         //creación (depende :v)
         Route::post('/servicios', [ServiciosController::class, "create"]);
 
+        //blogs creacion
+        Route::post('/blog_head', [BlogHeadController::class, "create"]);
+        Route::post('/blog_body', [BlogBodyController::class, "create"]);
+        Route::post('/blog_footer', [BlogFooterController::class, "create"]);
+        Route::post('/commend_tarjeta', [CommendTarjetaController::class, "create"]);
+        Route::post('/tarjeta', [TarjetaController::class, "create"]);
+
+        //blogs delete
+        Route::delete('/cards/{id}', [CardController::class, "destroy"]);
+        Route::delete('/blogs/{id}', [BlogController::class, "destroy"]);
+        Route::delete('/blog_head/{id}', [BlogHeadController::class, "destroy"]);
+        Route::delete('/blog_body/{id}', [BlogBodyController::class, "destroy"]);
+        Route::delete('/blog_footer/{id}', [BlogFooterController::class, "destroy"]);
+        Route::delete('/commend_tarjeta/{id}', [CommendTarjetaController::class, "destroy"]);
+        Route::delete('/tarjetas_delete/{id}', [TarjetaController::class, "destroyAll"]);
+        //Route::delete('/tarjetas_delete/{id}', [TarjetaController::class, "destroy"]);
     });
 });
 
@@ -87,3 +111,8 @@ Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
 Route::post('/modales', [ModalesController::class, "create"]);
 Route::post('/reset_password', action: [AuthController::class, "forgotPassword"]);
 Route::post('/update_password', action: [AuthController::class, "updatePassword"]);
+
+//blogs obtener
+Route::get('/cards', [CardController::class, "index"]);
+Route::get('/blogs/{id}', [BlogController::class, "show"]);
+//Route::get('/blogs', [BlogController::class, "index"]);
