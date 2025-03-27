@@ -50,6 +50,7 @@ class ContactanosController extends Controller
         $contacto = Contactanos::create($request->all());
 
         return response()->json([
+            'status' => 201,
             'message' => 'Contacto guardado exitosamente',
             'data' => $contacto,
         ], 201);

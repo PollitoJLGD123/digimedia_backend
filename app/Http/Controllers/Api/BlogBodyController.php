@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\BlogBody;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
+class BlogBodyController extends Controller
+{
+
+    public function create(Request $request)
+    {
+        try{
+
+            $validator = Validator::make($request->all(), [
+                'titulo' => 'required|string|max:255',
+                'descripcion' => 'required|string',
+                'id_commend_tarjeta' => 'nullable|integer|exists:commend_tarjetas,id_commend_tarjeta',
+                'url_image1' => 'required|string',
+                'url_image2' => 'nullable|string',
+                'url_image3' => 'nullable|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
+
+            DB::beginTransaction();
+
+            $blogBody = BlogBody::create($request->all());
+
+            DB::commit();
+
+            return response()->json([
+                "status" => 201,
+                "message" => "BlogBody creada correctamente",
+                "blogBody" => $blogBody,
+                "id" => $blogBody->id_blog_body
+            ], 201);
+
+        }catch(\Exception $ex){
+            DB::rollback();
+            return response()->json([
+                "status" => 500,
+                "message" => "Error al crear el blogBody",
+                "error" => $ex->getMessage()
+            ], 500);
+        }
+    }
+    public function destroy(int $id)
+    {
+
+        try{
+
+            $blogBody = BlogBody::find($id);
+
+            if (!$blogBody) {
+                return response()->json([
+                    "status" => 404,
+                    "message" => "BlogBody no encontrada"
+                ],404);
+            }
+
+            $blogBody->delete();
+
+            return response()->json([
+                "status" => 200,
+                "message" => "BlogBody eliminada correctamente"
+            ], 200);
+
+        }catch(\Exception $ex){
+            return response()->json([
+                "status" => 500,
+                "message" => "Error al eliminar el BlogBody",
+                "error" => $ex->getMessage()
+            ], 500);
+        }
+    }
+}

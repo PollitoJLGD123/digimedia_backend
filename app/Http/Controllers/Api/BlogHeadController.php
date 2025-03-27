@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\BlogHead;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
+class BlogHeadController extends Controller
+{
+    public function create(Request $request)
+    {
+        try{
+            $validator = Validator::make($request->all(), [
+                'titulo' => 'required|string|max:30',
+                'texto_frase' => 'required|string|max:50',
+                'texto_descripcion' => 'required|string|max:100',
+                'url_image' => 'required|string'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
+
+            DB::beginTransaction();
+
+            $blogHead = BlogHead::create($request->all());
+
+            DB::commit();
+
+            return response()->json([
+                "status" => 201,
+                "message" => "BlogHead creado correctamente",
+                "blogFooter" => $blogHead,
+                "id" => $blogHead->id_blog_head
+            ], 201);
+
+        }catch(\Exception $ex){
+            DB::rollback();
+            return response()->json([
+                "status" => 500,
+                "message" => "Error interno del servidor",
+                "error" => $ex->getMessage()
+                ], 500);
+        }
+    }
+    public function destroy(string $id)
+    {
+        try{
+
+            $blogHead = BlogHead::find($id);
+
+            if (!$blogHead) {
+                return response()->json([
+                    "status" => 404,
+                    "message" => "BlogHead no encontrado"
+                ]);
+            }
+            $blogHead->delete();
+            return response()->json([
+                "status" => 200,
+                "message" => "BlogHead eliminado correctamente"
+                ], 200);
+
+        }catch(\Exception $ex){
+            return response()->json([
+                "status" => 500,
+                "message" => "Error al eliminar el blogHead",
+                "error" => $ex->getMessage()
+                ], 500);
+        }
+    }
+}
