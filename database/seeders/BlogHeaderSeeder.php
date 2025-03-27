@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class BlogHeaderSeeder extends Seeder
 {
@@ -12,6 +13,33 @@ class BlogHeaderSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $blog_heads = [
+            [
+                'titulo' => 'Tu Bar, en la Mira',
+                'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
+                'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
+                'url_image'=>'fondo_blog_extend.png'
+            ],
+            [
+                'titulo' => 'Tu Bar, en la Mira',
+                'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
+                'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
+                'url_image'=>'fondo_blog_extend.png'
+            ],
+            [
+                'titulo' => 'Tu Bar, en la Mira',
+                'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
+                'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
+                'url_image'=>'fondo_blog_extend.png'
+            ],
+            [
+                'titulo' => 'Tu Bar, en la Mira',
+                'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
+                'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
+                'url_image'=>'fondo_blog_extend.png'
+            ],
+        ];
+
+        DB::table('blog_heads')->insert($blog_heads);
     }
 }

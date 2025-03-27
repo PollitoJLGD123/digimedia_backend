@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->id('id_card');
             $table->string('titulo');
-            $table->string('name_ruta'); //blog1-brilla-estilo
             $table->text('descripcion');
             $table->text('url_image');
+            $table->bigInteger('id_plantilla')->nullable();
             $table->foreignId('id_blog')->unique()->references('id_blog')->on('blogs')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
