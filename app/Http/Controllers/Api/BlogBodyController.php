@@ -50,9 +50,32 @@ class BlogBodyController extends Controller
             ], 500);
         }
     }
+
+    public function show(int $id){
+        try{
+            $blogBody = BlogBody::with('commend_tarjeta','tarjetas')->find($id);
+            if (!$blogBody) {
+                return response()->json([
+                    "status" => 404,
+                    "message" => "BlogBody no encontrada"
+                ],404);
+            }
+            return response()->json([
+                "status" => 200,
+                "data" => $blogBody
+            ], 200);
+
+        }catch(\Exception $ex){
+            return response()->json([
+                "status" => 500,
+                "message" => "Error interno",
+                "error" => $ex->getMessage()
+            ], 500);
+        }
+    }
+
     public function destroy(int $id)
     {
-
         try{
 
             $blogBody = BlogBody::find($id);

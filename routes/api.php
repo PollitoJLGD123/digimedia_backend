@@ -116,3 +116,6 @@ Route::post('/update_password', action: [AuthController::class, "updatePassword"
 Route::get('/cards', [CardController::class, "index"]);
 Route::get('/blogs/{id}', [BlogController::class, "show"]);
 Route::get('/blogs', [BlogController::class, "index"]);
+Route::get('/blog_head/{id}', [BlogHeadController::class, "show"]);
+Route::get('/blog_footer/{id}', [BlogFooterController::class, "show"]);
+Route::get('/blog_body/{id}', [BlogBodyController::class, "show"]);

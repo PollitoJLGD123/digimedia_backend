@@ -46,6 +46,33 @@ class BlogHeadController extends Controller
                 ], 500);
         }
     }
+
+
+    public function show(int $id){
+        try{
+
+            $blogHead = BlogHead::find($id);
+            if (!$blogHead) {
+                return response()->json([
+                    "status" => 404,
+                    "message" => "BlogHead no encontrado"
+                ],404);
+            }
+
+            return response()->json([
+                "status" => 200,
+                "data" => $blogHead
+            ], 200);
+
+        }catch(\Exception $ex){
+            return response()->json([
+                "status" => 500,
+                "message" => "Error interno del servidor",
+                "error" => $ex->getMessage()
+                ], 500);
+        }
+    }
+
     public function destroy(string $id)
     {
         try{

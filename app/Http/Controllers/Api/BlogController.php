@@ -53,7 +53,7 @@ class BlogController extends Controller
     {
         try{
 
-            $blog = Blog::where('id_blog', $id)->first()->with('head','body','footer');
+            $blog = Blog::find($id);
 
             if (!$blog) {
                 return response()->json([
