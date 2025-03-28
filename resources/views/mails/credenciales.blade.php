@@ -6,7 +6,7 @@
     <title>Bienvenido a DIGIMEDIA MARKETING</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
+
         :root {
             --primary-color: #8A4FFF;
             --primary-dark: #7340E0;
@@ -19,7 +19,7 @@
             --warning-dark: #B45309;
             --warning-light: #FFFBEB;
         }
-        
+
         body {
             font-family: 'Poppins', Arial, sans-serif;
             line-height: 1.6;
@@ -28,7 +28,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         .email-container {
             max-width: 600px;
             margin: 20px auto;
@@ -37,42 +37,42 @@
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(138, 79, 255, 0.1);
         }
-        
+
         .email-header {
             background-color: #8A4FFF;
             padding: 30px;
             text-align: center;
         }
-        
+
         .email-header img {
             max-width: 220px;
             height: auto;
         }
-        
+
         .email-header h1 {
             color: var(--text-on-primary);
             margin: 20px 0 0;
             font-weight: 600;
             font-size: 24px;
         }
-        
+
         .email-body {
             padding: 40px 30px;
         }
-        
+
         .greeting {
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 20px;
             color: #8A4FFF;
         }
-        
+
         .message {
             margin-bottom: 30px;
             color: var(--text-secondary);
             font-size: 16px;
         }
-        
+
         .credentials-box {
             background-color: var(--background-light);
             border-radius: 12px;
@@ -80,23 +80,23 @@
             margin-bottom: 30px;
             border-left: 4px solid #8A4FFF;
         }
-        
+
         .credential-item {
             margin-bottom: 15px;
             display: table;
             width: 100%;
         }
-        
+
         .credential-item:last-child {
             margin-bottom: 0;
         }
-        
+
         .credential-icon-container {
             display: table-cell;
             vertical-align: middle;
             width: 36px;
         }
-        
+
         .credential-icon {
             background-color: #8A4FFF;
             width: 36px;
@@ -109,14 +109,14 @@
             max-height: 36px;
             box-shadow: 0 2px 8px rgba(138, 79, 255, 0.3);
         }
-        
+
         .icon-cell {
             display: table-cell;
             vertical-align: middle;
             text-align: center;
             height: 36px;
         }
-        
+
         .credential-icon img {
             width: 18px;
             height: 18px;
@@ -124,27 +124,27 @@
             vertical-align: middle;
             filter: brightness(0) invert(1);
         }
-        
+
         .credential-content {
             display: table-cell;
             vertical-align: middle;
             padding-left: 15px;
         }
-        
+
         .credential-label {
             font-weight: 600;
             color: #8A4FFF;
             margin-bottom: 3px;
             font-size: 14px;
         }
-        
+
         .credential-value {
             font-weight: 500;
             font-size: 16px;
             color: var(--text-primary);
             word-break: break-all;
         }
-        
+
         .cta-button {
             display: block;
             background-color: #8A4FFF;
@@ -158,11 +158,11 @@
             transition: background-color 0.3s;
             box-shadow: 0 4px 10px rgba(138, 79, 255, 0.2);
         }
-        
+
         .cta-button:hover {
             background-color: #7340E0;
         }
-        
+
         .security-note {
             background-color: var(--warning-light);
             border-radius: 12px;
@@ -170,7 +170,7 @@
             border-left: 4px solid var(--warning-color);
             margin-bottom: 30px;
         }
-        
+
         .security-note-title {
             display: table;
             width: 100%;
@@ -178,87 +178,87 @@
             color: var(--warning-dark);
             margin-bottom: 5px;
         }
-        
+
         .security-note-icon {
             display: table-cell;
             vertical-align: middle;
             width: 18px;
         }
-        
+
         .security-note-text {
             display: table-cell;
             vertical-align: middle;
             padding-left: 8px;
         }
-        
+
         .security-note-title img {
             width: 18px;
             height: 18px;
             display: block;
         }
-        
+
         .security-note-content {
             color: #78350f;
             font-size: 14px;
         }
-        
+
         .email-footer {
             background-color: var(--background-light);
             padding: 25px 30px;
             text-align: center;
             border-top: 1px solid #E9E4FF;
         }
-        
+
         .company-info {
             font-size: 14px;
             color: #64748b;
             margin-bottom: 15px;
         }
-        
+
         .social-links {
             margin-bottom: 15px;
         }
-        
+
         .social-link {
             display: inline-block;
             margin: 0 8px;
         }
-        
+
         .social-link img {
             width: 24px;
             height: 24px;
             opacity: 0.7;
             transition: opacity 0.3s;
         }
-        
+
         .social-link:hover img {
             opacity: 1;
         }
-        
+
         .copyright {
             font-size: 12px;
             color: #94a3b8;
         }
-        
+
         .digimedia-signature {
             margin-top: 20px;
             font-weight: 600;
             color: #8A4FFF;
         }
-        
+
         @media only screen and (max-width: 600px) {
             .email-body {
                 padding: 30px 20px;
             }
-            
+
             .email-header {
                 padding: 20px;
             }
-            
+
             .email-header h1 {
                 font-size: 20px;
             }
-            
+
             .greeting {
                 font-size: 18px;
             }
@@ -271,14 +271,14 @@
             <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-v2gYpX1AexbpAeLB3A5QD7xRprduZF.png" alt="DIGIMEDIA MARKETING" />
             <h1>¡Bienvenido a nuestra plataforma!</h1>
         </div>
-        
+
         <div class="email-body">
             <div class="greeting">Hola {{ $nombre }},</div>
-            
+
             <p class="message">
                 Estamos encantados de darte la bienvenida a DIGIMEDIA MARKETING. Hemos creado tu cuenta y a continuación encontrarás tus credenciales de acceso:
             </p>
-            
+
             <div class="credentials-box">
                 <div class="credential-item">
                     <div class="credential-icon-container">
@@ -293,7 +293,7 @@
                         <div class="credential-value">{{ $email }}</div>
                     </div>
                 </div>
-                
+
                 <div class="credential-item">
                     <div class="credential-icon-container">
                         <div class="credential-icon">
@@ -308,11 +308,12 @@
                     </div>
                 </div>
             </div>
-            
-            <a href="{{ url('http://127.0.0.1:3000/login') }}" class="cta-button">
+
+            {{ /*url = https://digimediamkt.com/login  */}} {{ /* url = https://127.0.0.1:3000/login  */ }}
+            <a href="{{ url('https://digimediamkt.com/login') }}" class="cta-button">
                 Iniciar sesión ahora
             </a>
-            
+
             <div class="security-note">
                 <div class="security-note-title">
                     <div class="security-note-icon">
@@ -326,24 +327,24 @@
                     Por tu seguridad, te recomendamos cambiar tu contraseña inmediatamente después de iniciar sesión por primera vez. Nunca compartas tus credenciales con otras personas.
                 </div>
             </div>
-            
+
             <p class="message">
                 Si tienes alguna pregunta o necesitas ayuda, no dudes en contactar a nuestro equipo de soporte.
             </p>
-            
+
             <p class="message">
                 ¡Esperamos que disfrutes de nuestra plataforma!
                 <div class="digimedia-signature">El equipo de DIGIMEDIA MARKETING</div>
             </p>
         </div>
-        
+
         <div class="email-footer">
             <div class="company-info">
                 DIGIMEDIA MARKETING<br>
                 Av. Principal #123, Ciudad<br>
                 +52 (123) 456-7890
             </div>
-            
+
             <div class="social-links">
                 <a href="#" class="social-link">
                     <img src="https://cdn-icons-png.flaticon.com/128/733/733547.png" alt="Facebook">
@@ -358,7 +359,7 @@
                     <img src="https://cdn-icons-png.flaticon.com/128/3536/3536505.png" alt="LinkedIn">
                 </a>
             </div>
-            
+
             <div class="copyright">
                 &copy; {{ date('Y') }} DIGIMEDIA MARKETING. Todos los derechos reservados.
             </div>
