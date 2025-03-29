@@ -11,8 +11,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Cloudinary\Cloudinary;
 use App\Mail\CredencialesEmpleadoMail;
+use Laravel\Prompts\Themes\Contracts\Scrolling;
 
 class EmpleadoController extends Controller
 {
@@ -218,57 +219,68 @@ class EmpleadoController extends Controller
         ]);
     }
 
+    
     public function updateProfileImage(Request $request, $id)
     {
-        Log::info('Datos recibidos:', $request->all());
+        Log::info("Solicitud recibida para actualizar imagen de perfil del empleado con ID: $id");
+        Log::info('Datos recibidos para actualización de imagen:', $request->all());
+        
         $validate = Validator::make($request->all(), [
-            'public_id' => [
-                'required',
-                'string',
-                'regex:/^[a-zA-Z0-9_\-\.\/]+$/u' 
-            ],
-            'secure_url' => [
-                'required',
-                'url',
-                'starts_with:https://res.cloudinary.com/'.env('CLOUDINARY_CLOUD_NAME')
-            ]
-        ], [
-            'secure_url.starts_with' => 'La URL debe ser de Cloudinary',
-            'public_id.regex' => 'Formato inválido (solo letras, números, -, _, ., y /)'
+            'public_id' => 'required|string',
+            'secure_url' => 'required|url'
         ]);
 
         if ($validate->fails()) {
+            Log::warning('Validación fallida:', $validate->errors()->toArray());
             return response()->json([
                 "status" => 422,
                 "message" => "Error de validación",
                 "errors" => $validate->errors()
-            ]);
+            ], 422);
         }
 
         try {
-            $empleado = Empleado::lockForUpdate()->findOrFail($id);
-            Log::info('Empleado encontrado:', [$empleado]);
+            $empleado = Empleado::where('id_empleado', $id)->first();
+            Log::info('Empleado encontrado:', $empleado->toArray());
+            
+            if (!$empleado) {
+                Log::warning("Empleado no encontrado con ID: {$id}");
+                return response()->json([
+                    "status" => 404,
+                    "message" => "Empleado no encontrado"
+                ], 404);
+            }
+            
+            Log::info('Empleado encontrado:', ['id' => $empleado->id_empleado, 'imagen_actual' => $empleado->imagen_perfil]);
+            
             DB::beginTransaction();
 
             if ($empleado->imagen_perfil) {
-                $result = Cloudinary::destroy($empleado->imagen_perfil, [
-                    'resource_type' => 'image',
-                    'invalidate' => true
-                ]);
+                try {
+                    Log::info('Intentando eliminar imagen anterior:', ['public_id' => $empleado->imagen_perfil]);
+                    
+                    $cloudinary = new Cloudinary();
 
-                if ($result['result'] !== 'ok') {
-                    throw new \Exception('No se pudo eliminar la imagen anterior');
+                    $result = $cloudinary->uploadApi()->destroy($empleado->imagen_perfil);
+                    
+                    Log::info('Resultado de eliminación de Cloudinary:', ['result' => $result]);
+                } catch (\Exception $e) {
+                    Log::warning("Error al eliminar imagen anterior, continuando con actualización: " . $e->getMessage());
                 }
             }
 
-            $empleado->update([
-                'imagen_perfil' => $request->public_id,
-                'imagen_perfil_url' => $request->secure_url
-            ]);
+            /*$empleado->imagen_perfil = null;
+            $empleado->imagen_perfil_url = null;*/
+            $empleado->imagen_perfil = $request->public_id;
+            $empleado->imagen_perfil_url = $request->secure_url;
+            $empleado->save();
 
             DB::commit();
 
-            Log::info('Resultado de update:', [$empleado->fresh()]);
+            Log::info('Imagen actualizada correctamente:', [
+                'empleado_id' => $empleado->id_empleado,
+                'nueva_imagen' => $empleado->imagen_perfil
+            ]);
 
             return response()->json([
                 "status" => 200,
@@ -276,25 +288,22 @@ class EmpleadoController extends Controller
                 "data" => [
                     'public_id' => $empleado->imagen_perfil,
                     'url' => $empleado->imagen_perfil_url,
-                    'version' => time() 
+                    'version' => time()
                 ]
             ]);
 
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            DB::rollBack();
-            Log::error("Empleado no encontrado: " . $e->getMessage());
-            return response()->json([
-                "status" => 404,
-                "message" => "Empleado no encontrado"
-            ], 404);
-
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error("Error actualizando imagen: " . $e->getMessage());
+            
+            Log::error("Error actualizando imagen: " . $e->getMessage(), [
+                'exception' => $e,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             return response()->json([
                 "status" => 500,
                 "message" => "Error al actualizar la imagen",
-                "error" => env('APP_DEBUG') ? $e->getMessage() : 'Error interno'
+                "error" => env('APP_DEBUG') ? $e->getMessage() : 'Error interno del servidor'
             ], 500);
         }
     }
@@ -412,13 +421,50 @@ class EmpleadoController extends Controller
 
     public function deleteProfileImage($id)
     {
-        $empleado = Empleado::findOrFail($id);
+        try {
+            $empleado = Empleado::where('id_empleado', $id)->first();
+            
+            if (!$empleado) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Empleado no encontrado'
+                ], 404);
+            }
 
-        if ($empleado->imagen_perfil) {
-            Cloudinary::destroy($empleado->imagen_perfil);
-            $empleado->update(['imagen_perfil' => null, 'imagen_perfil_url' => null]);
+            if ($empleado->imagen_perfil) {
+                Log::info('Intentando eliminar imagen de perfil:', ['public_id' => $empleado->imagen_perfil]);
+                
+                try {
+                    $cloudinary = new Cloudinary();
+
+                    $result = $cloudinary->uploadApi()->destroy($empleado->imagen_perfil);
+                    Log::info('Resultado de eliminación:', ['result' => $result]);
+                } catch (\Exception $e) {
+                    Log::warning("Error al eliminar imagen de Cloudinary: " . $e->getMessage());
+                    // Continuamos con la actualización en la base de datos
+                }
+                
+                $empleado->imagen_perfil = null;
+                $empleado->imagen_perfil_url = null;
+                $empleado->save();
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Imagen eliminada correctamente'
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error("Error eliminando imagen de perfil: " . $e->getMessage(), [
+                'exception' => $e,
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'status' => 500,
+                'message' => 'Error al eliminar la imagen',
+                'error' => env('APP_DEBUG') ? $e->getMessage() : 'Error interno del servidor'
+            ], 500);
         }
-
-        return response()->json(['success' => true]);
     }
 }

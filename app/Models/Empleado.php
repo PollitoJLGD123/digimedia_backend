@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Cloudinary\Cloudinary;
 class Empleado extends Model
 {
     use HasFactory;
@@ -39,8 +39,19 @@ class Empleado extends Model
     public function getImagenPerfilUrlAttribute()
     {
         if ($this->imagen_perfil) {
-            return "https://res.cloudinary.com/".env('CLOUDINARY_CLOUD_NAME')."/image/upload/".$this->imagen_perfil;
+            $cloudinary = new Cloudinary([
+                'cloud' => [
+                    'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                    'api_key' => env('CLOUDINARY_API_KEY'),
+                    'api_secret' => env('CLOUDINARY_API_SECRET'),
+                ],
+                'url' => [
+                    'secure' => true
+                ]
+            ]);
+            
+            return $cloudinary->image($this->imagen_perfil)->toUrl();
         }
-        return "URL_IMAGEN_POR_DEFECTO";
+        return asset('images/default-profile.jpg');
     }
 }

@@ -123,6 +123,4 @@ Route::get('/blog_body/{id}', [BlogBodyController::class, "show"]);
 
 Route::post('/empleados/{id}/image', [EmpleadoController::class, 'updateProfileImage']);
     
-Route::delete('/empleados/{id}/image', [EmpleadoController::class, 'deleteProfileImage'])
-        ->where('id', '[0-9]+')
-        ->name('empleados.deleteImage');
+Route::delete('/empleados/{id}/image', [EmpleadoController::class, 'deleteProfileImage']);
