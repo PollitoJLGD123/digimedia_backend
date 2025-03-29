@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Mail\CredencialesEmpleadoMail;
 
 class EmpleadoController extends Controller
@@ -160,77 +161,144 @@ class EmpleadoController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
+            return response()->json([
+                "status" => 422, 
+                "message" => "Error de validación", 
+                "Errors" => $validate->errors()
+            ]);
         }
 
-        $empleado = Empleado::where('id_empleado', $id)->first();
         $empleado = Empleado::where('id_empleado', $id)->first();
 
         if (!$empleado) {
-            return response()->json(["status" => 404, "message" => "Empleado no encontrado"]);
+            return response()->json([
+                "status" => 404, 
+                "message" => "Empleado no encontrado"
+            ]);
         }
 
         $validator = Validator::make($request->all(), [
-            'nombre' => 'sometimes|string|max:255',
-            'apellido' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:empleados,email,' . $id . ',id_empleado|unique:users,email,' . $empleado->id_user,
-            'dni' => 'sometimes|string|max:20|unique:empleados,dni,' . $id . ',id_empleado',
-            'telefono' => 'nullable|string|max:20',
-            'id_rol' => 'sometimes|exists:roles,id_rol',
+            'nombre'    => 'sometimes|string|max:255',
+            'apellido'  => 'sometimes|string|max:255',
+            'email'     => 'sometimes|string|email|max:255|unique:empleados,email,' . $id . ',id_empleado|unique:users,email,' . $empleado->id_user,
+            'dni'       => 'sometimes|string|max:20|unique:empleados,dni,' . $id . ',id_empleado',
+            'telefono'  => 'nullable|string|max:20',
+            'id_rol'    => 'sometimes|exists:roles,id_rol',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        if ($request->has('email') && $request->email != $empleado->email) {
-            $user = User::find($empleado->id_user);
-            if ($user) {
-                $user->email = $request->email;
-                $user->save();
-            }
-        }
+        $user = User::find($empleado->id_user);
 
-        // Si se actualiza el nombre o apellido, también actualizar el name en users
-        if (($request->has('nombre') && $request->nombre != $empleado->nombre) ||
-            ($request->has('apellido') && $request->apellido != $empleado->apellido)) {
-            $user = User::find($empleado->id_user);
-            if ($user) {
-                $nombre = $request->has('nombre') ? $request->nombre : $empleado->nombre;
+        if ($user) {
+            if ($request->has('email') && $request->email != $empleado->email) {
+                $user->email = $request->email;
+            }
+
+            if (
+                ($request->has('nombre') && $request->nombre != $empleado->nombre) ||
+                ($request->has('apellido') && $request->apellido != $empleado->apellido)
+            ) {
+                $nombre   = $request->has('nombre') ? $request->nombre : $empleado->nombre;
                 $apellido = $request->has('apellido') ? $request->apellido : $empleado->apellido;
                 $user->name = $nombre . ' ' . $apellido;
-                $user->save();
             }
-        }
 
-        if ($request->has('email') && $request->email != $empleado->email) {
-            $user = User::find($empleado->id_user);
-            if ($user) {
-                $user->email = $request->email;
-                $user->save();
-            }
-        }
-
-        // actualizar nombre o apellido, actualiza name de users
-        if (($request->has('nombre') && $request->nombre != $empleado->nombre) ||
-            ($request->has('apellido') && $request->apellido != $empleado->apellido)) {
-            $user = User::find($empleado->id_user);
-            if ($user) {
-                $nombre = $request->has('nombre') ? $request->nombre : $empleado->nombre;
-                $apellido = $request->has('apellido') ? $request->apellido : $empleado->apellido;
-                $user->name = $nombre . ' ' . $apellido;
-                $user->save();
-            }
+            $user->save();
         }
 
         $empleado->update($request->all());
 
         return response()->json([
-            "status" => 200,
+            "status"  => 200,
             "message" => "Empleado actualizado correctamente",
-            "data" => $empleado
+            "data"    => $empleado
         ]);
     }
+
+    public function updateProfileImage(Request $request, $id)
+    {
+        Log::info('Datos recibidos:', $request->all());
+        $validate = Validator::make($request->all(), [
+            'public_id' => [
+                'required',
+                'string',
+                'regex:/^[a-zA-Z0-9_\-\.\/]+$/u' 
+            ],
+            'secure_url' => [
+                'required',
+                'url',
+                'starts_with:https://res.cloudinary.com/'.env('CLOUDINARY_CLOUD_NAME')
+            ]
+        ], [
+            'secure_url.starts_with' => 'La URL debe ser de Cloudinary',
+            'public_id.regex' => 'Formato inválido (solo letras, números, -, _, ., y /)'
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                "status" => 422,
+                "message" => "Error de validación",
+                "errors" => $validate->errors()
+            ]);
+        }
+
+        try {
+            $empleado = Empleado::lockForUpdate()->findOrFail($id);
+            Log::info('Empleado encontrado:', [$empleado]);
+            DB::beginTransaction();
+
+            if ($empleado->imagen_perfil) {
+                $result = Cloudinary::destroy($empleado->imagen_perfil, [
+                    'resource_type' => 'image',
+                    'invalidate' => true
+                ]);
+
+                if ($result['result'] !== 'ok') {
+                    throw new \Exception('No se pudo eliminar la imagen anterior');
+                }
+            }
+
+            $empleado->update([
+                'imagen_perfil' => $request->public_id,
+                'imagen_perfil_url' => $request->secure_url
+            ]);
+
+            DB::commit();
+
+            Log::info('Resultado de update:', [$empleado->fresh()]);
+
+            return response()->json([
+                "status" => 200,
+                "message" => "Imagen actualizada correctamente",
+                "data" => [
+                    'public_id' => $empleado->imagen_perfil,
+                    'url' => $empleado->imagen_perfil_url,
+                    'version' => time() 
+                ]
+            ]);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            DB::rollBack();
+            Log::error("Empleado no encontrado: " . $e->getMessage());
+            return response()->json([
+                "status" => 404,
+                "message" => "Empleado no encontrado"
+            ], 404);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Error actualizando imagen: " . $e->getMessage());
+            return response()->json([
+                "status" => 500,
+                "message" => "Error al actualizar la imagen",
+                "error" => env('APP_DEBUG') ? $e->getMessage() : 'Error interno'
+            ], 500);
+        }
+    }
+
 
     public function updatePass(Request $request, $id)
     {
@@ -340,5 +408,17 @@ class EmpleadoController extends Controller
             "status" => 200,
             "message" => "Empleado eliminado correctamente"
         ], 200);
+    }
+
+    public function deleteProfileImage($id)
+    {
+        $empleado = Empleado::findOrFail($id);
+
+        if ($empleado->imagen_perfil) {
+            Cloudinary::destroy($empleado->imagen_perfil);
+            $empleado->update(['imagen_perfil' => null, 'imagen_perfil_url' => null]);
+        }
+
+        return response()->json(['success' => true]);
     }
 }

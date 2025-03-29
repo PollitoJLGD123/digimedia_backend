@@ -19,6 +19,8 @@ class Empleado extends Model
         'email',
         'dni',
         'telefono',
+        'imagen_perfil',
+        'imagen_perfil_url',
         'id_user',
         'id_rol',
     ];
@@ -32,5 +34,13 @@ class Empleado extends Model
     public function rol()
     {
         return $this->belongsTo(Rol::class, 'id_rol', 'id_rol');
+    }
+
+    public function getImagenPerfilUrlAttribute()
+    {
+        if ($this->imagen_perfil) {
+            return "https://res.cloudinary.com/".env('CLOUDINARY_CLOUD_NAME')."/image/upload/".$this->imagen_perfil;
+        }
+        return "URL_IMAGEN_POR_DEFECTO";
     }
 }
