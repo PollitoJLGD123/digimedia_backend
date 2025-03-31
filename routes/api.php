@@ -119,3 +119,8 @@ Route::get('/blogs', [BlogController::class, "index"]);
 Route::get('/blog_head/{id}', [BlogHeadController::class, "show"]);
 Route::get('/blog_footer/{id}', [BlogFooterController::class, "show"]);
 Route::get('/blog_body/{id}', [BlogBodyController::class, "show"]);
+
+
+Route::post('/empleados/{id}/image', [EmpleadoController::class, 'updateProfileImage']);
+    
+Route::delete('/empleados/{id}/image', [EmpleadoController::class, 'deleteProfileImage']);

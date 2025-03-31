@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('email')->unique(); 
             $table->string('dni')->unique();
             $table->string('telefono')->nullable(); 
+            $table->string('imagen_perfil')->nullable();
+            $table->string('imagen_perfil_url')->nullable();
             $table->foreignId('id_user')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('id_rol')->nullable()->references('id_rol')->on('roles')->onDelete('cascade');
         });
