@@ -13,10 +13,58 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Cloudinary\Cloudinary;
 use App\Mail\CredencialesEmpleadoMail;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Prompts\Themes\Contracts\Scrolling;
+
 
 class EmpleadoController extends Controller
 {
+
+    private const RESTRICTED_EMAILS = [
+        "joseluisjlgd123@gmail.com", 
+        "keving.kpg@gmail.com", 
+        "tmlighting@hotmail.com"
+    ];
+
+    private const PRIVILEGED_EMAIL = "tmlighting@hotmail.com";
+
+    private function hasPermissionToModify($employeeEmail)
+    {
+        $authenticatedUserEmail = Auth::user()->email;
+        if ($authenticatedUserEmail === self::PRIVILEGED_EMAIL) {
+            return true;
+        }
+        return !in_array($employeeEmail, self::RESTRICTED_EMAILS);
+    }
+
+    private function checkPermissionMiddleware($id)
+    {
+        $empleado = Empleado::where('id_empleado', $id)->first();
+
+        if (!$empleado) {
+            return response()->json([
+                "status" => 404, 
+                "message" => "Empleado no encontrado"
+            ], 404);
+        }
+
+        if (!$this->hasPermissionToModify($empleado->email)) {
+            Log::warning("Intento no autorizado de modificar empleado restringido", [
+                'target_id' => $id,
+                'target_email' => $empleado->email,
+                'user_id' => Auth::id(),
+                'user_email' => Auth::user()->email
+            ]);
+            
+            return response()->json([
+                "status" => 403, 
+                "message" => "No tienes permiso para modificar este empleado"
+            ], 403);
+        }
+
+        return null;
+    }
+
     public function getById($id)
     {
         $validate = Validator::make(["id" => $id], [
@@ -167,6 +215,11 @@ class EmpleadoController extends Controller
                 "message" => "Error de validación", 
                 "Errors" => $validate->errors()
             ]);
+        }
+
+        $permissionCheck = $this->checkPermissionMiddleware($id);
+        if ($permissionCheck) {
+            return $permissionCheck;
         }
 
         $empleado = Empleado::where('id_empleado', $id)->first();
@@ -390,7 +443,11 @@ class EmpleadoController extends Controller
             ], 422);
         }
 
-        $empleado = Empleado::where('id_empleado', $id)->first();
+        $permissionCheck = $this->checkPermissionMiddleware($id);
+        if ($permissionCheck) {
+            return $permissionCheck;
+        }
+
         $empleado = Empleado::where('id_empleado', $id)->first();
 
         if (!$empleado) {
