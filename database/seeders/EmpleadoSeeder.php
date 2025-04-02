@@ -50,6 +50,33 @@ class EmpleadoSeeder extends Seeder
                 'id_user' => 4,
                 'id_rol' => 1,
             ],
+            [
+                'nombre' => 'Gonzalo Fernando',
+                'apellido' => 'Gallardo Huertas',
+                'email' => 'gogozgallardo22@gmail.com',
+                'dni' => '73068386',
+                'telefono' => '924783666',
+                'id_user' => 5,
+                'id_rol' => 1,
+            ],
+            [
+                'nombre' => 'Piero Alexander',
+                'apellido' => 'Catacora Mamani',
+                'email' => 'pierocatacorayt13@gmail.com',
+                'dni' => '70430224',
+                'telefono' => '985237799',
+                'id_user' => 6,
+                'id_rol' => 1,
+            ],
+            [
+                'nombre' => 'Pedro David',
+                'apellido' => 'De la Cruz Díaz',
+                'email' => 'delacruz0e72ef@outlook.com',
+                'dni' => '73944334',
+                'telefono' => '986657935',
+                'id_user' => 7,
+                'id_rol' => 1,
+            ],
         ];
         DB::table('empleados')->insert($empleados);
     }

@@ -274,17 +274,14 @@ class EmpleadoController extends Controller
 
     
     public function updateProfileImage(Request $request, $id)
-    {
-        Log::info("Solicitud recibida para actualizar imagen de perfil del empleado con ID: $id");
-        Log::info('Datos recibidos para actualización de imagen:', $request->all());
-        
+    {    
         $validate = Validator::make($request->all(), [
             'public_id' => 'required|string',
             'secure_url' => 'required|url'
         ]);
 
         if ($validate->fails()) {
-            Log::warning('Validación fallida:', $validate->errors()->toArray());
+
             return response()->json([
                 "status" => 422,
                 "message" => "Error de validación",
@@ -294,8 +291,6 @@ class EmpleadoController extends Controller
 
         try {
             $empleado = Empleado::where('id_empleado', $id)->first();
-            Log::info('Empleado encontrado:', $empleado->toArray());
-            
             if (!$empleado) {
                 Log::warning("Empleado no encontrado con ID: {$id}");
                 return response()->json([
@@ -303,8 +298,6 @@ class EmpleadoController extends Controller
                     "message" => "Empleado no encontrado"
                 ], 404);
             }
-            
-            Log::info('Empleado encontrado:', ['id' => $empleado->id_empleado, 'imagen_actual' => $empleado->imagen_perfil]);
             
             DB::beginTransaction();
 

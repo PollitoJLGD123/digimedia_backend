@@ -309,7 +309,6 @@
                 </div>
             </div>
 
-            {{ /*url = https://digimediamkt.com/login  */}} {{ /* url = https://127.0.0.1:3000/login  */ }}
             <a href="{{ url('https://digimediamkt.com/login') }}" class="cta-button">
                 Iniciar sesión ahora
             </a>
