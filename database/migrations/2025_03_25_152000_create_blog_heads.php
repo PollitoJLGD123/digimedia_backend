@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('texto_frase',50);
             $table->string('texto_descripcion',100);
             $table->text('public_image');
+            $table->text('url_image')->nullable();
         });
     }
 

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('titulo');
             $table->text('descripcion');
             $table->text('public_image');
+            $table->text('url_image')->nullable();
             $table->bigInteger('id_plantilla')->nullable();
             $table->foreignId('id_blog')->unique()->references('id_blog')->on('blogs')->onDelete('cascade');
         });

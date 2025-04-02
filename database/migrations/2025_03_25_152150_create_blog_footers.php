@@ -16,8 +16,11 @@ return new class extends Migration
             $table->string('titulo');
             $table->text('descripcion');
             $table->text('public_image1')->nullable();
+            $table->text('url_image1')->nullable();
             $table->text('public_image2')->nullable();
+            $table->text('url_image2')->nullable();
             $table->text('public_image3')->nullable();
+            $table->text('url_image3')->nullable();
         });
     }
 
