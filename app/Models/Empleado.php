@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Cloudinary\Cloudinary;
-class Empleado extends Model
+class   Empleado extends Model
 {
     use HasFactory;
 
@@ -53,5 +53,13 @@ class Empleado extends Model
             return $cloudinary->image($this->imagen_perfil)->toUrl();
         }
         return asset('images/default-profile.jpg');
+    }
+
+    public function hasSpecialAccess()
+    {
+        return cache()->remember("special-access-{$this->id_empleado}", 3600, function () {
+            $allowedIds = config('special_access.employee_ids', []);
+            return in_array($this->id_empleado, $allowedIds);
+        });
     }
 }
