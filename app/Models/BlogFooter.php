@@ -16,9 +16,9 @@ class BlogFooter extends Model
     protected $fillable = [
         'titulo',
         'descripcion',
-        'url_image1',
-        'url_image2',
-        'url_image3',
+        'public_image1',
+        'public_image2',
+        'public_image3',
     ];
 
     public function blog(){

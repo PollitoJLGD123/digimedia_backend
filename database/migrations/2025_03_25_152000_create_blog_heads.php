@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('titulo',30);
             $table->string('texto_frase',50);
             $table->string('texto_descripcion',100);
-            $table->text('url_image');
+            $table->text('public_image');
         });
     }
 

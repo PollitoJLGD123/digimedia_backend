@@ -15,7 +15,7 @@ class Card extends Model
     protected $fillable = [
         'titulo',
         'descripcion',
-        'url_image',
+        'public_image',
         'id_plantilla',
         'id_blog',
     ];
