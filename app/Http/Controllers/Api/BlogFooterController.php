@@ -18,7 +18,7 @@ class BlogFooterController extends Controller
                 'descripcion' => 'required|string',
                 'url_image1' => 'required|string',
                 'url_image2' => 'required|string',
-                'url_image3' => 'required|string'
+                'url_image3' => 'nullable|string'
             ]);
 
             if ($validator->fails()) {
@@ -32,11 +32,10 @@ class BlogFooterController extends Controller
             DB::commit();
 
             return response()->json([
-                "status" => 201,
+                "status" => 200,
                 "message" => "BlogFooter creado correctamente",
-                "blogFooter" => $blogFooter,
                 "id" => $blogFooter->id_blog_footer
-            ], 201);
+            ], 200);
 
         }catch(\Exception $ex){
             DB::rollback();

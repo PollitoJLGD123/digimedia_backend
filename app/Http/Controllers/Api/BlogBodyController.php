@@ -35,11 +35,10 @@ class BlogBodyController extends Controller
             DB::commit();
 
             return response()->json([
-                "status" => 201,
-                "message" => "BlogBody creada correctamente",
-                "blogBody" => $blogBody,
+                "status" => 200,
+                "message" => "BlogBody creado correctamente",
                 "id" => $blogBody->id_blog_body
-            ], 201);
+            ], 200);
 
         }catch(\Exception $ex){
             DB::rollback();

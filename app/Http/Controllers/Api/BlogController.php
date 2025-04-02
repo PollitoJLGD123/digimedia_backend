@@ -37,11 +37,10 @@ class BlogController extends Controller
             DB::commit();
 
             return response()->json([
-                "status" => 201,
+                "status" => 200,
                 "message" => "Blog creada correctamente",
-                "blog" => $blog,
                 "id" => $blog->id_blog
-            ], 201);
+            ], 200);
 
         }catch(\Exception $e){
             DB::rollback();

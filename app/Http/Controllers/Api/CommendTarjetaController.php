@@ -32,11 +32,10 @@ class CommendTarjetaController extends Controller
             DB::commit();
 
             return response()->json([
-                "status" => 201,
+                "status" => 200,
                 "message" => "CommendTarjeta creada correctamente",
-                "commendTarjeta" => $commendTarjeta,
                 "id" => $commendTarjeta->id_commend_tarjeta
-            ],201);
+            ],200);
 
         }catch(\Exception $e){
             DB::rollback();

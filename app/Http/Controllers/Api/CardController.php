@@ -48,11 +48,10 @@ class CardController extends Controller
             DB::commit();
 
             return response()->json([
-                "status" => 201,
+                "status" => 200,
                 "message" => "Card creada correctamente",
-                "card" => $card,
                 "id" => $card->id_card
-            ], 201);
+            ], 200);
         }catch(\Exception $ex){
             DB::rollback();
             return response()->json([
