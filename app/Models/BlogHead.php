@@ -17,6 +17,7 @@ class BlogHead extends Model
         'texto_frase',
         'texto_descripcion',
         'public_image',
+        'url_image',
     ];
 
     public function blog(){

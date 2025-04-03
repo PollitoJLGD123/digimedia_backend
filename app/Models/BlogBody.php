@@ -17,8 +17,11 @@ class BlogBody extends Model
         'descripcion',
         'id_commend_tarjeta',
         'public_image1',
+        'url_image1',
         'public_image2',
+        'url_image2',
         'public_image3',
+        'url_image3',
     ];
 
     public function blog(){
