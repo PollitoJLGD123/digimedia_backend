@@ -18,25 +18,25 @@ class BlogHeaderSeeder extends Seeder
                 'titulo' => 'Tu Bar, en la Mira',
                 'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
                 'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
-                'url_image'=>'fondo_blog_extend.png'
+                'public_image'=>'fondo_blog_extend.png'
             ],
             [
                 'titulo' => 'Tu Bar, en la Mira',
                 'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
                 'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
-                'url_image'=>'fondo_blog_extend.png'
+                'public_image'=>'fondo_blog_extend.png'
             ],
             [
                 'titulo' => 'Tu Bar, en la Mira',
                 'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
                 'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
-                'url_image'=>'fondo_blog_extend.png'
+                'public_image'=>'fondo_blog_extend.png'
             ],
             [
                 'titulo' => 'Tu Bar, en la Mira',
                 'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
                 'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
-                'url_image'=>'fondo_blog_extend.png'
+                'public_image'=>'fondo_blog_extend.png'
             ],
         ];
 

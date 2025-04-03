@@ -17,7 +17,7 @@ class BlogHeadController extends Controller
                 'titulo' => 'required|string|max:30',
                 'texto_frase' => 'required|string|max:50',
                 'texto_descripcion' => 'required|string|max:100',
-                'url_image' => 'required|string'
+                'public_image' => 'required|string'
             ]);
 
             if ($validator->fails()) {

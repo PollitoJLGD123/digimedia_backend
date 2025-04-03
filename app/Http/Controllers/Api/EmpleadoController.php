@@ -13,10 +13,64 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Cloudinary\Cloudinary;
 use App\Mail\CredencialesEmpleadoMail;
-use Laravel\Prompts\Themes\Contracts\Scrolling;
+use Illuminate\Support\Facades\Auth;
+
 
 class EmpleadoController extends Controller
 {
+
+    private const RESTRICTED_EMAILS = [
+        "joseluisjlgd123@gmail.com", 
+        "keving.kpg@gmail.com", 
+        "tmlighting@hotmail.com"
+    ];
+
+    private const PRIVILEGED_EMAIL = "tmlighting@hotmail.com";
+
+    private function hasPermissionToModify($employeeEmail, $employeeId)
+    {
+        $user = Auth::user();
+        $authenticatedUserEmail = $user->email;
+        $empleadoUsuario = Empleado::where('id_user', $user->id)->first();
+        $editarMiPerfil = $empleadoUsuario && $empleadoUsuario->id_empleado == $employeeId;
+
+        if ($authenticatedUserEmail === self::PRIVILEGED_EMAIL) {
+            return true;
+        }
+        if ($editarMiPerfil) {
+            return true;
+        }
+        return !in_array($employeeEmail, self::RESTRICTED_EMAILS);
+    }
+
+    private function checkPermissionMiddleware($id)
+    {
+        $empleado = Empleado::where('id_empleado', $id)->first();
+
+        if (!$empleado) {
+            return response()->json([
+                "status" => 404, 
+                "message" => "Empleado no encontrado"
+            ], 404);
+        }
+
+        if (!$this->hasPermissionToModify($empleado->email, $id)) {
+            Log::warning("Intento no autorizado de modificar empleado restringido", [
+                'target_id' => $id,
+                'target_email' => $empleado->email,
+                'user_id' => Auth::id(),
+                'user_email' => Auth::user()->email
+            ]);
+            
+            return response()->json([
+                "status" => 403, 
+                "message" => "No tienes permiso para modificar este empleado"
+            ], 403);
+        }
+
+        return null;
+    }
+
     public function getById($id)
     {
         $validate = Validator::make(["id" => $id], [
@@ -41,13 +95,8 @@ class EmpleadoController extends Controller
 
     public function getAllByPage(Request $request)
     {
-        Log::info("Solicitud recibida para obtener empleados paginados");
-
         try {
             $empleados = Empleado::with('rol')->orderBy('id_empleado', 'asc')->paginate(5);
-
-            Log::info("Empleados obtenidos correctamente:", $empleados->toArray());
-
             $empleados->getCollection()->transform(function ($empleado) {
                 return [
                     'id_empleado' => $empleado->id_empleado,
@@ -67,7 +116,6 @@ class EmpleadoController extends Controller
                 'page' => $empleados->currentPage()
             ]);
         } catch (\Exception $e) {
-            Log::error("Error al obtener empleados:", ["error" => $e->getMessage()]);
             return response()->json([
                 "status" => 500,
                 "message" => "Error interno del servidor",
@@ -125,7 +173,6 @@ class EmpleadoController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            Log::error("Error al crear empleado:", ["error" => $e->getMessage()]);
             return response()->json([
                 "status" => 500,
                 "message" => "Error al crear empleado",
@@ -167,6 +214,11 @@ class EmpleadoController extends Controller
                 "message" => "Error de validación", 
                 "Errors" => $validate->errors()
             ]);
+        }
+
+        $permissionCheck = $this->checkPermissionMiddleware($id);
+        if ($permissionCheck) {
+            return $permissionCheck;
         }
 
         $empleado = Empleado::where('id_empleado', $id)->first();
@@ -239,7 +291,6 @@ class EmpleadoController extends Controller
         try {
             $empleado = Empleado::where('id_empleado', $id)->first();
             if (!$empleado) {
-                Log::warning("Empleado no encontrado con ID: {$id}");
                 return response()->json([
                     "status" => 404,
                     "message" => "Empleado no encontrado"
@@ -250,30 +301,23 @@ class EmpleadoController extends Controller
 
             if ($empleado->imagen_perfil) {
                 try {
-                    Log::info('Intentando eliminar imagen anterior:', ['public_id' => $empleado->imagen_perfil]);
                     
                     $cloudinary = new Cloudinary();
 
                     $result = $cloudinary->uploadApi()->destroy($empleado->imagen_perfil);
                     
-                    Log::info('Resultado de eliminación de Cloudinary:', ['result' => $result]);
+                    Log::info(['result' => $result]);
                 } catch (\Exception $e) {
                     Log::warning("Error al eliminar imagen anterior, continuando con actualización: " . $e->getMessage());
                 }
             }
 
-            /*$empleado->imagen_perfil = null;
-            $empleado->imagen_perfil_url = null;*/
+            $empleado->imagen_perfil_url = null;
             $empleado->imagen_perfil = $request->public_id;
             $empleado->imagen_perfil_url = $request->secure_url;
             $empleado->save();
 
             DB::commit();
-
-            Log::info('Imagen actualizada correctamente:', [
-                'empleado_id' => $empleado->id_empleado,
-                'nueva_imagen' => $empleado->imagen_perfil
-            ]);
 
             return response()->json([
                 "status" => 200,
@@ -329,9 +373,6 @@ class EmpleadoController extends Controller
     public function verifyPassword(Request $request)
     {
         try {
-            Log::info('Datos recibidos: ' . json_encode($request->all()));
-            Log::info('Token: ' . $request->bearerToken());
-
             $request->validate([
                 'currentPassword' => 'required',
                 'id_empleado' => 'required|exists:empleados,id_empleado'
@@ -358,7 +399,6 @@ class EmpleadoController extends Controller
                 'message' => 'Contraseña verificada correctamente'
             ]);
         } catch (\Exception $e) {
-            Log::error('Error en verifyPassword: ' . $e->getMessage());
             return response()->json([
                 'error' => 'Ocurrió un error al procesar la solicitud',
                 'message' => $e->getMessage()
@@ -368,8 +408,6 @@ class EmpleadoController extends Controller
 
     public function delete(Request $request, $id)
     {
-        Log::info("Intentando eliminar empleado con ID: $id");
-
         $validate = Validator::make(["id" => $id], [
             "id" => "required|numeric",
         ]);
@@ -383,18 +421,20 @@ class EmpleadoController extends Controller
             ], 422);
         }
 
-        $empleado = Empleado::where('id_empleado', $id)->first();
+        $permissionCheck = $this->checkPermissionMiddleware($id);
+        if ($permissionCheck) {
+            return $permissionCheck;
+        }
+
         $empleado = Empleado::where('id_empleado', $id)->first();
 
         if (!$empleado) {
-            Log::error("Empleado no encontrado con ID: $id");
             return response()->json([
                 "status" => 404,
                 "message" => "Empleado no encontrado"
             ], 404);
         }
 
-        Log::info("Empleado encontrado: ", $empleado->toArray());
 
         $user = User::find($empleado->id_user);
         if ($user) {

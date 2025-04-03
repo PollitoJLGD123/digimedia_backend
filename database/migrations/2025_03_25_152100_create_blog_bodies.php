@@ -16,9 +16,13 @@ return new class extends Migration
             $table->string('titulo');
             $table->text('descripcion');
             $table->foreignId( 'id_commend_tarjeta')->unique()->nullable()->references('id_commend_tarjeta')->on('commend_tarjetas')->onDelete('cascade');
-            $table->text('url_image1');
-            $table->text('url_image2');
+            $table->text('public_image1');
+            $table->text('url_image1')->nullable();
+            $table->text('public_image2');
+            $table->text('url_image2')->nullable();
+            $table->text('public_image3')->nullable();
             $table->text('url_image3')->nullable();
+
         });
     }
 

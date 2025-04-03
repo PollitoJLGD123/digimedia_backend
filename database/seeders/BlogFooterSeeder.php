@@ -17,30 +17,30 @@ class BlogFooterSeeder extends Seeder
             [
                 'titulo' => 'Conclusion',
                 'descripcion' => 'Invertir en luces neón LED no solo mejora la estética de tu bar, sino que también influye en la percepción de los clientes y fortalece tu marca. ¡Haz que tu bar brille con luz propia!',
-                'url_image1'=>'blog-2.jpg',
-                'url_image2'=>'blog-2.jpg',
-                'url_image3'=>'blog-2.jpg'
+                'public_image1'=>'blog-2.jpg',
+                'public_image2'=>'blog-2.jpg',
+                'public_image3'=>'blog-2.jpg'
             ],
             [
                 'titulo' => 'Conclusion',
                 'descripcion' => 'Invertir en luces neón LED no solo mejora la estética de tu bar, sino que también influye en la percepción de los clientes y fortalece tu marca. ¡Haz que tu bar brille con luz propia!',
-                'url_image1'=>'blog-2.jpg',
-                'url_image2'=>'blog-2.jpg',
-                'url_image3'=>'blog-2.jpg'
+                'public_image1'=>'blog-2.jpg',
+                'public_image2'=>'blog-2.jpg',
+                'public_image3'=>'blog-2.jpg'
             ],
             [
                 'titulo' => 'Conclusion',
                 'descripcion' => 'Invertir en luces neón LED no solo mejora la estética de tu bar, sino que también influye en la percepción de los clientes y fortalece tu marca. ¡Haz que tu bar brille con luz propia!',
-                'url_image1'=>'blog-2.jpg',
-                'url_image2'=>'blog-2.jpg',
-                'url_image3'=>'blog-2.jpg'
+                'public_image1'=>'blog-2.jpg',
+                'public_image2'=>'blog-2.jpg',
+                'public_image3'=>'blog-2.jpg'
             ],
             [
                 'titulo' => 'Conclusion',
                 'descripcion' => 'Invertir en luces neón LED no solo mejora la estética de tu bar, sino que también influye en la percepción de los clientes y fortalece tu marca. ¡Haz que tu bar brille con luz propia!',
-                'url_image1'=>'blog-2.jpg',
-                'url_image2'=>'blog-2.jpg',
-                'url_image3'=>'blog-2.jpg'
+                'public_image1'=>'blog-2.jpg',
+                'public_image2'=>'blog-2.jpg',
+                'public_image3'=>'blog-2.jpg'
             ],
         ];
 
