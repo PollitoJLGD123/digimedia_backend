@@ -20,8 +20,8 @@ class EmpleadoController extends Controller
 {
 
     private const RESTRICTED_EMAILS = [
-        "joseluisjlgd123@gmail.com", 
-        "keving.kpg@gmail.com", 
+        "joseluisjlgd123@gmail.com",
+        "keving.kpg@gmail.com",
         "tmlighting@hotmail.com"
     ];
 
@@ -49,7 +49,7 @@ class EmpleadoController extends Controller
 
         if (!$empleado) {
             return response()->json([
-                "status" => 404, 
+                "status" => 404,
                 "message" => "Empleado no encontrado"
             ], 404);
         }
@@ -61,9 +61,9 @@ class EmpleadoController extends Controller
                 'user_id' => Auth::id(),
                 'user_email' => Auth::user()->email
             ]);
-            
+
             return response()->json([
-                "status" => 403, 
+                "status" => 403,
                 "message" => "No tienes permiso para modificar este empleado"
             ], 403);
         }
@@ -210,8 +210,8 @@ class EmpleadoController extends Controller
 
         if ($validate->fails()) {
             return response()->json([
-                "status" => 422, 
-                "message" => "Error de validación", 
+                "status" => 422,
+                "message" => "Error de validación",
                 "Errors" => $validate->errors()
             ]);
         }
@@ -225,7 +225,7 @@ class EmpleadoController extends Controller
 
         if (!$empleado) {
             return response()->json([
-                "status" => 404, 
+                "status" => 404,
                 "message" => "Empleado no encontrado"
             ]);
         }
@@ -271,16 +271,15 @@ class EmpleadoController extends Controller
         ]);
     }
 
-    
+
     public function updateProfileImage(Request $request, $id)
-    {    
+    {
         $validate = Validator::make($request->all(), [
             'public_id' => 'required|string',
             'secure_url' => 'required|url'
         ]);
 
         if ($validate->fails()) {
-
             return response()->json([
                 "status" => 422,
                 "message" => "Error de validación",
@@ -296,17 +295,16 @@ class EmpleadoController extends Controller
                     "message" => "Empleado no encontrado"
                 ], 404);
             }
-            
+
             DB::beginTransaction();
 
             if ($empleado->imagen_perfil) {
                 try {
-                    
+
                     $cloudinary = new Cloudinary();
 
                     $result = $cloudinary->uploadApi()->destroy($empleado->imagen_perfil);
-                    
-                    Log::info(['result' => $result]);
+
                 } catch (\Exception $e) {
                     Log::warning("Error al eliminar imagen anterior, continuando con actualización: " . $e->getMessage());
                 }
@@ -331,12 +329,12 @@ class EmpleadoController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             Log::error("Error actualizando imagen: " . $e->getMessage(), [
                 'exception' => $e,
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 "status" => 500,
                 "message" => "Error al actualizar la imagen",
@@ -456,7 +454,7 @@ class EmpleadoController extends Controller
     {
         try {
             $empleado = Empleado::where('id_empleado', $id)->first();
-            
+
             if (!$empleado) {
                 return response()->json([
                     'status' => 404,
@@ -466,7 +464,7 @@ class EmpleadoController extends Controller
 
             if ($empleado->imagen_perfil) {
                 Log::info('Intentando eliminar imagen de perfil:', ['public_id' => $empleado->imagen_perfil]);
-                
+
                 try {
                     $cloudinary = new Cloudinary();
 
@@ -476,7 +474,7 @@ class EmpleadoController extends Controller
                     Log::warning("Error al eliminar imagen de Cloudinary: " . $e->getMessage());
                     // Continuamos con la actualización en la base de datos
                 }
-                
+
                 $empleado->imagen_perfil = null;
                 $empleado->imagen_perfil_url = null;
                 $empleado->save();
@@ -486,13 +484,13 @@ class EmpleadoController extends Controller
                 'status' => 200,
                 'message' => 'Imagen eliminada correctamente'
             ]);
-            
+
         } catch (\Exception $e) {
             Log::error("Error eliminando imagen de perfil: " . $e->getMessage(), [
                 'exception' => $e,
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 'status' => 500,
                 'message' => 'Error al eliminar la imagen',

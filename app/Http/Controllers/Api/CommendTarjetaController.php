@@ -17,9 +17,9 @@ class CommendTarjetaController extends Controller
                 'titulo' => 'required|string|max:255',
                 'texto1' => 'required|string|max:255',
                 'texto2' => 'required|string|max:255',
-                'texto3' => 'string|max:255',
-                'texto4' => 'string|max:255',
-                'texto5' => 'string|max:255',
+                'texto3' => 'required|string|max:255',
+                'texto4' => 'nullable|string|max:255',
+                'texto5' => 'nullable|string|max:255',
             ]);
 
             if ($validator->fails()) {

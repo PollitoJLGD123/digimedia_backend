@@ -24,6 +24,7 @@ class BlogController extends Controller
                 'id_blog_head' => 'required|integer|exists:blog_heads,id_blog_head',
                 'id_blog_body' => 'required|integer|exists:blog_bodies,id_blog_body',
                 'id_blog_footer' => 'required|integer|exists:blog_footers,id_blog_footer',
+                'fecha' => 'required|date'
             ]);
 
             if ($validator->fails()) {

@@ -16,9 +16,12 @@ class BlogFooterController extends Controller
             $validator = Validator::make($request->all(), [
                 'titulo' => 'required|string|max:255',
                 'descripcion' => 'required|string',
-                'public_image1' => 'required|string',
-                'public_image2' => 'required|string',
-                'public_image3' => 'required|string'
+                'public_image1' => 'required|url',
+                'url_image1' => 'nullable|string',
+                'public_image2' => 'required|url',
+                'url_image2' => 'nullable|string',
+                'public_image3' => 'required|url',
+                'url_image3' => 'nullable|string'
             ]);
 
             if ($validator->fails()) {
