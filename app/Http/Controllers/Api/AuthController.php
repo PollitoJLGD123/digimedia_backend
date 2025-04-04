@@ -14,6 +14,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgotPassword;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -178,34 +179,45 @@ class AuthController extends Controller
             'token' => 'required|string',
             'password' => 'required|min:6|confirmed',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()->first()], 400);
         }
-
-        $tokenUser = DB::table('password_reset_tokens')->where('token', $request->token)->first();
-
+    
+        Log::info('Token recibido: ' . $request->token);
+        
+        $tokenUser = DB::table('password_reset_tokens')
+            ->whereRaw('LOWER(token) = ?', [strtolower($request->token)])
+            ->first();
+    
         if (!$tokenUser) {
+            $exactToken = DB::table('password_reset_tokens')
+                ->where('token', $request->token)
+                ->first();
+                
+            Log::info('Token no encontrado. Tokens disponibles: ' . 
+                json_encode(DB::table('password_reset_tokens')->pluck('token')->toArray()));
+                
             return response()->json([
                 'status' => 'error',
-                'message' => 'Token inválido'
+                'message' => 'Token inválido o expirado'
             ], 404);
         }
-
+    
         $user = User::where('email', $tokenUser->email)->first();
-
+    
         if (!$user) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Usuario no encontrado'
             ], 404);
         }
-
+    
         $user->password = Hash::make($request->password);
         $user->save();
-
+    
         DB::table('password_reset_tokens')->where('token', $request->token)->delete();
-
+    
         return response()->json(['message' => 'Contraseña actualizada correctamente, ingresa desde el login'], 200);
     }
 

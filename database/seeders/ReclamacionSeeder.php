@@ -28,7 +28,7 @@ class ReclamacionSeeder extends Seeder
                 'ciudad' => 'Lima',
                 'tipoReclamo' => 'RECLAMO',
                 'id_servicio' => 1,
-                'reclamoPerson' => 'Reclao por el servicio el dia 15/2/2022',
+                'reclamoPerson' => 'Reclamo por el servicio el dia 15/2/2022',
                 'checkReclamoForm' => true,
                 'aceptaPoliticaPrivacidad' => true,
                 'fechaIncidente' => Carbon::now(),
