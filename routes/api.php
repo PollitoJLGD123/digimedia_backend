@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\BlogFooterController;
 use App\Http\Controllers\Api\BlogHeadController;
 use App\Http\Controllers\Api\TarjetaController;
 use App\Http\Controllers\Api\CommendTarjetaController;
+use App\Http\Controllers\Api\ImageController;
 
 use App\Http\Middleware\isAdmin;
 use App\Models\CommendTarjeta;
@@ -85,7 +86,14 @@ Route::middleware('auth:sanctum')->group(function () {
         //creación (depende :v)
         Route::post('/servicios', [ServiciosController::class, "create"]);
 
-
+        //blogs creacion
+        Route::post('/card', [CardController::class, "create"]);
+        Route::post('/blog', [BlogController::class, "create"]);
+        Route::post('/blog_head', [BlogHeadController::class, "create"]);
+        Route::post('/blog_body', [BlogBodyController::class, "create"]);
+        Route::post('/blog_footer', [BlogFooterController::class, "create"]);
+        Route::post('/commend_tarjeta', [CommendTarjetaController::class, "create"]);
+        Route::post('/tarjeta', [TarjetaController::class, "create"]);
 
         //blogs delete
         Route::delete('/cards/{id}', [CardController::class, "destroy"]);
@@ -96,6 +104,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/commend_tarjeta/{id}', [CommendTarjetaController::class, "destroy"]);
         Route::delete('/tarjetas_delete/{id}', [TarjetaController::class, "destroyAll"]);
         //Route::delete('/tarjetas_delete/{id}', [TarjetaController::class, "destroy"]);
+
     });
 });
 
@@ -118,14 +127,5 @@ Route::get('/blog_body/{id}', [BlogBodyController::class, "show"]);
 
 Route::post('/empleados/{id}/image', [EmpleadoController::class, 'updateProfileImage']);
 Route::delete('/empleados/{id}/image', [EmpleadoController::class, 'deleteProfileImage']);
+Route::post('/delete_image', [ImageController::class, "deleteImage"]);
 
-Route::put('/blog_head/image/{id}', [BlogHeadController::class, 'updateImage']);
-
-//blogs creacion
-Route::post('/card', [CardController::class, "create"]);
-Route::post('/blog', [BlogController::class, "create"]);
-Route::post('/blog_head', [BlogHeadController::class, "create"]);
-Route::post('/blog_body', [BlogBodyController::class, "create"]);
-Route::post('/blog_footer', [BlogFooterController::class, "create"]);
-Route::post('/commend_tarjeta', [CommendTarjetaController::class, "create"]);
-Route::post('/tarjeta', [TarjetaController::class, "create"]);
