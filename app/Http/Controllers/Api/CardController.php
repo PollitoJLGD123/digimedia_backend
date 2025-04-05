@@ -33,7 +33,7 @@ class CardController extends Controller
             $validator = Validator::make($request->all(), [
                 'titulo' => 'required|string|max:255',
                 'descripcion' => 'required|string',
-                'public_image' => 'required|url',
+                'public_image' => 'required|string',
                 'url_image' => 'nullable|string',
                 'id_plantilla' => 'required|integer|min:1|max:3',
                 'id_blog' => 'required|integer|exists:blogs,id_blog',
