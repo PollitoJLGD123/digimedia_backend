@@ -21,24 +21,6 @@ class CommendTarjetaSeeder extends Seeder
                 'texto2' => "Elige un diseño legible y atractivo.",
                 'texto3' => "Considera el lugar de instalación para maximizar su impacto.",
             ],
-            [
-                'titulo' => "Consejos para Elegir el Letrero Perfecto",
-                'texto1' => "Opta por colores que reflejen la personalidad de tu bar.",
-                'texto2' => "Elige un diseño legible y atractivo.",
-                'texto3' => "Considera el lugar de instalación para maximizar su impacto.",
-            ],
-            [
-                'titulo' => "Consejos para Elegir el Letrero Perfecto",
-                'texto1' => "Opta por colores que reflejen la personalidad de tu bar.",
-                'texto2' => "Elige un diseño legible y atractivo.",
-                'texto3' => "Considera el lugar de instalación para maximizar su impacto.",
-            ],
-            [
-                'titulo' => "Consejos para Elegir el Letrero Perfecto",
-                'texto1' => "Opta por colores que reflejen la personalidad de tu bar.",
-                'texto2' => "Elige un diseño legible y atractivo.",
-                'texto3' => "Considera el lugar de instalación para maximizar su impacto.",
-            ],
         ];
 
         DB::table('commend_tarjetas')->insert($commend_tarjetas);

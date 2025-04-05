@@ -20,24 +20,6 @@ class BlogHeaderSeeder extends Seeder
                 'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
                 'public_image'=>'/blog/fondo_blog_extend.png'
             ],
-            [
-                'titulo' => 'Tu Bar, en la Mira',
-                'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
-                'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
-                'public_image'=>'/blog/fondo_blog_extend.png'
-            ],
-            [
-                'titulo' => 'Tu Bar, en la Mira',
-                'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
-                'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
-                'public_image'=>'/blog/fondo_blog_extend.png'
-            ],
-            [
-                'titulo' => 'Tu Bar, en la Mira',
-                'texto_frase' => 'Ilumina tu espacio, cautiva a tus clientes',
-                'texto_descripcion' => 'Transforma la atmósfera de tu bar con luces neón LED vibrantes y llenas de estilo.',
-                'public_image'=>'/blog/fondo_blog_extend.png'
-            ],
         ];
 
         DB::table('blog_heads')->insert($blog_heads);

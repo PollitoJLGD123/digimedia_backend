@@ -19,21 +19,6 @@ class BlogSeeder extends Seeder
                 'id_blog_body' => 1,
                 'id_blog_footer' => 1
             ],
-            [
-                'id_blog_head' => 2,
-                'id_blog_body' => 2,
-                'id_blog_footer' => 2
-            ],
-            [
-                'id_blog_head' => 3,
-                'id_blog_body' => 3,
-                'id_blog_footer' => 3
-            ],
-            [
-                'id_blog_head' => 4,
-                'id_blog_body' => 4,
-                'id_blog_footer' => 4
-            ]
         ];
 
         DB::table('blogs')->insert($blogs);

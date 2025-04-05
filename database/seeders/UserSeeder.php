@@ -18,17 +18,17 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Kevin',
                 'email' => 'keving.kpg@gmail.com',
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make('F@Q#n64QuJm%'),
             ],
             [
                 'name' => 'Jose Luis',
                 'email' => 'joseluisjlgd123@gmail.com',
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make('j8#m2%Q2g2SW'),
             ],
             [
                 'name' => 'Juan Carlos',
                 'email' => 'tmlighting@hotmail.com',
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make('Vqw&Kk4o$Q7c'),
             ],
             [
                 'name' => 'Krizzia Martina',
