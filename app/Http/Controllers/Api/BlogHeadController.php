@@ -16,9 +16,9 @@ class BlogHeadController extends Controller
     {
         try{
             $validator = Validator::make($request->all(), [
-                'titulo' => 'required|string|max:30',
-                'texto_frase' => 'required|string|max:50',
-                'texto_descripcion' => 'required|string|max:100',
+                'titulo' => 'required|string|max:50',
+                'texto_frase' => 'required|string|max:70',
+                'texto_descripcion' => 'required|string|max:120',
                 'public_image' => 'required|string',
                 'url_image' => 'nullable|string'
             ]);
