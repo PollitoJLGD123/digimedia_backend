@@ -15,21 +15,21 @@ class ContactanosSeeder extends Seeder
     {
          $contactos = [
             [
-                'nombre' => 'Juan Pérez',
+                'nombre' => 'Juan Pérez EJEMPLO',
                 'email' => 'juan@gmail.com',
                 'numero' => '987654321',
                 'mensaje' => 'Me interesa obtener más información sobre sus servicios.',
                 'estado' => 0,
             ],
             [
-                'nombre' => 'Juan Rodriguez',
+                'nombre' => 'Juan Rodriguez EJEMPLO',
                 'email' => 'juan2@gmail.com',
                 'numero' => '987654322',
                 'mensaje' => 'Me interesa obtener más información sobre sus servicios.',
                 'estado' => 1,
             ],
             [
-                'nombre' => 'Juan Nuñez',
+                'nombre' => 'Juan Nuñez EJEMPLO',
                 'email' => 'juan3@gmail.com',
                 'numero' => '987654323',
                 'mensaje' => 'Me interesa obtener más información sobre sus servicios.',

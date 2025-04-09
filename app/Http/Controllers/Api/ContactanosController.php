@@ -31,10 +31,8 @@ class ContactanosController extends Controller
         ], 200);
     }
 
-    /* Guardar un contacto */
     public function create(Request $request)
     {
-        // Validación de datos
         $validated = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -46,7 +44,6 @@ class ContactanosController extends Controller
             return response()->json(['errors' => $validated->errors()], 400);
         }
 
-        // Crear un nuevo contacto
         $contacto = Contactanos::create($request->all());
 
         return response()->json([
@@ -56,7 +53,6 @@ class ContactanosController extends Controller
         ], 201);
     }
 
-    /* Actualizar el estado de un contacto (de 0 a 1) */
     public function update(Request $request, $id)
     {
         $contacto = Contactanos::find($id);

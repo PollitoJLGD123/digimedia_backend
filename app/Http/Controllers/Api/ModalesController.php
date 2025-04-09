@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendEmailJob;
 use App\Models\modalservicios;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendModalMail;
 
 class ModalesController extends Controller
 {
@@ -28,6 +29,8 @@ class ModalesController extends Controller
                 'id_servicio' => 'required|integer|min:1|max:4',
             ]);
 
+            DB::beginTransaction();
+
             $newRecord = DB::table('modalservicios')->insertGetId([
                 'nombre' => $validatedData['nombre'],
                 'telefono' => $validatedData['telefono'],
@@ -35,14 +38,26 @@ class ModalesController extends Controller
                 'id_servicio' => intval($validatedData['id_servicio']),
             ]);
 
+            $id_servicio = $validatedData['id_servicio'];
 
-            /* // Enviar el primer correo inmediatamente
-            dispatch(new SendEmailJob(0, $request->id_servicio, $request->correo));
-            // Enviar el segundo correo después de 1 minuto
-            dispatch(new SendEmailJob(1, $request->id_servicio, $request->correo))->delay(Carbon::now()->addMinutes(60 * 24));
-            // Enviar el tercer correo después de 2 minutos
-            dispatch(new SendEmailJob(2, $request->id_servicio, $request->correo))->delay(Carbon::now()->addMinutes(4));
-            */
+            if ($id_servicio == 1){
+                $vista_correo = "mails.mod.service1";
+            }
+            if ($id_servicio == 2){
+                $vista_correo = "mails.mod.service2";
+            }
+            if ($id_servicio == 3){
+                $vista_correo = "mails.mod.service3";
+            }
+            if ($id_servicio == 4){
+                $vista_correo = "mails.mod.service4";
+            }
+
+            Mail::to($validatedData['correo'])->send(
+                new SendModalMail($validatedData,$vista_correo)
+            );
+
+            DB::commit();
 
             return response()->json([
                 'message' => 'Registro creado exitosamente',
@@ -55,11 +70,13 @@ class ModalesController extends Controller
                 ]
             ], 201);
         } catch (\Illuminate\Validation\ValidationException $error) {
+            DB::rollback();
             return response()->json([
                 'error' => 'Error en la validación',
                 'details' => $error->errors()
             ], 400);
         } catch (\Exception $error) {
+            DB::rollback();
             return response()->json([
                 'error' => 'Error al crear el registro',
                 'details' => $error->getMessage()
