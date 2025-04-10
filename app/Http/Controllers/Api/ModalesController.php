@@ -54,7 +54,7 @@ class ModalesController extends Controller
             }
 
             Mail::to($validatedData['correo'])->send(
-                new SendModalMail($validatedData,$vista_correo)
+                new SendModalMail($validatedData,$vista_correo, 1)
             );
 
             DB::commit();

@@ -3,10 +3,7 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class SendModalMail extends Mailable
@@ -15,11 +12,13 @@ class SendModalMail extends Mailable
 
     public $data;
     public $vista;
+    public $number_mail;
 
-    public function __construct($data, $vista)
+    public function __construct($data, $vista,$number_mail)
     {
         $this->data = $data;
         $this->vista = $vista;
+        $this->number_mail = $number_mail;
     }
 
     public function build()
