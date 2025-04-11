@@ -44,12 +44,11 @@ class ContactanosController extends Controller
             return response()->json(['errors' => $validated->errors()], 400);
         }
 
-        $contacto = Contactanos::create($request->all());
+        Contactanos::create($request->all());
 
         return response()->json([
             'status' => 201,
-            'message' => 'Contacto guardado exitosamente',
-            'data' => $contacto,
+            'message' => 'Contacto guardado exitosamente'
         ], 201);
     }
 
