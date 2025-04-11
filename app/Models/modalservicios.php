@@ -21,8 +21,18 @@ class modalservicios extends Model
 
     public $timestamps = false;
 
-    public function servicio(): BelongsTo
+    public function servicio()
     {
         return $this->belongsTo(servicios::class, 'id_servicio');
     }
+
+    public function watModal()
+    {
+        return $this->hasMany(WatModal::class, 'id_modalservicio', 'id_modalservicio');
+    }
+    public function emailModal()
+    {
+        return $this->hasMany(EmailModal::class, 'id_modalservicio', 'id_modalservicio');
+    }
+
 }

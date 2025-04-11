@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendEmailJob;
 use App\Models\modalservicios;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendModalMail;
+use App\Models\EmailModal;
+use App\Models\WatModal;
 
 class ModalesController extends Controller
 {
@@ -28,38 +31,80 @@ class ModalesController extends Controller
                 'id_servicio' => 'required|integer|min:1|max:4',
             ]);
 
-            $newRecord = DB::table('modalservicios')->insertGetId([
-                'nombre' => $validatedData['nombre'],
-                'telefono' => $validatedData['telefono'],
-                'correo' => $validatedData['correo'],
-                'id_servicio' => intval($validatedData['id_servicio']),
-            ]);
+            DB::beginTransaction();
+
+            $modal_servicio = modalservicios::create($request->all());
+
+            for ($i = 1; $i <= 3; $i++) {
+                if ($i == 1){
+                    $first_email_modal = EmailModal::create([
+                        'estado' => 0,
+                        'error' => '',
+                        'id_modalservicio' => $modal_servicio->id_modalservicio,
+                        'number_message' => $i,
+                        'fecha' => now(),
+                    ]);
+                }
+                else{
+                    EmailModal::create([
+                        'estado' => 0,
+                        'error' => '',
+                        'id_modalservicio' => $modal_servicio->id_modalservicio,
+                        'number_message' => $i,
+                        'fecha' => now(),
+                    ]);
+                }
+            }
+
+            for ($i = 1; $i <= 2; $i++) {
+                WatModal::create([
+                    'estado' => 0,
+                    'error' => '',
+                    'id_modalservicio' => $modal_servicio->id_modalservicio,
+                    'number_message' => $i,
+                    'fecha' => now(),
+                ]);
+            }
+
+            try{
+                //aqui tratamos de enviar el email al correo correspondiente, ya que si no existe
+                // el primer registro lo cambiamos con error de envio
+
+                $data = [
+                    'nombre' => $request->nombre,
+                    'correo' => $request->correo,
+                    'telefono' => $request->telefono,
+                    'id_servicio' => $request->id_servicio,
+                    'number_message' => 1, //primer mensaje que enviaremos nosotros
+                ];
+
+                
 
 
-            /* // Enviar el primer correo inmediatamente
-            dispatch(new SendEmailJob(0, $request->id_servicio, $request->correo));
-            // Enviar el segundo correo después de 1 minuto
-            dispatch(new SendEmailJob(1, $request->id_servicio, $request->correo))->delay(Carbon::now()->addMinutes(60 * 24));
-            // Enviar el tercer correo después de 2 minutos
-            dispatch(new SendEmailJob(2, $request->id_servicio, $request->correo))->delay(Carbon::now()->addMinutes(4));
-            */
+
+            }catch(\Exception $e){
+                if (isset($first_email_modal)) {
+                    $first_email_modal->update([
+                        'estado' => 1,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+
+            DB::commit();
 
             return response()->json([
-                'message' => 'Registro creado exitosamente',
-                'data' => [
-                    'id_modal' => $newRecord,
-                    'nombre' => $validatedData['nombre'],
-                    'telefono' => $validatedData['telefono'],
-                    'correo' => $validatedData['correo'],
-                    'id_servicio' => $validatedData['id_servicio'],
-                ]
+                'status' => 201,
+                'message' => 'Modal guardado exitosamente'
             ], 201);
         } catch (\Illuminate\Validation\ValidationException $error) {
+            DB::rollback();
             return response()->json([
                 'error' => 'Error en la validación',
                 'details' => $error->errors()
             ], 400);
         } catch (\Exception $error) {
+            DB::rollback();
             return response()->json([
                 'error' => 'Error al crear el registro',
                 'details' => $error->getMessage()
@@ -111,10 +156,21 @@ class ModalesController extends Controller
             return response()->json(['error' => 'Modal no encontrado'], 404);
         }
 
+        $emails_modal = EmailModal::where('id_modalservicio', $id)->all();
+        $wats_modal = WatModal::where('id_modalservicio', $id)->all();
+
+        if($emails_modal != null){
+            $emails_modal->delete();
+        }
+
+        if($wats_modal != null){
+            $wats_modal->delete();
+        }
+
         $modal->delete();
 
         return response()->json([
-            'message' => 'Contacto eliminado exitosamente'
+            'message' => 'Modal eliminado exitosamente'
         ], 200);
     }
 }

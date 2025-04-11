@@ -17,7 +17,7 @@ class ReclamacionSeeder extends Seeder
     {
         $reclamaciones = [
             [
-                'nombre' => 'Carlos',
+                'nombre' => 'Carlos EJEMPLO',
                 'apellido' => 'Mendoza Vargas',
                 'documento' => 'DNI',
                 'numeroDocumento' => '45781236',
@@ -36,7 +36,7 @@ class ReclamacionSeeder extends Seeder
                 'estadoReclamo' => 'PENDIENTE'
             ],
             [
-                'nombre' => 'María',
+                'nombre' => 'María EJEMPLO',
                 'apellido' => 'Gómez Rodríguez',
                 'documento' => 'CE',
                 'numeroDocumento' => 'CE001234567',
@@ -55,7 +55,7 @@ class ReclamacionSeeder extends Seeder
                 'estadoReclamo' => 'PENDIENTE'
             ],
             [
-                'nombre' => 'José Luis',
+                'nombre' => 'José Luis EJEMPLO',
                 'apellido' => 'Paredes Santillán',
                 'documento' => 'RUC',
                 'numeroDocumento' => '20512345678',

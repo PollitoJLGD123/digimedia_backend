@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Krizzia Martina',
                 'email' => 'krizzia_saavedra201@hotmail.com',
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make('2XQsrPELv$&Y'),
             ],
             [
                 'name' => 'Gonzalo Fernando',

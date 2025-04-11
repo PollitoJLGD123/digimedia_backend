@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             ModalservicioSeeder::class,
             RolSeeder::class,
             EmpleadoSeeder::class,
+            MailModalSeeder::class,
+            WatModalSeeder::class,
         ]);
     }
 }
