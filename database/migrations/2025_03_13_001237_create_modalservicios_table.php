@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nombre', 100);
             $table->string('telefono', 9);
             $table->string('correo', 200);
-            $table->foreignId('id_servicio')->unique()->references('id_servicio')->on('servicios')->onDelete('cascade');
+            $table->foreignId('id_servicio')->references('id_servicio')->on('servicios')->onDelete('cascade');
             $table->boolean('estado')->nullable()->default(1);
             $table->timestamp('fecha')->useCurrent();
         });

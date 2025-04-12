@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\modalservicios;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\SendModalMail;
-use App\Models\EmailModal;
+use App\Mail\ModalMail;
 use App\Models\WatModal;
+use App\Mail\MailService;
+use App\Models\EmailModal;
+use Illuminate\Http\Request;
+use App\Models\modalservicios;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class ModalesController extends Controller
 {
@@ -73,20 +74,26 @@ class ModalesController extends Controller
                 $data = [
                     'nombre' => $request->nombre,
                     'correo' => $request->correo,
-                    'telefono' => $request->telefono,
-                    'id_servicio' => $request->id_servicio,
-                    'number_message' => 1, //primer mensaje que enviaremos nosotros
+                    'telefono' => $request->telefono
                 ];
 
-                
+                Mail::to($request->correo)->send(
+                    new MailService(1, $data, $request->id_servicio)
+                );
 
-
-
-            }catch(\Exception $e){
                 if (isset($first_email_modal)) {
                     $first_email_modal->update([
                         'estado' => 1,
-                        'error' => $e->getMessage(),
+                        'error' => 'Se envio correctamente'
+                    ]);
+                }
+
+            }catch(\Exception $e){
+                Log::error('Error al enviar el correo: ' . $e->getMessage());
+                if (isset($first_email_modal)) {
+                    $first_email_modal->update([
+                        'estado' => 1,
+                        'error' => 'Enviado con error, Posiblemente el correo no existe'
                     ]);
                 }
             }
@@ -110,6 +117,10 @@ class ModalesController extends Controller
                 'details' => $error->getMessage()
             ], 500);
         }
+    }
+
+    public function enviarEmailManual(Request $request, $number){
+
     }
 
     public function getById($id)
