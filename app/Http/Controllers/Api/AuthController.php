@@ -115,6 +115,8 @@ class AuthController extends Controller
         $rol = $empleado->rol;
         $abilities = [$rol->nombre];
 
+        $permisos = $rol->permisos->pluck('slug')->toArray();
+
         // quitar tokens anteriores
         $user->tokens()->delete();
         // token incluyendo rol (capcidad)
@@ -125,6 +127,7 @@ class AuthController extends Controller
             'user'     => $user,
             'empleado' => $empleado,
             'rol'      => $rol->nombre,
+            'permisos' => $permisos,
             'token'    => $token,
         ]);
     }
@@ -227,11 +230,14 @@ class AuthController extends Controller
         $empleado = $user->empleado;
         $rol = $empleado ? $empleado->rol : null;
 
+        $permisos = $rol ? $rol->permisos->pluck('slug')->toArray() : [];
+
         return response()->json([
             'user' => $user,
             'empleado' => $empleado,
             'rol' => $rol ? $rol->nombre : null,
-            'permissions' => $user->currentAccessToken()->abilities
+            'abilities' => $user->currentAccessToken()->abilities,
+            'permisos' => $permisos
         ]);
     }
 }
