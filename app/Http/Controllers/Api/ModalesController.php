@@ -22,6 +22,20 @@ class ModalesController extends Controller
         return response()->json($modals, 200);
     }
 
+    public function getSendModales($id){
+
+        $modals_mails = EmailModal::where('id_modalservicio', $id)->get();
+        $modal_wats = WatModal::where('id_modalservicio', $id)->get();
+
+        $data = [
+            'mails' => $modals_mails,
+            'wats' => $modal_wats,
+            'status' => 200
+        ];
+
+        return response()->json($data, 200);
+    }
+
     public function create(Request $request)
     {
         try {
@@ -84,16 +98,16 @@ class ModalesController extends Controller
                 if (isset($first_email_modal)) {
                     $first_email_modal->update([
                         'estado' => 1,
-                        'error' => 'Se envio correctamente'
+                        'fecha' => now(),
                     ]);
                 }
 
             }catch(\Exception $e){
-                Log::error('Error al enviar el correo: ' . $e->getMessage());
                 if (isset($first_email_modal)) {
                     $first_email_modal->update([
                         'estado' => 1,
-                        'error' => 'Enviado con error, Posiblemente el correo no existe'
+                        'error' => 'Enviado con error, Posiblemente el correo no existe',
+                        'fecha' => now(),
                     ]);
                 }
             }
@@ -104,6 +118,7 @@ class ModalesController extends Controller
                 'status' => 201,
                 'message' => 'Modal guardado exitosamente'
             ], 201);
+
         } catch (\Illuminate\Validation\ValidationException $error) {
             DB::rollback();
             return response()->json([
@@ -117,10 +132,6 @@ class ModalesController extends Controller
                 'details' => $error->getMessage()
             ], 500);
         }
-    }
-
-    public function enviarEmailManual(Request $request, $number){
-
     }
 
     public function getById($id)
