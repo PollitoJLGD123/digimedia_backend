@@ -82,13 +82,15 @@ class TarjetaController extends Controller
     {
         try{
 
-            $tarjetas = Tarjeta::where('id_blog_body', $id)->all();
+            $tarjetas = Tarjeta::where('id_blog_body', $id)->get();
 
             if (!$tarjetas) {
                 return response()->json(['error' => 'No se encontraron tarjetas'], 404);
             }
 
-            $tarjetas->delete();
+            foreach ($tarjetas as $tarjeta) {
+                $tarjeta->delete();
+            }
 
             return response()->json([
                 "status" => 200,
