@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\SendModalMail;
 use App\Models\EmailModal;
 use App\Models\WatModal;
-
 class ModalesController extends Controller
 {
     public function get(Request $request)
@@ -156,15 +155,19 @@ class ModalesController extends Controller
             return response()->json(['error' => 'Modal no encontrado'], 404);
         }
 
-        $emails_modal = EmailModal::where('id_modalservicio', $id)->all();
-        $wats_modal = WatModal::where('id_modalservicio', $id)->all();
-
-        if($emails_modal != null){
-            $emails_modal->delete();
+        $emails_modal = EmailModal::where('id_modalservicio', $id)->get();
+        $wats_modal = WatModal::where('id_modalservicio', $id)->get();
+        
+        if ($emails_modal->isNotEmpty()) {
+            foreach ($emails_modal as $email) {
+                $email->delete();
+            }
         }
 
-        if($wats_modal != null){
-            $wats_modal->delete();
+        if ($wats_modal->isNotEmpty()) {
+            foreach ($wats_modal as $wat) {
+                $wat->delete();
+            }
         }
 
         $modal->delete();
