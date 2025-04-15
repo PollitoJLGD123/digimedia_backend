@@ -111,8 +111,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:ver-roles')->get('/roles/{id}', [RolController::class, "show"]);
     Route::middleware('permission:editar-roles')->put('/roles/{id}', [RolController::class, "update"]);
     Route::middleware('permission:eliminar-roles')->delete('/roles/{id}', [RolController::class, "destroy"]);
-    Route::middleware('permission:asignar-permisos')->get('/roles/{id}/permisos', [RolController::class, "getPermisos"]);
-    Route::middleware('permission:asignar-permisos')->post('/roles/{id}/permisos', [RolController::class, "syncPermisos"]);
+    Route::middleware('permission:ver-permisos')->get('/roles/{id}/permisos', [RolController::class, "getPermisos"]);
+    Route::middleware('permission:ver-permisos')->post('/roles/{id}/permisos', [RolController::class, "syncPermisos"]);
 
     // permisos
     Route::middleware('permission:ver-permisos')->get('/permisos', [PermisoController::class, "index"]);
