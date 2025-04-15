@@ -71,7 +71,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:enviar-mensajes')->get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
     Route::middleware('permission:enviar-mensajes')->put('/modales/estado_wat/{id}', [ModalWatController::class, "cambiarEstado"]);
 
-
     // rutas update
     Route::middleware('permission:editar-contactos')->put('/contactanos/{id}', [ContactanosController::class, "update"]);
     Route::middleware('permission:editar-servicios')->put('/servicios/{id}', [ServiciosController::class, "update"]);
