@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\modalservicios;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\SendModalMail;
-use App\Models\EmailModal;
+use App\Mail\ModalMail;
 use App\Models\WatModal;
+use App\Mail\MailService;
+use App\Models\EmailModal;
+use Illuminate\Http\Request;
+use App\Models\modalservicios;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class ModalesController extends Controller
 {
@@ -19,6 +20,20 @@ class ModalesController extends Controller
         $modals = modalservicios::with('servicio')->orderBy('id_modalservicio', 'asc')->paginate(4);
 
         return response()->json($modals, 200);
+    }
+
+    public function getSendModales($id){
+
+        $modals_mails = EmailModal::where('id_modalservicio', $id)->get();
+        $modal_wats = WatModal::where('id_modalservicio', $id)->get();
+
+        $data = [
+            'mails' => $modals_mails,
+            'wats' => $modal_wats,
+            'status' => 200
+        ];
+
+        return response()->json($data, 200);
     }
 
     public function create(Request $request)
@@ -73,20 +88,26 @@ class ModalesController extends Controller
                 $data = [
                     'nombre' => $request->nombre,
                     'correo' => $request->correo,
-                    'telefono' => $request->telefono,
-                    'id_servicio' => $request->id_servicio,
-                    'number_message' => 1, //primer mensaje que enviaremos nosotros
+                    'telefono' => $request->telefono
                 ];
 
-                
+                Mail::to($request->correo)->send(
+                    new MailService(1, $data, $request->id_servicio)
+                );
 
-
+                if (isset($first_email_modal)) {
+                    $first_email_modal->update([
+                        'estado' => 1,
+                        'fecha' => now(),
+                    ]);
+                }
 
             }catch(\Exception $e){
                 if (isset($first_email_modal)) {
                     $first_email_modal->update([
                         'estado' => 1,
-                        'error' => $e->getMessage(),
+                        'error' => 'Enviado con error, Posiblemente el correo no existe',
+                        'fecha' => now(),
                     ]);
                 }
             }
@@ -97,6 +118,7 @@ class ModalesController extends Controller
                 'status' => 201,
                 'message' => 'Modal guardado exitosamente'
             ], 201);
+
         } catch (\Illuminate\Validation\ValidationException $error) {
             DB::rollback();
             return response()->json([
@@ -156,15 +178,19 @@ class ModalesController extends Controller
             return response()->json(['error' => 'Modal no encontrado'], 404);
         }
 
-        $emails_modal = EmailModal::where('id_modalservicio', $id)->all();
-        $wats_modal = WatModal::where('id_modalservicio', $id)->all();
+        $emails_modal = EmailModal::where('id_modalservicio', $id)->get();
+        $wats_modal = WatModal::where('id_modalservicio', $id)->get();
 
         if($emails_modal != null){
-            $emails_modal->delete();
+            foreach ($emails_modal as $email) {
+                $email->delete();
+            }
         }
 
         if($wats_modal != null){
-            $wats_modal->delete();
+            foreach ($wats_modal as $wat) {
+                $wat->delete();
+            }
         }
 
         $modal->delete();

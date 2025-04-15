@@ -1,26 +1,28 @@
 <?php
 
-use App\Http\Controllers\Api\ContactanosController;
-use App\Http\Controllers\Api\ModalesController;
-use App\Http\Controllers\Api\ReclamacionesController;
-use App\Http\Controllers\Api\ServiciosController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\EmpleadoController;
+use Illuminate\Http\Request;
+use App\Models\CommendTarjeta;
+use App\Http\Middleware\isAdmin;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RolController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\CardController;
-use App\Http\Controllers\Api\BlogBodyController;
-use App\Http\Controllers\Api\BlogFooterController;
-use App\Http\Controllers\Api\BlogHeadController;
-use App\Http\Controllers\Api\TarjetaController;
-use App\Http\Controllers\Api\CommendTarjetaController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ImageController;
+use App\Http\Controllers\Api\ModalesController;
+use App\Http\Controllers\Api\TarjetaController;
+use App\Http\Controllers\Api\BlogBodyController;
+use App\Http\Controllers\Api\BlogHeadController;
+use App\Http\Controllers\Api\EmpleadoController;
+use App\Http\Controllers\Api\ModalWatController;
 
-use App\Http\Middleware\isAdmin;
-use App\Models\CommendTarjeta;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ModalMailController;
+use App\Http\Controllers\Api\ServiciosController;
+use App\Http\Controllers\Api\BlogFooterController;
+use App\Http\Controllers\Api\ContactanosController;
+use App\Http\Controllers\Api\ReclamacionesController;
+use App\Http\Controllers\Api\CommendTarjetaController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -67,10 +69,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:ventas,marketing,administrador')->group(function () {
         // ver datos sin eliminar
-        Route::get('/contactanos', [ContactanosController::class, "get"]);
-        Route::get('/reclamaciones', [ReclamacionesController::class, "get"]);
-        Route::get('/modales', [ModalesController::class, "get"]);
-        Route::get('/servicios', [ServiciosController::class, "get"]);
+        //Route::get('/reclamaciones', [ReclamacionesController::class, "get"]);
+        //Route::get('/modales', [ModalesController::class, "get"]);
+        //Route::get('/contactanos', [ContactanosController::class, "get"]);
+        //Route::get('/servicios', [ServiciosController::class, "get"]);
+
+        //modales gets
+        //Route::get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
 
         //getById
         Route::get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
@@ -129,3 +134,10 @@ Route::post('/empleados/{id}/image', [EmpleadoController::class, 'updateProfileI
 Route::delete('/empleados/{id}/image', [EmpleadoController::class, 'deleteProfileImage']);
 Route::post('/delete_image', [ImageController::class, "deleteImage"]);
 
+Route::get('/reclamaciones', [ReclamacionesController::class, "get"]);
+Route::get('/modales', [ModalesController::class, "get"]);
+Route::get('/contactanos', [ContactanosController::class, "get"]);
+Route::get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
+
+Route::get('/modales/send_mail/{id}', [ModalMailController::class, "sendMail"]);
+Route::get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
