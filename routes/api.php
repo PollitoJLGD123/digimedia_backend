@@ -6,10 +6,10 @@ use App\Http\Middleware\isAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RolController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PermisoController;
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\CardController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\ImageController;
 use App\Http\Controllers\Api\ModalesController;
 use App\Http\Controllers\Api\TarjetaController;
 use App\Http\Controllers\Api\BlogBodyController;
@@ -23,105 +23,19 @@ use App\Http\Controllers\Api\BlogFooterController;
 use App\Http\Controllers\Api\ContactanosController;
 use App\Http\Controllers\Api\ReclamacionesController;
 use App\Http\Controllers\Api\CommendTarjetaController;
+use App\Http\Controllers\Api\ImageController;
 
+// rutas públicas 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/user/login', [UserController::class, "login"]);
+Route::post('/reset_password', [AuthController::class, "forgotPassword"]);
+Route::post('/update_password', [AuthController::class, "updatePassword"]);
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/me', [AuthController::class, 'me']);
-    Route::get('/user/logout', [UserController::class, "logout"]);
-
-    //Para administradores
-    Route::middleware('role:administrador')->group(function () {
-        // Rutas - usuarios
-        Route::get('/user', [UserController::class, "getAllByPage"]);
-        Route::get('/user/{id}', [UserController::class, "getById"]);
-        Route::post('/user', [UserController::class, "create"]);
-        Route::put('/user/{id}', [UserController::class, "update"]);
-        Route::put('/user/pass/{id}', [UserController::class, "updatePass"]);
-        Route::delete('/user/{id}', [UserController::class, "delete"]);
-
-        // Rutas - servicios
-        Route::delete('/servicios/{id}', [ServiciosController::class, "delete"]);
-
-        // Rutas - contactanos
-        Route::delete('/contactanos/{id}', [ContactanosController::class, "delete"]);
-        Route::delete('/reclamaciones/{id}', [ReclamacionesController::class, "delete"]);
-        Route::delete('/modales/{id}', [ModalesController::class, "delete"]);
-
-
-        // Rutas - empleados
-        Route::get('/empleados', [EmpleadoController::class, "getAllByPage"]);
-        Route::get('/empleados/{id}', [EmpleadoController::class, "getById"]);
-        Route::post('/empleados', [EmpleadoController::class, "create"]);
-        Route::put('/empleados/{id}', [EmpleadoController::class, "update"]);
-        Route::put('/empleados/pass/{id}', [EmpleadoController::class, "updatePass"]);
-        Route::delete('/empleados/{id}', [EmpleadoController::class, "delete"]);
-
-
-        //Rutas - Roles
-        Route::get('/roles', [RolController::class, "index"]);
-
-
-    });
-
-    Route::middleware('role:ventas,marketing,administrador')->group(function () {
-        // ver datos sin eliminar
-        //Route::get('/reclamaciones', [ReclamacionesController::class, "get"]);
-        //Route::get('/modales', [ModalesController::class, "get"]);
-        //Route::get('/contactanos', [ContactanosController::class, "get"]);
-        //Route::get('/servicios', [ServiciosController::class, "get"]);
-
-        //modales gets
-        //Route::get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
-
-        //getById
-        Route::get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
-        Route::get('/contactanos/{id}', [ContactanosController::class, "getById"]);
-        Route::get('/modales/{id}', [ModalesController::class, "getById"]);
-
-        // actualizar datos
-        Route::put('/contactanos/{id}', [ContactanosController::class, "update"]);
-        Route::put('/servicios/{id}', [ServiciosController::class, "update"]);
-        Route::put('/reclamaciones/{id}', [ReclamacionesController::class, "update"]);
-        Route::put('/modales/{id}', [ModalesController::class, "update"]);
-
-        //creación (depende :v)
-        Route::post('/servicios', [ServiciosController::class, "create"]);
-
-        //blogs creacion
-        Route::post('/card', [CardController::class, "create"]);
-        Route::post('/blog', [BlogController::class, "create"]);
-        Route::post('/blog_head', [BlogHeadController::class, "create"]);
-        Route::post('/blog_body', [BlogBodyController::class, "create"]);
-        Route::post('/blog_footer', [BlogFooterController::class, "create"]);
-        Route::post('/commend_tarjeta', [CommendTarjetaController::class, "create"]);
-        Route::post('/tarjeta', [TarjetaController::class, "create"]);
-
-        //blogs delete
-        Route::delete('/cards/{id}', [CardController::class, "destroy"]);
-        Route::delete('/blogs/{id}', [BlogController::class, "destroy"]);
-        Route::delete('/blog_head/{id}', [BlogHeadController::class, "destroy"]);
-        Route::delete('/blog_body/{id}', [BlogBodyController::class, "destroy"]);
-        Route::delete('/blog_footer/{id}', [BlogFooterController::class, "destroy"]);
-        Route::delete('/commend_tarjeta/{id}', [CommendTarjetaController::class, "destroy"]);
-        Route::delete('/tarjetas_delete/{id}', [TarjetaController::class, "destroyAll"]);
-        //Route::delete('/tarjetas_delete/{id}', [TarjetaController::class, "destroy"]);
-
-    });
-});
-
-//publicas
-Route::post('/empleados/verify-password', [EmpleadoController::class, 'verifyPassword']);
 Route::post('/contactanos', [ContactanosController::class, "create"]);
 Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
 Route::post('/modales', [ModalesController::class, "create"]);
-Route::post('/reset_password', action: [AuthController::class, "forgotPassword"]);
-Route::post('/update_password', action: [AuthController::class, "updatePassword"]);
-
-//blogs obtener
+// blogs públicos
 Route::get('/cards', [CardController::class, "index"]);
 Route::get('/blogs/{id}', [BlogController::class, "show"]);
 Route::get('/blogs', [BlogController::class, "index"]);
@@ -129,15 +43,85 @@ Route::get('/blog_head/{id}', [BlogHeadController::class, "show"]);
 Route::get('/blog_footer/{id}', [BlogFooterController::class, "show"]);
 Route::get('/blog_body/{id}', [BlogBodyController::class, "show"]);
 
+// rutas autenticadas
+Route::middleware('auth:sanctum')->group(function () {
+    // autenticación
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/empleados/verify-password', [EmpleadoController::class, 'verifyPassword']);
+    Route::get('/user/logout', [UserController::class, "logout"]);
 
-Route::post('/empleados/{id}/image', [EmpleadoController::class, 'updateProfileImage']);
-Route::delete('/empleados/{id}/image', [EmpleadoController::class, 'deleteProfileImage']);
-Route::post('/delete_image', [ImageController::class, "deleteImage"]);
+    // imágenes 
+    Route::post('/empleados/{id}/image', [EmpleadoController::class, 'updateProfileImage']);
+    Route::delete('/empleados/{id}/image', [EmpleadoController::class, 'deleteProfileImage']);
+    Route::post('/delete_image', [ImageController::class, "deleteImage"]);
 
-Route::get('/reclamaciones', [ReclamacionesController::class, "get"]);
-Route::get('/modales', [ModalesController::class, "get"]);
-Route::get('/contactanos', [ContactanosController::class, "get"]);
-Route::get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
+    Route::middleware('permission:ver-contactos')->get('/contactanos', [ContactanosController::class, "get"]);
+    Route::middleware('permission:ver-reclamaciones')->get('/reclamaciones', [ReclamacionesController::class, "get"]);
+    Route::middleware('permission:ver-modales')->get('/modales', [ModalesController::class, "get"]);
+    Route::middleware('permission:ver-servicios')->get('/servicios', [ServiciosController::class, "get"]);
 
-Route::get('/modales/send_mail/{id}', [ModalMailController::class, "sendMail"]);
-Route::get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
+    Route::middleware('permission:ver-contactos')->get('/contactanos/{id}', [ContactanosController::class, "getById"]);
+    Route::middleware('permission:ver-reclamaciones')->get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
+    Route::middleware('permission:ver-modales')->get('/modales/{id}', [ModalesController::class, "getById"]);
+
+    // rutas update
+    Route::middleware('permission:editar-contactos')->put('/contactanos/{id}', [ContactanosController::class, "update"]);
+    Route::middleware('permission:editar-servicios')->put('/servicios/{id}', [ServiciosController::class, "update"]);
+    Route::middleware('permission:editar-reclamaciones')->put('/reclamaciones/{id}', [ReclamacionesController::class, "update"]);
+    Route::middleware('permission:editar-modales')->put('/modales/{id}', [ModalesController::class, "update"]);
+
+    // rutas create
+    Route::middleware('permission:crear-servicios')->post('/servicios', [ServiciosController::class, "create"]);
+    Route::middleware('permission:crear-blogs')->post('/card', [CardController::class, "create"]);
+    Route::middleware('permission:crear-blogs')->post('/blog', [BlogController::class, "create"]);
+    Route::middleware('permission:crear-blogs')->post('/blog_head', [BlogHeadController::class, "create"]);
+    Route::middleware('permission:crear-blogs')->post('/blog_body', [BlogBodyController::class, "create"]);
+    Route::middleware('permission:crear-blogs')->post('/blog_footer', [BlogFooterController::class, "create"]);
+    Route::middleware('permission:crear-tarjetas')->post('/commend_tarjeta', [CommendTarjetaController::class, "create"]);
+    Route::middleware('permission:crear-tarjetas')->post('/tarjeta', [TarjetaController::class, "create"]);
+
+    // rutas delete/destroy
+    Route::middleware('permission:eliminar-blogs')->delete('/cards/{id}', [CardController::class, "destroy"]);
+    Route::middleware('permission:eliminar-blogs')->delete('/blogs/{id}', [BlogController::class, "destroy"]);
+    Route::middleware('permission:eliminar-blogs')->delete('/blog_head/{id}', [BlogHeadController::class, "destroy"]);
+    Route::middleware('permission:eliminar-blogs')->delete('/blog_body/{id}', [BlogBodyController::class, "destroy"]);
+    Route::middleware('permission:eliminar-blogs')->delete('/blog_footer/{id}', [BlogFooterController::class, "destroy"]);
+    Route::middleware('permission:eliminar-tarjetas')->delete('/commend_tarjeta/{id}', [CommendTarjetaController::class, "destroy"]);
+    Route::middleware('permission:eliminar-tarjetas')->delete('/tarjetas_delete/{id}', [TarjetaController::class, "destroyAll"]);
+    Route::middleware('permission:eliminar-contactos')->delete('/contactanos/{id}', [ContactanosController::class, "delete"]);
+    Route::middleware('permission:eliminar-reclamaciones')->delete('/reclamaciones/{id}', [ReclamacionesController::class, "delete"]);
+    Route::middleware('permission:eliminar-modales')->delete('/modales/{id}', [ModalesController::class, "delete"]);
+    Route::middleware('permission:eliminar-servicios')->delete('/servicios/{id}', [ServiciosController::class, "delete"]);
+
+    // permisos especificos para admin
+    Route::middleware('permission:ver-usuarios')->get('/user', [UserController::class, "getAllByPage"]);
+    Route::middleware('permission:ver-usuarios')->get('/user/{id}', [UserController::class, "getById"]);
+    Route::middleware('permission:crear-usuarios')->post('/user', [UserController::class, "create"]);
+    Route::middleware('permission:editar-usuarios')->put('/user/{id}', [UserController::class, "update"]);
+    Route::middleware('permission:editar-usuarios')->put('/user/pass/{id}', [UserController::class, "updatePass"]);
+    Route::middleware('permission:eliminar-usuarios')->delete('/user/{id}', [UserController::class, "delete"]);
+
+    Route::middleware('permission:ver-empleados')->get('/empleados', [EmpleadoController::class, "getAllByPage"]);
+    Route::middleware('permission:ver-empleados')->get('/empleados/{id}', [EmpleadoController::class, "getById"]);
+    Route::middleware('permission:crear-empleados')->post('/empleados', [EmpleadoController::class, "create"]);
+    Route::middleware('permission:editar-empleados')->put('/empleados/{id}', [EmpleadoController::class, "update"]);
+    Route::middleware('permission:editar-empleados')->put('/empleados/pass/{id}', [EmpleadoController::class, "updatePass"]);
+    Route::middleware('permission:eliminar-empleados')->delete('/empleados/{id}', [EmpleadoController::class, "delete"]);
+
+    // roles
+    Route::middleware('permission:ver-roles')->get('/roles', [RolController::class, "index"]);
+    Route::middleware('permission:crear-roles')->post('/roles', [RolController::class, "store"]);
+    Route::middleware('permission:ver-roles')->get('/roles/{id}', [RolController::class, "show"]);
+    Route::middleware('permission:editar-roles')->put('/roles/{id}', [RolController::class, "update"]);
+    Route::middleware('permission:eliminar-roles')->delete('/roles/{id}', [RolController::class, "destroy"]);
+    Route::middleware('permission:ver-permisos')->get('/roles/{id}/permisos', [RolController::class, "getPermisos"]);
+    Route::middleware('permission:ver-permisos')->post('/roles/{id}/permisos', [RolController::class, "syncPermisos"]);
+
+    // permisos
+    Route::middleware('permission:ver-permisos')->get('/permisos', [PermisoController::class, "index"]);
+    Route::middleware('permission:ver-permisos')->get('/permisos/{id}', [PermisoController::class, "show"]);
+    Route::middleware('permission:crear-permisos')->post('/permisos', [PermisoController::class, "store"]);
+    Route::middleware('permission:editar-permisos')->put('/permisos/{id}', [PermisoController::class, "update"]);
+    Route::middleware('permission:eliminar-permisos')->delete('/permisos/{id}', [PermisoController::class, "destroy"]);
+});
