@@ -28,7 +28,6 @@ use App\Http\Controllers\Api\ImageController;
 // rutas públicas
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/user/login', [UserController::class, "login"]);
 Route::post('/reset_password', [AuthController::class, "forgotPassword"]);
 Route::post('/update_password', [AuthController::class, "updatePassword"]);
 
@@ -55,7 +54,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/empleados/verify-password', [EmpleadoController::class, 'verifyPassword']);
-    Route::get('/user/logout', [UserController::class, "logout"]);
 
     // imágenes
     Route::post('/empleados/{id}/image', [EmpleadoController::class, 'updateProfileImage']);
@@ -100,13 +98,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:eliminar-modales')->delete('/modales/{id}', [ModalesController::class, "delete"]);
     Route::middleware('permission:eliminar-servicios')->delete('/servicios/{id}', [ServiciosController::class, "delete"]);
 
-    // permisos especificos para admin
-    Route::middleware('permission:ver-usuarios')->get('/user', [UserController::class, "getAllByPage"]);
-    Route::middleware('permission:ver-usuarios')->get('/user/{id}', [UserController::class, "getById"]);
-    Route::middleware('permission:crear-usuarios')->post('/user', [UserController::class, "create"]);
-    Route::middleware('permission:editar-usuarios')->put('/user/{id}', [UserController::class, "update"]);
-    Route::middleware('permission:editar-usuarios')->put('/user/pass/{id}', [UserController::class, "updatePass"]);
-    Route::middleware('permission:eliminar-usuarios')->delete('/user/{id}', [UserController::class, "delete"]);
 
     Route::middleware('permission:ver-empleados')->get('/empleados', [EmpleadoController::class, "getAllByPage"]);
     Route::middleware('permission:ver-empleados')->get('/empleados/{id}', [EmpleadoController::class, "getById"]);

@@ -360,12 +360,34 @@ class EmpleadoController extends Controller
             return response()->json(["status" => 404, "message" => "Empleado no encontrado"]);
         }
 
-        // id user del empleado
         $userId = $empleado->id_user;
 
-        // updatePass del user controller
-        $userController = new UserController();
-        return $userController->updatePass($request, $userId);
+        return $this->updatePass1($request, $userId);
+    }
+
+    private function updatePass1(Request $request, $id)
+    {
+        $validate = Validator::make(["id" => $request->id], [
+            "id" => "required|numeric",
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors()]);
+        }
+
+        $validate = Validator::make($request->all(), [
+            "password" => "required|string|min:4",
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json(["status" => 422, "message" => "Error de validación", "Errors" => $validate->errors(), "data" => $request->all()]);
+        }
+
+        $response = User::where(["id" => intval($id)])->update(["password" => Hash::make($request->password)]);
+
+        if ($response) {
+            return response()->json(["status" => 200, "message" => "Registro actualizado correctamente"]);
+        }
     }
 
     public function verifyPassword(Request $request)
