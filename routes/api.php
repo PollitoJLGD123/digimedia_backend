@@ -69,10 +69,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:ventas,marketing,administrador')->group(function () {
         // ver datos sin eliminar
-        //Route::get('/reclamaciones', [ReclamacionesController::class, "get"]);
-        //Route::get('/modales', [ModalesController::class, "get"]);
-        //Route::get('/contactanos', [ContactanosController::class, "get"]);
-        //Route::get('/servicios', [ServiciosController::class, "get"]);
+        Route::get('/reclamaciones', [ReclamacionesController::class, "get"]);
+        Route::get('/modales', [ModalesController::class, "get"]);
+        Route::get('/contactanos', [ContactanosController::class, "get"]);
+        Route::get('/servicios', [ServiciosController::class, "get"]);
 
         //modales gets
         //Route::get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
@@ -134,13 +134,8 @@ Route::post('/empleados/{id}/image', [EmpleadoController::class, 'updateProfileI
 Route::delete('/empleados/{id}/image', [EmpleadoController::class, 'deleteProfileImage']);
 Route::post('/delete_image', [ImageController::class, "deleteImage"]);
 
-Route::get('/reclamaciones', [ReclamacionesController::class, "get"]);
-Route::get('/modales', [ModalesController::class, "get"]);
-Route::get('/contactanos', [ContactanosController::class, "get"]);
 Route::get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
-
 Route::get('/modales/send_mail/{id}', [ModalMailController::class, "sendMail"]);
 Route::get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
-
 Route::put('/modales/reportar_error/{id}', [ModalMailController::class, "reportarError"]);
 Route::put('/modales/estado_wat/{id}', [ModalWatController::class, "cambiarEstado"]);
