@@ -9,6 +9,7 @@ use App\Models\modalservicios;
 use App\Mail\MailService;
 use Exception;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class ModalMailController extends Controller
 {
@@ -49,5 +50,32 @@ class ModalMailController extends Controller
             ]);
             return response()->json(['message' => 'Error al enviar el correo'], 500);
         }
+    }
+
+    public function reportarError(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'error' => 'required|string|max:500',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], 400);
+        }
+
+        $modal_mail = EmailModal::find($id);
+        if (!$modal_mail) {
+            return response()->json(['message' => 'Mensaje no encontrado'], 404);
+        }
+
+        $modal_mail->update([
+            'estado' => 1,
+            'error' => $request->error,
+            'fecha' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Error reportado exitosamente',
+            'modal_mail' => $modal_mail
+        ], 200);
     }
 }

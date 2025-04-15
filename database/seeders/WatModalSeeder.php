@@ -13,8 +13,8 @@ class WatModalSeeder extends Seeder
     {
         $wat_modals = [
             [
-                'estado' => 1,
-                'error' => 'Error, el numero no existe',
+                'estado' => 0,
+                'error' => '',
                 'id_modalservicio' => 1,
                 'number_message' => 1,
                 'fecha' => now(),
@@ -43,8 +43,8 @@ class WatModalSeeder extends Seeder
             ],
 
             [
-                'estado' => 1,
-                'error' => 'Error de envio, el numero no existe',
+                'estado' => 0,
+                'error' => '',
                 'id_modalservicio' => 3,
                 'number_message' => 1,
                 'fecha' => now(),

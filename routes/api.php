@@ -141,3 +141,6 @@ Route::get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModale
 
 Route::get('/modales/send_mail/{id}', [ModalMailController::class, "sendMail"]);
 Route::get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
+
+Route::put('/modales/reportar_error/{id}', [ModalMailController::class, "reportarError"]);
+Route::put('/modales/estado_wat/{id}', [ModalWatController::class, "cambiarEstado"]);
