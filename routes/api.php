@@ -35,6 +35,9 @@ Route::post('/update_password', [AuthController::class, "updatePassword"]);
 Route::post('/contactanos', [ContactanosController::class, "create"]);
 Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
 Route::post('/modales', [ModalesController::class, "create"]);
+Route::get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
+Route::get('/modales/send_mail/{id}', [ModalMailController::class, "sendMail"]);
+Route::get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
 // blogs públicos
 Route::get('/cards', [CardController::class, "index"]);
 Route::get('/blogs/{id}', [BlogController::class, "show"]);
