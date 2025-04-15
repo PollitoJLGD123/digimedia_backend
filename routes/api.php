@@ -35,9 +35,6 @@ Route::post('/update_password', [AuthController::class, "updatePassword"]);
 Route::post('/contactanos', [ContactanosController::class, "create"]);
 Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
 Route::post('/modales', [ModalesController::class, "create"]);
-Route::get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
-Route::get('/modales/send_mail/{id}', [ModalMailController::class, "sendMail"]);
-Route::get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
 // blogs públicos
 Route::get('/cards', [CardController::class, "index"]);
 Route::get('/blogs/{id}', [BlogController::class, "show"]);
@@ -45,6 +42,12 @@ Route::get('/blogs', [BlogController::class, "index"]);
 Route::get('/blog_head/{id}', [BlogHeadController::class, "show"]);
 Route::get('/blog_footer/{id}', [BlogFooterController::class, "show"]);
 Route::get('/blog_body/{id}', [BlogBodyController::class, "show"]);
+
+Route::get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
+Route::get('/modales/send_mail/{id}', [ModalMailController::class, "sendMail"]);
+Route::get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
+Route::put('/modales/reportar_error/{id}', [ModalMailController::class, "reportarError"]);
+Route::put('/modales/estado_wat/{id}', [ModalWatController::class, "cambiarEstado"]);
 
 // rutas autenticadas
 Route::middleware('auth:sanctum')->group(function () {
