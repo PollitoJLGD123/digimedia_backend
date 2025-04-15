@@ -30,6 +30,7 @@ class PermisosSeeder extends Seeder
             ['nombre' => 'Ver modales', 'descripcion' => 'Permite ver los modales'],
             ['nombre' => 'Editar modales', 'descripcion' => 'Permite editar modales'],
             ['nombre' => 'Eliminar modales', 'descripcion' => 'Permite eliminar modales'],
+            ['nombre' => 'Enviar mensajes', 'descripcion' => 'Enviar modales de Emails y WhatsApp'],
 
             // Servicios
             ['nombre' => 'Ver servicios', 'descripcion' => 'Permite ver los servicios'],
