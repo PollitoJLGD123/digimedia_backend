@@ -15,10 +15,10 @@ class CardController extends Controller
         try{
             if (!$id) {
                 $cards = Card::all();
-                return response()->json($cards, 200);
             }
-
-            $cards = Card::where('id_empleado', $id)->get();
+            else{
+                $cards = Card::where('id_empleado', $id)->get();
+            }
             return response()->json($cards, 200);
 
         }catch(\Exception $ex){
