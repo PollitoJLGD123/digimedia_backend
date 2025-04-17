@@ -1,15 +1,11 @@
 <?php
 
-use Illuminate\Http\Request;
-use App\Models\CommendTarjeta;
-use App\Http\Middleware\isAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RolController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PermisoController;
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\CardController;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ModalesController;
 use App\Http\Controllers\Api\TarjetaController;
 use App\Http\Controllers\Api\BlogBodyController;
@@ -41,6 +37,7 @@ Route::get('/blogs', [BlogController::class, "index"]);
 Route::get('/blog_head/{id}', [BlogHeadController::class, "show"]);
 Route::get('/blog_footer/{id}', [BlogFooterController::class, "show"]);
 Route::get('/blog_body/{id}', [BlogBodyController::class, "show"]);
+Route::get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
 
 // rutas autenticadas
 Route::middleware('auth:sanctum')->group(function () {
@@ -58,17 +55,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:ver-reclamaciones')->get('/reclamaciones', [ReclamacionesController::class, "get"]);
     Route::middleware('permission:ver-modales')->get('/modales', [ModalesController::class, "get"]);
     Route::middleware('permission:ver-servicios')->get('/servicios', [ServiciosController::class, "get"]);
-
+    Route::middleware('permission:ver-blogs')->get('/cards/{id?}', [CardController::class, "get"]);
     Route::middleware('permission:ver-contactos')->get('/contactanos/{id}', [ContactanosController::class, "getById"]);
     Route::middleware('permission:ver-reclamaciones')->get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
     Route::middleware('permission:ver-modales')->get('/modales/{id}', [ModalesController::class, "getById"]);
 
     //revisar emails y messages
-    Route::middleware('permission:ver-modales')->get('/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
+    Route::middleware('permission:ver-modales')->get('/modales/modals_emails_wats/{id}', [ModalesController::class, "getSendModales"]);
     //enviar emails y messages
     Route::middleware('permission:enviar-mensajes')->get('/modales/send_mail/{id}',[ModalMailController::class, "sendMail"]);
     Route::middleware('permission:enviar-mensajes')->put('/modales/reportar_error/{id}', [ModalMailController::class, "reportarError"]);
-    Route::middleware('permission:enviar-mensajes')->get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
     Route::middleware('permission:enviar-mensajes')->put('/modales/estado_wat/{id}', [ModalWatController::class, "cambiarEstado"]);
 
     // rutas update

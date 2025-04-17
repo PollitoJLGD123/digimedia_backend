@@ -10,11 +10,15 @@ use Illuminate\Support\Facades\DB;
 
 class CardController extends Controller
 {
-    public function index()
+    public function get($id = null)
     {
         try{
+            if (!$id) {
+                $cards = Card::all();
+                return response()->json($cards, 200);
+            }
 
-            $cards = Card::all();
+            $cards = Card::where('id_empleado', $id)->get();
             return response()->json($cards, 200);
 
         }catch(\Exception $ex){
