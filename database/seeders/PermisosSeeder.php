@@ -32,11 +32,11 @@ class PermisosSeeder extends Seeder
             ['nombre' => 'Eliminar modales', 'descripcion' => 'Permite eliminar modales'],
             ['nombre' => 'Enviar mensajes', 'descripcion' => 'Enviar modales de Emails y WhatsApp'],
 
-            // Servicios
+            // Servicios (se puede descomentar en caso se implementen los servicios em el dashboard; las rutas ya están incluidas en el api.php) 
             ['nombre' => 'Ver servicios', 'descripcion' => 'Permite ver los servicios'],
-            ['nombre' => 'Crear servicios', 'descripcion' => 'Permite crear servicios'],
-            ['nombre' => 'Editar servicios', 'descripcion' => 'Permite editar servicios'],
-            ['nombre' => 'Eliminar servicios', 'descripcion' => 'Permite eliminar servicios'],
+            //['nombre' => 'Crear servicios', 'descripcion' => 'Permite crear servicios'],
+            //['nombre' => 'Editar servicios', 'descripcion' => 'Permite editar servicios'],
+            //['nombre' => 'Eliminar servicios', 'descripcion' => 'Permite eliminar servicios'],
 
             // Roles
             ['nombre' => 'Ver roles', 'descripcion' => 'Permite ver la lista de roles'],

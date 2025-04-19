@@ -39,6 +39,10 @@ Route::get('/blog_footer/{id}', [BlogFooterController::class, "show"]);
 Route::get('/blog_body/{id}', [BlogBodyController::class, "show"]);
 Route::get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
 
+Route::middleware('ver-servicios')->get('/servicios', [ServiciosController::class, "get"]);
+
+
+
 // rutas autenticadas
 Route::middleware('auth:sanctum')->group(function () {
     // autenticación
@@ -54,7 +58,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:ver-contactos')->get('/contactanos', [ContactanosController::class, "get"]);
     Route::middleware('permission:ver-reclamaciones')->get('/reclamaciones', [ReclamacionesController::class, "get"]);
     Route::middleware('permission:ver-modales')->get('/modales', [ModalesController::class, "get"]);
-    Route::middleware('permission:ver-servicios')->get('/servicios', [ServiciosController::class, "get"]);
     Route::middleware('permission:ver-blogs')->get('/cards/{id?}', [CardController::class, "get"]);
     Route::middleware('permission:ver-contactos')->get('/contactanos/{id}', [ContactanosController::class, "getById"]);
     Route::middleware('permission:ver-reclamaciones')->get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
