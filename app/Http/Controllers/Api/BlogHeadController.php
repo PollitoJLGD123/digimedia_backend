@@ -132,7 +132,7 @@ class BlogHeadController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    public function destroy($id)
     {
         try{
 

@@ -10,14 +10,29 @@ use Illuminate\Support\Facades\DB;
 
 class CardController extends Controller
 {
+
+    public function index()
+    {
+        try{
+            $cards = Card::orderBy('id_card', 'asc')->get();
+            return response()->json($cards, 200);
+        }catch(\Exception $ex){
+            return response()->json([
+                "status" => 500,
+                "message" => "Error interno del servidor",
+                "error" => $ex->getMessage()
+            ], 500);
+        }
+    }
+
     public function get($id = null)
     {
         try{
             if (!$id) {
-                $cards = Card::all();
+                $cards = Card::with('empleado')->get();
             }
             else{
-                $cards = Card::where('id_empleado', $id)->get();
+                $cards = Card::with('empleado')->where('id_empleado', $id)->get();
             }
             return response()->json($cards, 200);
 

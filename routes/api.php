@@ -55,7 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:ver-reclamaciones')->get('/reclamaciones', [ReclamacionesController::class, "get"]);
     Route::middleware('permission:ver-modales')->get('/modales', [ModalesController::class, "get"]);
     Route::middleware('permission:ver-servicios')->get('/servicios', [ServiciosController::class, "get"]);
-    Route::middleware('permission:ver-blogs')->get('/cards/{id?}', [CardController::class, "get"]);
+    Route::middleware('permission:ver-blogs')->get('/cards/blog/{id?}', [CardController::class, "get"]);
     Route::middleware('permission:ver-contactos')->get('/contactanos/{id}', [ContactanosController::class, "getById"]);
     Route::middleware('permission:ver-reclamaciones')->get('/reclamaciones/{id}', [ReclamacionesController::class, "getById"]);
     Route::middleware('permission:ver-modales')->get('/modales/{id}', [ModalesController::class, "getById"]);

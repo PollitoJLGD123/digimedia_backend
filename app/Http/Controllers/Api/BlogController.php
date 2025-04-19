@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blog;
+use App\Models\BlogBody;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
@@ -76,20 +77,44 @@ class BlogController extends Controller
     {
         try{
 
-            $blog = Blog::find($id);
+            $blog = Blog::with('card')->find($id);
 
-            if (!$blog) {
-                return response()->json([
-                    "status" => 404,
-                    "message" => "Blog no encontrada"
-                ],404);
-            }
+            $id_header_blog = $blog->id_blog_head;
 
+            $id_body_blog = $blog->id_blog_body;
+
+            $id_footer_blog = $blog->id_blog_footer;
+
+            //primero card
+            $card_object = new CardController();
+            $card_object->destroy($blog->card->id_card);
+
+            //segundo blog
             $blog->delete();
+
+            //tecero blog_head
+            $blog_head = new BlogHeadController();
+            $blog_head->destroy($id_header_blog);
+
+            //cuarto blog_footer
+            $blog_footer = new BlogFooterController();
+            $blog_footer->destroy($id_footer_blog);
+
+            //quinto tarjetas
+            $tarjeta = new TarjetaController();
+            $tarjeta->destroyAll($id_body_blog);
+
+            //sexto commend_tarjeta
+            $blog_body_model = BlogBody::find($id_body_blog);
+            $commend_tarjeta = new CommendTarjetaController();
+            $commend_tarjeta->destroy($blog_body_model->id_commend_tarjeta);
+
+            //por ultimo blog_body
+            $blog_body_model->delete();
 
             return response()->json([
                 "status" => 200,
-                "message" => "Blog eliminada correctamente"
+                "message" => "Blog eliminado correctamente"
             ],200);
 
         }catch(\Exception $e){

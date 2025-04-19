@@ -42,7 +42,7 @@ class CommendTarjetaController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    public function destroy(string $id)
+    public function destroy($id)
     {
         try{
 

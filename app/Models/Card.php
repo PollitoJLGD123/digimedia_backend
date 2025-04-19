@@ -24,4 +24,8 @@ class Card extends Model
     public function blog(){
         return $this->hasOne(Blog::class, 'id_blog', 'id_blog');
     }
+
+    public function empleado(){
+        return $this->hasOne(Empleado::class, 'id_empleado', 'id_empleado');
+    }
 }
