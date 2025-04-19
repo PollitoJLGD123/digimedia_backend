@@ -83,7 +83,6 @@ class PermisosSeeder extends Seeder
                 'Editar reclamaciones',
 
                 'Enviar mensajes', 
-                'Ver empleados', 
             ],
             'marketing' => [
                 'Ver contactos', 
