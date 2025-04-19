@@ -2,85 +2,115 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 use App\Models\Permiso;
 use App\Models\Rol;
-use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class PermisosSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $permisos = [
             // Contactos
-            ['nombre' => 'Ver contactos', 'descripcion' => 'Permite ver los contactos'],
-            ['nombre' => 'Editar contactos', 'descripcion' => 'Permite editar contactos'],
-            ['nombre' => 'Eliminar contactos', 'descripcion' => 'Permite eliminar contactos'],
+            'Ver contactos' => 'Permite ver los contactos',
+            'Editar contactos' => 'Permite editar contactos',
+            'Eliminar contactos' => 'Permite eliminar contactos',
 
             // Reclamaciones
-            ['nombre' => 'Ver reclamaciones', 'descripcion' => 'Permite ver las reclamaciones'],
-            ['nombre' => 'Editar reclamaciones', 'descripcion' => 'Permite editar reclamaciones'],
-            ['nombre' => 'Eliminar reclamaciones', 'descripcion' => 'Permite eliminar reclamaciones'],
+            'Ver reclamaciones' => 'Permite ver las reclamaciones',
+            'Editar reclamaciones' => 'Permite editar reclamaciones',
+            'Eliminar reclamaciones' => 'Permite eliminar reclamaciones',
 
             // Modales
-            ['nombre' => 'Ver modales', 'descripcion' => 'Permite ver los modales'],
-            ['nombre' => 'Editar modales', 'descripcion' => 'Permite editar modales'],
-            ['nombre' => 'Eliminar modales', 'descripcion' => 'Permite eliminar modales'],
-            ['nombre' => 'Enviar mensajes', 'descripcion' => 'Enviar modales de Emails y WhatsApp'],
+            'Ver modales' => 'Permite ver los modales',
+            'Editar modales' => 'Permite editar modales',
+            'Eliminar modales' => 'Permite eliminar modales',
+            'Enviar mensajes' => 'Enviar modales de Emails y WhatsApp',
 
             // Servicios (se puede descomentar en caso se implementen los servicios em el dashboard; las rutas ya están incluidas en el api.php) 
-            ['nombre' => 'Ver servicios', 'descripcion' => 'Permite ver los servicios'],
-            //['nombre' => 'Crear servicios', 'descripcion' => 'Permite crear servicios'],
-            //['nombre' => 'Editar servicios', 'descripcion' => 'Permite editar servicios'],
-            //['nombre' => 'Eliminar servicios', 'descripcion' => 'Permite eliminar servicios'],
+            'Ver servicios' => 'Permite ver los servicios',
+            //'Crear servicios' => 'Permite crear nuevos servicios',
+            //'Editar servicios' => 'Permite editar servicios existentes',
+            //'Eliminar servicios' => 'Permite eliminar servicios existentes',
 
             // Roles
-            ['nombre' => 'Ver roles', 'descripcion' => 'Permite ver la lista de roles'],
-            ['nombre' => 'Crear roles', 'descripcion' => 'Permite crear nuevos roles'],
-            ['nombre' => 'Editar roles', 'descripcion' => 'Permite modificar roles existentes'],
-            ['nombre' => 'Eliminar roles', 'descripcion' => 'Permite eliminar roles existentes'],
+            'Ver roles' => 'Permite ver la lista de roles',
+            'Crear roles' => 'Permite crear nuevos roles',
+            'Editar roles' => 'Permite modificar roles existentes',
+            'Eliminar roles' => 'Permite eliminar roles existentes',
 
             // Permisos
-            ['nombre' => 'Ver permisos', 'descripcion' => 'Permite ver la lista de permisos'],
-            ['nombre' => 'Crear permisos', 'descripcion' => 'Permite crear nuevos permisos'],
-            ['nombre' => 'Editar permisos', 'descripcion' => 'Permite modificar permisos existentes'],
-            ['nombre' => 'Eliminar permisos', 'descripcion' => 'Permite eliminar permisos existentes'],
+            'Ver permisos' => 'Permite ver la lista de permisos',
+            'Crear permisos' => 'Permite crear nuevos permisos',
+            'Editar permisos' => 'Permite modificar permisos existentes',
+            'Eliminar permisos' => 'Permite eliminar permisos existentes',
 
             // Empleados
-            ['nombre' => 'Ver empleados', 'descripcion' => 'Permite ver la lista de empleados'],
-            ['nombre' => 'Crear empleados', 'descripcion' => 'Permite crear nuevos empleados'],
-            ['nombre' => 'Editar empleados', 'descripcion' => 'Permite modificar empleados existentes'],
-            ['nombre' => 'Eliminar empleados', 'descripcion' => 'Permite eliminar empleados existentes'],
+            'Ver empleados' => 'Permite ver la lista de empleados',
+            'Crear empleados' => 'Permite crear nuevos empleados',
+            'Editar empleados' => 'Permite modificar empleados existentes',
+            'Eliminar empleados' => 'Permite eliminar empleados existentes',
 
-            // blogs
-            ['nombre' => 'Ver blogs', 'descripcion' => 'Permite ver la gestión de blogs'],
-            ['nombre' => 'Crear blogs', 'descripcion' => 'Permite crear contenido de blogs'],
-            ['nombre' => 'Editar blogs', 'descripcion' => 'Permite editar contenido de blogs'],
-            ['nombre' => 'Eliminar blogs', 'descripcion' => 'Permite eliminar contenido de blogs'],
+            // Blogs
+            'Ver blogs' => 'Permite ver la gestión de blogs',
+            'Crear blogs' => 'Permite crear contenido de blogs',
+            'Editar blogs' => 'Permite editar contenido de blogs',
+            'Eliminar blogs' => 'Permite eliminar contenido de blogs',
 
-            // tarjetas
-            ['nombre' => 'Crear tarjetas', 'descripcion' => 'Permite crear tarjetas'],
-            ['nombre' => 'Eliminar tarjetas', 'descripcion' => 'Permite eliminar tarjetas'],
+            // Tarjetas
+            'Crear tarjetas' => 'Permite crear tarjetas',
+            'Eliminar tarjetas' => 'Permite eliminar tarjetas',
         ];
 
-        foreach ($permisos as $permiso) {
-            Permiso::create([
-                'nombre' => $permiso['nombre'],
-                'slug' => Str::slug($permiso['nombre']),
-                'descripcion' => $permiso['descripcion']
-            ]);
+        foreach ($permisos as $nombre => $descripcion) {
+            Permiso::updateOrCreate(
+                ['nombre' => $nombre],
+                ['slug' => Str::slug($nombre), 'descripcion' => $descripcion]
+            );
         }
 
-        $rolAdmin = Rol::where('nombre', 'administrador')->first();
+        $rolesPermisos = [
+            'administrador' => array_keys($permisos), // todos
+            'ventas' => [
+                'Ver contactos', 
+                'Editar contactos',
 
-        if ($rolAdmin) {
-            $todosLosPermisos = Permiso::all()->pluck('id_permiso')->toArray();
-            $rolAdmin->permisos()->sync($todosLosPermisos);
+                'Ver modales', 
+                'Editar modales',
+
+                'Ver reclamaciones',
+                'Editar reclamaciones',
+
+                'Enviar mensajes', 
+                'Ver empleados', 
+            ],
+            'marketing' => [
+                'Ver contactos', 
+                'Editar contactos',
+
+                'Ver modales', 
+                'Editar modales',
+
+                'Ver reclamaciones',
+                'Editar reclamaciones',
+
+                'Enviar mensajes', 
+                
+                'Ver blogs', 
+                'Editar blogs',
+                'Eliminar blogs',
+                'Crear blogs',
+                'Crear tarjetas',
+            ],
+        ];
+
+        foreach ($rolesPermisos as $nombreRol => $permisosAsignados) {
+            $rol = Rol::firstOrCreate(['nombre' => $nombreRol]);
+
+            $permisosIds = Permiso::whereIn('nombre', $permisosAsignados)->pluck('id_permiso')->toArray();
+
+            $rol->permisos()->sync($permisosIds);
         }
     }
-
 }
