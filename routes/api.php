@@ -103,8 +103,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:ver-empleados')->get('/empleados', [EmpleadoController::class, "getAllByPage"]);
     Route::middleware('permission:ver-empleados')->get('/empleados/{id}', [EmpleadoController::class, "getById"]);
     Route::middleware('permission:crear-empleados')->post('/empleados', [EmpleadoController::class, "create"]);
-    Route::middleware('permission:editar-empleados')->put('/empleados/{id}', [EmpleadoController::class, "update"]);
-    Route::middleware('permission:editar-empleados')->put('/empleados/pass/{id}', [EmpleadoController::class, "updatePass"]);
+    Route::middleware('permission:permisos-generales')->put('/empleados/{id}', [EmpleadoController::class, "update"]);
+    Route::middleware('permission:permisos-generales')->put('/empleados/pass/{id}', [EmpleadoController::class, "updatePass"]);
     Route::middleware('permission:eliminar-empleados')->delete('/empleados/{id}', [EmpleadoController::class, "delete"]);
 
     // roles

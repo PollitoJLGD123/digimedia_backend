@@ -61,6 +61,8 @@ class PermisosSeeder extends Seeder
             // Tarjetas
             'Crear tarjetas' => 'Permite crear tarjetas',
             'Eliminar tarjetas' => 'Permite eliminar tarjetas',
+            
+            'Permisos generales' => 'Permite acceder a los permisos básicos',
         ];
 
         foreach ($permisos as $nombre => $descripcion) {
@@ -83,6 +85,7 @@ class PermisosSeeder extends Seeder
                 'Editar reclamaciones',
 
                 'Enviar mensajes', 
+                'Permisos generales',
             ],
             'marketing' => [
                 'Ver contactos', 
@@ -101,6 +104,8 @@ class PermisosSeeder extends Seeder
                 'Eliminar blogs',
                 'Crear blogs',
                 'Crear tarjetas',
+
+                'Permisos generales',
             ],
         ];
 
