@@ -19,6 +19,7 @@ class Card extends Model
         'url_image',
         'id_plantilla',
         'id_blog',
+        'id_empleado'
     ];
 
     public function blog(){

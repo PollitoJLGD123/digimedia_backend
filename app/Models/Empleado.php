@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Cloudinary\Cloudinary;
-class   Empleado extends Model
+class Empleado extends Model
 {
     use HasFactory;
 
