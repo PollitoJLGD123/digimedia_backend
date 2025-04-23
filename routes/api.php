@@ -86,9 +86,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:crear-blogs')->post('/blog_footer', [BlogFooterController::class, "create"]);
     Route::middleware('permission:crear-tarjetas')->post('/commend_tarjeta', [CommendTarjetaController::class, "create"]);
     Route::middleware('permission:crear-tarjetas')->post('/tarjeta', [TarjetaController::class, "create"]);
-    Route::middleware('permission:crear-tarjetas')->put('/card/blog/image_head/{id}', [CardController::class, "imageHeader"]);
-    Route::middleware('permission:crear-tarjetas')->put('/card/blog/images_body/{id}', [CardController::class, "imagesBody"]);
-    Route::middleware('permission:crear-tarjetas')->put('/card/blog/images_footer/{id}', [CardController::class, "imagesFooter"]);
+    Route::middleware('permission:crear-tarjetas')->post('/card/blog/image_head/{id}', [CardController::class, "imageHeader"]);
+    Route::middleware('permission:crear-tarjetas')->post('/card/blog/images_body/{id}', [CardController::class, "imagesBody"]);
+    Route::middleware('permission:crear-tarjetas')->post('/card/blog/images_footer/{id}', [CardController::class, "imagesFooter"]);
 
 
     // rutas delete/destroy

@@ -8,6 +8,8 @@ use App\Models\Blog;
 use App\Models\BlogBody;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
@@ -77,7 +79,7 @@ class BlogController extends Controller
     {
         try{
 
-            $blog = Blog::with('card')->find($id);
+            $blog = Blog::with(['card', 'head'])->find($id);
 
             $id_header_blog = $blog->id_blog_head;
 
@@ -85,8 +87,16 @@ class BlogController extends Controller
 
             $id_footer_blog = $blog->id_blog_footer;
 
+            $relativePath = "images/templates/plantilla{$blog->card->id_plantilla}/" . Str::slug($blog->head->titulo) . "{$blog->id_blog}";
+
+            //eliminarla pero ver si existe asi que normal obvia la anterior
+            if (Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->deleteDirectory($relativePath);
+            }
+
             //primero card
             $card_object = new CardController();
+
             $card_object->destroy($blog->card->id_card);
 
             //segundo blog
@@ -109,7 +119,7 @@ class BlogController extends Controller
             $commend_tarjeta = new CommendTarjetaController();
             $commend_tarjeta->destroy($blog_body_model->id_commend_tarjeta);
 
-            //por ultimo blog_body
+            //por antepenultimo blog_body
             $blog_body_model->delete();
 
             return response()->json([

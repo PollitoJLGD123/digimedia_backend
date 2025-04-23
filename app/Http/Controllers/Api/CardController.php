@@ -13,16 +13,22 @@ use App\Http\Controllers\Controller;
 use App\Models\BlogFooter;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
+
 
 class CardController extends Controller
 {
 
+    private const url_api = "http://localhost:8000";
+    //private const url_api = "http://digimedia.mkt";
+
     public function index()
     {
-        try{
+        try {
             $cards = Card::orderBy('id_card', 'asc')->get();
             return response()->json($cards, 200);
-        }catch(\Exception $ex){
+        } catch (\Exception $ex) {
             return response()->json([
                 "status" => 500,
                 "message" => "Error interno del servidor",
@@ -33,16 +39,14 @@ class CardController extends Controller
 
     public function get($id = null)
     {
-        try{
+        try {
             if (!$id) {
                 $cards = Card::with('empleado')->get();
-            }
-            else{
+            } else {
                 $cards = Card::with('empleado')->where('id_empleado', $id)->get();
             }
             return response()->json($cards, 200);
-
-        }catch(\Exception $ex){
+        } catch (\Exception $ex) {
             return response()->json([
                 "status" => 500,
                 "message" => "Error interno del servidor",
@@ -53,7 +57,7 @@ class CardController extends Controller
 
     public function create(Request $request)
     {
-        try{
+        try {
 
             $validator = Validator::make($request->all(), [
                 'titulo' => 'required|string|max:255',
@@ -79,7 +83,7 @@ class CardController extends Controller
                 "message" => "Card creada correctamente",
                 "id" => $card->id_card
             ], 200);
-        }catch(\Exception $ex){
+        } catch (\Exception $ex) {
             Log::info($ex->getMessage());
             DB::rollback();
             return response()->json([
@@ -90,170 +94,220 @@ class CardController extends Controller
         }
     }
 
-    public function imageHeader(Request $request, int $id){
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
-        ]);
+    public function imageHeader(Request $request, int $id)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp,avif,jfif|max:20480',
+            ]);
 
-        if (!$request->hasFile('file') || $validator->fails()) {
-            Log::info("No se ha enviado la imagen");
-            return response()->json([
-                "status" => 400,
-                'data'=> "Guardar ruta imagen local",
-                "message" => "No se ha enviado la imagen"
-            ], 400);
-        }
-        else{
-            $card = Card::find($id);
-
-            if (!$card) {
+            if (!$request->hasFile('file') || $validator->fails()) {
+                Log::info($validator->errors());
                 return response()->json([
-                    "status" => 404,
-                    "message" => "Blog no encontrado"
-                ], 404);
-            }
+                    "status" => 201,
+                    'data' => "Guardar ruta imagen local",
+                    "message" => "No se ha enviado la imagen"
+                ], 201);
+            } else {
+                $card = Card::find($id);
 
-            $blog = Blog::find($card->id_blog);
+                if (!$card) {
+                    return response()->json([
+                        "status" => 404,
+                        "message" => "Blog no encontrado"
+                    ], 404);
+                }
 
-            $blog_header = BlogHead::find($blog->id_blog_header);
+                $blog = Blog::find($card->id_blog);
 
-            $file = $request->file('file');
-            $fileName = Str::slug($card->blog->titulo).".webp";
-            $filePath = "storage/app/public/images/templates/plantilla".$card->id_plantilla."/".Str::slug($blog->titulo).$card->id_blog."/head";
-            $file->move(storage_path($filePath), $fileName);
+                $blog_header = BlogHead::find($blog->id_blog_head);
 
-            $card->public_image = $filePath."/".$fileName;
-            $card->url_image = $fileName;
-            $card->save();
+                $file = $request->file('file');
+                $relativePath = "images/templates/plantilla{$card->id_plantilla}/" . Str::slug($blog_header->titulo) . "{$card->id_blog}/head";
+                $fileName = Str::slug($blog_header->titulo) . ".webp";
 
-            $blog_header->public_image = $filePath."/".$fileName;
-            $blog_header->url_image = $fileName;
-            $blog_header->save();
+                $image = Image::read($file)->cover(1900, 800);
 
-            return response()->json([
-                "status" => 200,
-                "message" => "Success, imagen subida correctamente",
-                "url_image" => $filePath."/".$fileName
-            ], 200);
-        }
+                Storage::disk('public')->put("{$relativePath}/{$fileName}", (string) $image->toWebp());
 
-        /*
-            storage/app/public/images/templates/plantilla{id_plantilla}/blog{id_blog}/head/image.jpeg
-            storage/app/public/images/templates/plantilla{id_plantilla}/blog{id_blog}/body/image.webp
-            storage/app/public/images/templates/plantilla{id_plantilla}/blog{id_blog}/footer/image.webp
-        */
-    }
+                $url = Storage::url("{$relativePath}/{$fileName}");
 
-    public function imagesBody(Request $request, int $id){
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
-            'name' => 'required|string|max:255',
-        ]);
+                $card->public_image = self::url_api . $url;
+                $card->url_image =  $url;
+                $card->save();
 
-        if (!$request->hasFile('file') || $validator->fails()) {
-            Log::info("No se ha enviado la imagen");
-            return response()->json([
-                "status" => 400,
-                'data'=> "Guardar ruta imagen local",
-                "message" => "No se ha enviado la imagen"
-            ], 400);
-        }
-        else{
-            $card = Card::find($id);
+                $blog_header->public_image = self::url_api . $url;
+                $blog_header->url_image =  $url;
+                $blog_header->save();
 
-            if (!$card) {
                 return response()->json([
-                    "status" => 404,
-                    "message" => "Blog no encontrado"
-                ], 404);
+                    "status" => 200,
+                    "message" => "Success, imagen subida correctamente",
+                    "url_image" => $url
+                ], 200);
             }
+        } catch (\Exception $ex) {
 
-            $blog = Blog::find($card->id_blog);
-
-            $file = $request->file('file');
-            $fileName = $request->name.".webp";
-            $filePath = "storage/app/public/images/templates/plantilla".$card->id_plantilla."/".Str::slug($blog->titulo).$card->id_blog."/body";
-            $file->move(storage_path($filePath), $fileName);
-
-            $blog_body = BlogBody::find($blog->id_blog_body);
-
-            if($request->name == "image1"){
-                $blog_body->public_image1 = $filePath."/".$fileName;
-                $blog_body->url_image1 = $fileName;
-            }else if($request->name == "image2"){
-                $blog_body->public_image2 = $filePath."/".$fileName;
-                $blog_body->url_image2 = $fileName;
-            }else{
-                $blog_body->public_image3 = $filePath."/".$fileName;
-                $blog_body->url_image3 = $fileName;
-            }
-
-            $blog_body->save();
+            Log::info($ex->getMessage());
 
             return response()->json([
-                "status" => 200,
-                "message" => "Success, imagen subida correctamente"
-            ], 200);
+                "status" => 500,
+                "error" => $ex->getMessage()
+            ], 500);
         }
     }
 
-    public function imagesFooter(Request $request, int $id){
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
-            'name' => 'required|string|max:255',
-        ]);
+    public function imagesBody(Request $request, int $id)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp,avif,jfif|max:20480',
+                'name' => 'required|string|max:255',
+            ]);
 
-        if (!$request->hasFile('file') || $validator->fails()) {
-            Log::info("No se ha enviado la imagen");
-            return response()->json([
-                "status" => 400,
-                'data'=> "Guardar ruta imagen local",
-                "message" => "No se ha enviado la imagen"
-            ], 400);
-        }
-        else{
-            $card = Card::find($id);
+            if (!$request->hasFile('file') || $validator->fails()) {
+                Log::info($validator->errors());
 
-            if (!$card) {
                 return response()->json([
-                    "status" => 404,
-                    "message" => "Blog no encontrado"
-                ], 404);
+                    "status" => 201,
+                    'data' => "Guardar ruta imagen local",
+                    "message" => "No se ha enviado la imagen"
+                ], 201);
+            } else {
+                $card = Card::find($id);
+
+                if (!$card) {
+                    return response()->json([
+                        "status" => 404,
+                        "message" => "Blog no encontrado"
+                    ], 404);
+                }
+
+                $blog = Blog::find($card->id_blog);
+                $blog_header = BlogHead::find($blog->id_blog_head);
+                $blog_body = BlogBody::find($blog->id_blog_body);
+
+                $file = $request->file('file');
+                $fileName = $request->name . ".webp";
+
+                $relativePath = "images/templates/plantilla{$card->id_plantilla}/" . Str::slug($blog_header->titulo) . "{$card->id_blog}/body";
+
+                $image = Image::read($file)->cover(600, 350);
+
+                Storage::disk('public')->put("{$relativePath}/{$fileName}", (string) $image->toWebp());
+
+                $url = Storage::url("{$relativePath}/{$fileName}");
+
+                switch ($request->name) {
+                    case "image1":
+                        $blog_body->public_image1 = self::url_api . $url;
+                        $blog_body->url_image1 = $url;
+                        break;
+                    case "image2":
+                        $blog_body->public_image2 = self::url_api . $url;
+                        $blog_body->url_image2 = $url;
+                        break;
+                    default:
+                        $blog_body->public_image3 = self::url_api . $url;
+                        $blog_body->url_image3 = $url;
+                        break;
+                }
+
+                $blog_body->save();
+
+                return response()->json([
+                    "status" => 200,
+                    "message" => "Success, imagen subida correctamente",
+                    "url" => $url
+                ], 200);
             }
-
-            $blog = Blog::find($card->id_blog);
-
-            $file = $request->file('file');
-            $fileName = $request->name.".webp";
-            $filePath = "storage/app/public/images/templates/plantilla".$card->id_plantilla."/".Str::slug($blog->titulo).$card->id_blog."/footer";
-            $file->move(storage_path($filePath), $fileName);
-
-            $blog_footer = BlogFooter::find($blog->id_blog_footer);
-
-            if($request->name == "image1"){
-                $blog_footer->public_image1 = $filePath."/".$fileName;
-                $blog_footer->url_image1 = $fileName;
-                $blog_footer->save();
-            }else if($request->name == "image2"){
-                $blog_footer->public_image2 = $filePath."/".$fileName;
-                $blog_footer->url_image2 = $fileName;
-                $blog_footer->save();
-            }else{
-                $blog_footer->public_image3 = $filePath."/".$fileName;
-                $blog_footer->url_image3 = $fileName;
-                $blog_footer->save();
-            }
-
+        } catch (\Exception $ex) {
+            Log::info($ex->getMessage());
             return response()->json([
-                "status" => 200,
-                "message" => "Success, imagen subida correctamente"
-            ], 200);
+                "status" => 500,
+                "error" => $ex->getMessage()
+            ], 500);
+        }
+    }
+
+    public function imagesFooter(Request $request, int $id)
+    {
+
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp,avif,jfif|max:20480',
+                'name' => 'required|string|max:255',
+            ]);
+
+            if (!$request->hasFile('file') || $validator->fails()) {
+
+                Log::info($validator->errors());
+
+                return response()->json([
+                    "status" => 201,
+                    'data' => "Guardar ruta imagen local",
+                    "message" => "No se ha enviado la imagen"
+                ], 201);
+            } else {
+                $card = Card::find($id);
+
+                if (!$card) {
+                    return response()->json([
+                        "status" => 404,
+                        "message" => "Blog no encontrado"
+                    ], 404);
+                }
+
+                $blog = Blog::find($card->id_blog);
+                $blog_header = BlogHead::find($blog->id_blog_head);
+                $blog_footer = BlogFooter::find($blog->id_blog_footer);
+
+                $file = $request->file('file');
+                $fileName = $request->name . ".webp";
+
+                $relativePath = "images/templates/plantilla{$card->id_plantilla}/" . Str::slug($blog_header->titulo) . "{$card->id_blog}/footer";
+
+                $image = Image::read($file)->cover(250, 200);
+
+                Storage::disk('public')->put("{$relativePath}/{$fileName}", (string) $image->toWebp());
+
+                $url = Storage::url("{$relativePath}/{$fileName}");
+
+                switch ($request->name) {
+                    case "image1":
+                        $blog_footer->public_image1 = self::url_api . $url;
+                        $blog_footer->url_image1 = $url;
+                        break;
+                    case "image2":
+                        $blog_footer->public_image2 = self::url_api . $url;
+                        $blog_footer->url_image2 =  $url;
+                        break;
+                    default:
+                        $blog_footer->public_image3 = self::url_api . $url;
+                        $blog_footer->url_image3 =  $url;
+                        break;
+                }
+
+                $blog_footer->save();
+
+                return response()->json([
+                    "status" => 200,
+                    "message" => "Success, imagen subida correctamente"
+                ], 200);
+            }
+        } catch (\Exception $ex) {
+            Log::info($ex->getMessage());
+            return response()->json([
+                "status" => 500,
+                "error" => $ex->getMessage()
+            ], 500);
         }
     }
 
     public function destroy(int $id)
     {
-        try{
+        try {
             $card = Card::find($id);
 
             if (!$card) {
@@ -267,14 +321,13 @@ class CardController extends Controller
             return response()->json([
                 "status" => 200,
                 "message" => "Card eliminada correctamente"
-            ],200);
-
-        }catch(\Exception $ex){
+            ], 200);
+        } catch (\Exception $ex) {
             return response()->json([
                 "status" => 500,
                 "message" => "Error al eliminar la card",
                 "error" => $ex->getMessage()
-            ],500);
+            ], 500);
         }
     }
 }
