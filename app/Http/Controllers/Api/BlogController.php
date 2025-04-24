@@ -87,7 +87,7 @@ class BlogController extends Controller
 
             $id_footer_blog = $blog->id_blog_footer;
 
-            $relativePath = "images/templates/plantilla{$blog->card->id_plantilla}/" . Str::slug($blog->head->titulo) . "{$blog->id_blog}";
+            $relativePath = "images/templates/plantilla{$blog->card->id_plantilla}/" . Str::slug($blog->head->titulo) . $blog->id_blog;
 
             //eliminarla pero ver si existe asi que normal obvia la anterior
             if (Storage::disk('public')->exists($relativePath)) {
@@ -119,7 +119,7 @@ class BlogController extends Controller
             $commend_tarjeta = new CommendTarjetaController();
             $commend_tarjeta->destroy($blog_body_model->id_commend_tarjeta);
 
-            //por antepenultimo blog_body
+            //por ultimo blog_body
             $blog_body_model->delete();
 
             return response()->json([

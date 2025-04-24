@@ -124,7 +124,13 @@ class CardController extends Controller
 
                 $file = $request->file('file');
                 $relativePath = "images/templates/plantilla{$card->id_plantilla}/" . Str::slug($blog_header->titulo) . "{$card->id_blog}/head";
-                $fileName = Str::slug($blog_header->titulo) . ".webp";
+                $fileName = "imagenPrincipal.webp";
+
+                $filePath = $relativePath . "/" . $fileName;
+
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                }
 
                 $image = Image::read($file)->cover(1900, 800);
 
@@ -192,6 +198,12 @@ class CardController extends Controller
 
                 $relativePath = "images/templates/plantilla{$card->id_plantilla}/" . Str::slug($blog_header->titulo) . "{$card->id_blog}/body";
 
+                $filePath = $relativePath . "/" . $fileName;
+
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                }
+
                 $image = Image::read($file)->cover(600, 350);
 
                 Storage::disk('public')->put("{$relativePath}/{$fileName}", (string) $image->toWebp());
@@ -241,7 +253,6 @@ class CardController extends Controller
             ]);
 
             if (!$request->hasFile('file') || $validator->fails()) {
-
                 Log::info($validator->errors());
 
                 return response()->json([
@@ -267,6 +278,12 @@ class CardController extends Controller
                 $fileName = $request->name . ".webp";
 
                 $relativePath = "images/templates/plantilla{$card->id_plantilla}/" . Str::slug($blog_header->titulo) . "{$card->id_blog}/footer";
+
+                $filePath = $relativePath . "/" . $fileName;
+
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                }
 
                 $image = Image::read($file)->cover(250, 200);
 
