@@ -20,8 +20,8 @@ use Intervention\Image\Laravel\Facades\Image;
 class CardController extends Controller
 {
 
-    //private const url_api = "http://localhost:8000";
-    private const url_api = "http://back.digimediamkt.com";
+    private const url_api = "http://localhost:8000";
+    //private const url_api = "http://back.digimediamkt.com";
 
     public function index()
     {
