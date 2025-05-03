@@ -125,7 +125,6 @@ class CardController extends Controller
                 $file = $request->file('file');
                 $relativePath = "images/templates/plantilla{$card->id_plantilla}/" . Str::slug($blog_header->titulo) . "{$card->id_blog}/head";
                 $fileName = "imagenPrincipal.webp";
-
                 $filePath = $relativePath . "/" . $fileName;
 
                 if (Storage::disk('public')->exists($filePath)) {
@@ -133,23 +132,24 @@ class CardController extends Controller
                 }
 
                 $image = Image::read($file)->cover(1900, 800);
-
                 Storage::disk('public')->put("{$relativePath}/{$fileName}", (string) $image->toWebp());
 
-                $url = Storage::url("{$relativePath}/{$fileName}");
+                $basePath = '/storage/app/public/';
+                $fullUrl = self::url_api . $basePath . $relativePath . '/' . $fileName;
+                $relativeUrl = $basePath . $relativePath . '/' . $fileName;
 
-                $card->public_image = self::url_api . $url;
-                $card->url_image =  $url;
+                $card->public_image = $fullUrl;
+                $card->url_image = $relativeUrl;
                 $card->save();
 
-                $blog_header->public_image = self::url_api . $url;
-                $blog_header->url_image =  $url;
+                $blog_header->public_image = $fullUrl;
+                $blog_header->url_image = $relativeUrl;
                 $blog_header->save();
 
                 return response()->json([
                     "status" => 200,
                     "message" => "Success, imagen subida correctamente",
-                    "url_image" => $url
+                    "url_image" => $fullUrl
                 ], 200);
             }
         } catch (\Exception $ex) {
@@ -197,7 +197,6 @@ class CardController extends Controller
                 $fileName = $request->name . ".webp";
 
                 $relativePath = "images/templates/plantilla{$card->id_plantilla}/" . Str::slug($blog_header->titulo) . "{$card->id_blog}/body";
-
                 $filePath = $relativePath . "/" . $fileName;
 
                 if (Storage::disk('public')->exists($filePath)) {
@@ -205,23 +204,24 @@ class CardController extends Controller
                 }
 
                 $image = Image::read($file)->cover(600, 350);
-
                 Storage::disk('public')->put("{$relativePath}/{$fileName}", (string) $image->toWebp());
 
-                $url = Storage::url("{$relativePath}/{$fileName}");
+                $basePath = '/storage/app/public/';
+                $fullUrl = self::url_api . $basePath . $relativePath . '/' . $fileName;
+                $relativeUrl = $basePath . $relativePath . '/' . $fileName;
 
                 switch ($request->name) {
                     case "image1":
-                        $blog_body->public_image1 = self::url_api . $url;
-                        $blog_body->url_image1 = $url;
+                        $blog_body->public_image1 = $fullUrl;
+                        $blog_body->url_image1 = $relativeUrl;
                         break;
                     case "image2":
-                        $blog_body->public_image2 = self::url_api . $url;
-                        $blog_body->url_image2 = $url;
+                        $blog_body->public_image2 = $fullUrl;
+                        $blog_body->url_image2 = $relativeUrl;
                         break;
                     default:
-                        $blog_body->public_image3 = self::url_api . $url;
-                        $blog_body->url_image3 = $url;
+                        $blog_body->public_image3 = $fullUrl;
+                        $blog_body->url_image3 = $relativeUrl;
                         break;
                 }
 
@@ -230,7 +230,7 @@ class CardController extends Controller
                 return response()->json([
                     "status" => 200,
                     "message" => "Success, imagen subida correctamente",
-                    "url" => $url
+                    "url" => $fullUrl
                 ], 200);
             }
         } catch (\Exception $ex) {
@@ -244,9 +244,7 @@ class CardController extends Controller
 
     public function imagesFooter(Request $request, int $id)
     {
-
         try {
-
             $validator = Validator::make($request->all(), [
                 'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp,avif,jfif|max:20480',
                 'name' => 'required|string|max:255',
@@ -278,7 +276,6 @@ class CardController extends Controller
                 $fileName = $request->name . ".webp";
 
                 $relativePath = "images/templates/plantilla{$card->id_plantilla}/" . Str::slug($blog_header->titulo) . "{$card->id_blog}/footer";
-
                 $filePath = $relativePath . "/" . $fileName;
 
                 if (Storage::disk('public')->exists($filePath)) {
@@ -286,23 +283,24 @@ class CardController extends Controller
                 }
 
                 $image = Image::read($file)->cover(250, 200);
-
                 Storage::disk('public')->put("{$relativePath}/{$fileName}", (string) $image->toWebp());
 
-                $url = Storage::url("{$relativePath}/{$fileName}");
+                $basePath = '/storage/app/public/';
+                $fullUrl = self::url_api . $basePath . $relativePath . '/' . $fileName;
+                $relativeUrl = $basePath . $relativePath . '/' . $fileName;
 
                 switch ($request->name) {
                     case "image1":
-                        $blog_footer->public_image1 = self::url_api . $url;
-                        $blog_footer->url_image1 = $url;
+                        $blog_footer->public_image1 = $fullUrl;
+                        $blog_footer->url_image1 = $relativeUrl;
                         break;
                     case "image2":
-                        $blog_footer->public_image2 = self::url_api . $url;
-                        $blog_footer->url_image2 =  $url;
+                        $blog_footer->public_image2 = $fullUrl;
+                        $blog_footer->url_image2 = $relativeUrl;
                         break;
                     default:
-                        $blog_footer->public_image3 = self::url_api . $url;
-                        $blog_footer->url_image3 =  $url;
+                        $blog_footer->public_image3 = $fullUrl;
+                        $blog_footer->url_image3 = $relativeUrl;
                         break;
                 }
 
@@ -310,7 +308,8 @@ class CardController extends Controller
 
                 return response()->json([
                     "status" => 200,
-                    "message" => "Success, imagen subida correctamente"
+                    "message" => "Success, imagen subida correctamente",
+                    "url" => $fullUrl // Agregado URL en la respuesta
                 ], 200);
             }
         } catch (\Exception $ex) {
