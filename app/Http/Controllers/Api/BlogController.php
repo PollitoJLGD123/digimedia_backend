@@ -15,7 +15,7 @@ class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::all();
+        $blogs = Blog::with('card')->get();
         return response()->json($blogs, 200);
     }
 
@@ -56,7 +56,7 @@ class BlogController extends Controller
     {
         try{
 
-            $blog = Blog::find($id);
+            $blog = Blog::with('card')->find($id);
 
             if (!$blog) {
                 return response()->json([

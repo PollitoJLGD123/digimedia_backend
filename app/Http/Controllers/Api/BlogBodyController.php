@@ -19,7 +19,7 @@ class BlogBodyController extends Controller
                 'titulo' => 'required|string|max:255',
                 'descripcion' => 'required|string',
                 'id_commend_tarjeta' => 'nullable|integer|exists:commend_tarjetas,id_commend_tarjeta',
-                'public_image1' => 'required|string',
+                'public_image1' => 'nullable|string',
                 'url_image1' => 'nullable|string',
                 'public_image2' => 'nullable|string',
                 'url_image2' => 'nullable|string',
