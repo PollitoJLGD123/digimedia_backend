@@ -31,7 +31,7 @@ Route::post('/contactanos', [ContactanosController::class, "create"]);
 Route::post('/reclamaciones', [ReclamacionesController::class, "create"]);
 Route::post('/modales', [ModalesController::class, "create"]);
 
-// blogs públicos
+// blogs públicos para ver los clientes
 Route::get('/cards', [CardController::class, "index"]);
 Route::get('/blogs/{id}', [BlogController::class, "show"]);
 Route::get('/blogs', [BlogController::class, "index"]);
@@ -79,6 +79,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // rutas create
     Route::middleware('permission:crear-servicios')->post('/servicios', [ServiciosController::class, "create"]);
+
+    //rutas create blog
     Route::middleware('permission:crear-blogs')->post('/card', [CardController::class, "create"]);
     Route::middleware('permission:crear-blogs')->post('/blog', [BlogController::class, "create"]);
     Route::middleware('permission:crear-blogs')->post('/blog_head', [BlogHeadController::class, "create"]);
@@ -90,16 +92,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:crear-tarjetas')->post('/card/blog/images_body/{id}', [CardController::class, "imagesBody"]);
     Route::middleware('permission:crear-tarjetas')->post('/card/blog/images_footer/{id}', [CardController::class, "imagesFooter"]);
 
-    //rutas blog update
-    Route::middleware('permission:crear-blogs')->put('/card', [CardController::class, "update"]);
-    Route::middleware('permission:crear-blogs')->put('/blog', [BlogController::class, "update"]);
-    Route::middleware('permission:crear-blogs')->put('/blog_head', [BlogHeadController::class, "update"]);
-    Route::middleware('permission:crear-blogs')->put('/blog_body', [BlogBodyController::class, "update"]);
-    Route::middleware('permission:crear-blogs')->put('/blog_footer', [BlogFooterController::class, "update"]);
-    Route::middleware('permission:crear-tarjetas')->put('/commend_tarjeta', [CommendTarjetaController::class, "update"]);
-    Route::middleware('permission:crear-tarjetas')->put('/tarjeta', [TarjetaController::class, "update"]);
+    //rutas update blog
+    Route::middleware('permission:editar-blogs')->put('/card/{id}', [CardController::class, "update"]);
+    Route::middleware('permission:editar-blogs')->put('/blog/{id}', [BlogController::class, "update"]);
+    Route::middleware('permission:editar-blogs')->put('/blog_head/{id}', [BlogHeadController::class, "update"]);
+    Route::middleware('permission:editar-blogs')->put('/blog_body/{id}', [BlogBodyController::class, "update"]);
+    Route::middleware('permission:editar-blogs')->put('/blog_footer/{id}', [BlogFooterController::class, "update"]);
+    Route::middleware('permission:editar-blogs')->put('/commend_tarjeta/{id}', [CommendTarjetaController::class, "update"]);
+    Route::middleware('permission:editar-blogs')->put('/tarjeta/{id}', [TarjetaController::class, "update"]);
 
-    // rutas delete/destroy
+    //rutas delete blog
     Route::middleware('permission:eliminar-blogs')->delete('/cards/{id}', [CardController::class, "destroy"]);
     Route::middleware('permission:eliminar-blogs')->delete('/blogs/{id}', [BlogController::class, "destroy"]);
     Route::middleware('permission:eliminar-blogs')->delete('/blog_head/{id}', [BlogHeadController::class, "destroy"]);
@@ -107,6 +109,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('permission:eliminar-blogs')->delete('/blog_footer/{id}', [BlogFooterController::class, "destroy"]);
     Route::middleware('permission:eliminar-tarjetas')->delete('/commend_tarjeta/{id}', [CommendTarjetaController::class, "destroy"]);
     Route::middleware('permission:eliminar-tarjetas')->delete('/tarjetas_delete/{id}', [TarjetaController::class, "destroyAll"]);
+
+
     Route::middleware('permission:eliminar-contactos')->delete('/contactanos/{id}', [ContactanosController::class, "delete"]);
     Route::middleware('permission:eliminar-reclamaciones')->delete('/reclamaciones/{id}', [ReclamacionesController::class, "delete"]);
     Route::middleware('permission:eliminar-modales')->delete('/modales/{id}', [ModalesController::class, "delete"]);
