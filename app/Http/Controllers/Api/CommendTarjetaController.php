@@ -14,10 +14,10 @@ class CommendTarjetaController extends Controller
     {
         try{
             $validator = Validator::make($request->all(), [
-                'titulo' => 'required|string|max:255',
-                'texto1' => 'required|string|max:255',
-                'texto2' => 'required|string|max:255',
-                'texto3' => 'required|string|max:255',
+                'titulo' => 'nullable|string|max:255',
+                'texto1' => 'nullable|string|max:255',
+                'texto2' => 'nullable|string|max:255',
+                'texto3' => 'nullable|string|max:255',
                 'texto4' => 'nullable|string|max:255',
                 'texto5' => 'nullable|string|max:255',
             ]);
@@ -25,6 +25,7 @@ class CommendTarjetaController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
+
             DB::beginTransaction();
 
             $commendTarjeta = CommendTarjeta::create($request->all());
@@ -42,6 +43,58 @@ class CommendTarjetaController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function update(Request $request,int $id){
+        try{
+
+            $validator = Validator::make($request->all(), [
+                'titulo' => 'required|string|max:255',
+                'texto1' => 'required|string|max:255',
+                'texto2' => 'required|string|max:255',
+                'texto3' => 'required|string|max:255',
+                'texto4' => 'nullable|string|max:255',
+                'texto5' => 'nullable|string|max:255',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
+
+            $tarjeta = CommendTarjeta::find($id);
+
+            if(! $tarjeta){
+                return response()->json(
+                    [
+                        'status'=> 404,
+                        'message'=> 'Tarjeta no encontrada'
+                    ],200
+                );
+            }
+
+            DB::beginTransaction();
+
+            $tarjeta->update($request->all());
+
+            DB::commit();
+
+            return response()->json([
+                'status'=> 200,
+                'message'=> 'Tarjeta actualizada',
+                'id'=> $tarjeta->id_tarjeta
+            ],200);
+
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(
+                [
+                    'status'=> 400,
+                    'message'=> 'Error interno del servidor',
+                    'error' => $e->getMessage()
+                ],200
+            );
+        }
+    }
+
     public function destroy($id)
     {
         try{

@@ -94,6 +94,52 @@ class CardController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        try {
+
+            $validator = Validator::make($request->all(), [
+                'titulo' => 'required|string|max:255',
+                'descripcion' => 'required|string',
+                'public_image' => 'required|string',
+                'url_image' => 'nullable|string',
+                'id_plantilla' => 'required|integer|min:1|max:3',
+                'id_blog' => 'required|integer|exists:blogs,id_blog',
+                'id_empleado' => 'required|integer|exists:empleados,id_empleado',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
+
+            $card = Card::findOrFail($id);
+
+            if (!$card){
+                return response()->json([
+                    'status'=> 404,
+                    'message'=> 'Card no encontrada'
+                ], 404);
+            }
+
+            $card->update($request->all());
+
+            DB::commit();
+
+            return response()->json([
+                'status'=> 200,
+                'message'=> 'Card actualizado',
+                'id'=> $card->id_card
+            ], 200);
+
+        } catch (\Exception $ex) {
+            DB::rollback();
+            return response()->json([
+                "status"=> 500,
+                "error"=> $ex->getMessage()
+            ],500);
+        }
+    }
+
     public function imageHeader(Request $request, int $id)
     {
         try {

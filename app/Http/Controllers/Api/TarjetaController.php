@@ -58,6 +58,45 @@ class TarjetaController extends Controller
         }
     }
 
+    public function update(Request $request, int $id)
+    {
+        try{
+            $validator = Validator::make($request->all(), [
+                'titulo' => 'required|string|max:70',
+                'descripcion' => 'required|string',
+                'id_blog_body' => 'required|integer|exists:blog_bodies,id_blog_body',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
+
+            $tarjeta = Tarjeta::find($id);
+
+            if(!$tarjeta){
+                return response()->json([
+                    'status'=> 400,
+                    'message'=> 'Tarjeta no encontrada'
+                ],404);
+            }
+
+            DB::beginTransaction();
+
+            $tarjeta->update($request->all());
+
+            DB::commit();
+
+            return response()->json([
+                "status" => 200,
+                "message" => "Tarjeta creada correctamente",
+                "id" => $tarjeta->id_tarjeta
+            ],200);
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function destroy(int $id)
     {
         try{

@@ -49,60 +49,48 @@ class BlogHeadController extends Controller
         }
     }
 
-    public function updateImage(Request $request, int $id){
-        $validate = Validator::make($request->all(), [
-            'public_id' => 'required|string',
-            'secure_url' => 'required|url'
-        ]);
-
-        if ($validate->fails()) {
-            return response()->json([
-                "status" => 422,
-                "message" => "Error de validación",
-                "errors" => $validate->errors()
-            ], 422);
-        }
-
+    public function update(Request $request, int $id){
         try{
+            $validator = Validator::make($request->all(), [
+                'titulo' => 'required|string|max:50',
+                'texto_frase' => 'required|string|max:70',
+                'texto_descripcion' => 'required|string|max:120',
+                'public_image' => 'required|string',
+                'url_image' => 'nullable|string'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
 
             $blogHead = BlogHead::find($id);
-            if(!$blogHead){
+
+            if (!$blogHead){
                 return response()->json([
-                    "status" => 404,
-                    "message" => "BlogHead no encontrado"
-                ],404);
+                    'status'=> 404,
+                    'message'=> 'BlogHead no encontrado'
+                ], 404);
             }
 
             DB::beginTransaction();
 
-            if ($blogHead->url_image || $blogHead->public_image) {
-                try {
-                    $cloudinary = new Cloudinary();
-                    $cloudinary->uploadApi()->destroy($blogHead->public_image);
-                } catch (\Exception $e) {
-                    Log::warning("Error al eliminar imagen anterior, continuando con actualización: " . $e->getMessage());
-                }
-            }
-            $blogHead->public_image = $request->public_id;
-            $blogHead->url_image = $request->secure_url;
-            $blogHead->save();
+            $blogHead->update($request->all());
 
             DB::commit();
 
             return response()->json([
-                "status" => 200,
-                "message" => "Imagen de blogHead actualizada correctamente",
-                "public_image" => $blogHead->public_image,
-                "url_image" => $blogHead->url_image
+                'status'=> 200,
+                'message'=> 'BlogHead actualizado',
+                'id'=> $blogHead->id_blog_head
             ], 200);
 
         }catch(\Exception $ex){
             DB::rollback();
             return response()->json([
-                "status" => 500,
-                "message" => "Error interno del servidor",
-                "error" => $ex->getMessage()
-                ], 500);
+                'status'=> 500,
+                'message'=> 'Error interno del servidor',
+                'error'=> $ex->getMessage()
+            ], 500);
         }
     }
 

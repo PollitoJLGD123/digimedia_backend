@@ -28,7 +28,7 @@ class PermisosSeeder extends Seeder
             'Eliminar modales' => 'Permite eliminar modales',
             'Enviar mensajes' => 'Enviar modales de Emails y WhatsApp',
 
-            // Servicios (se puede descomentar en caso se implementen los servicios em el dashboard; las rutas ya están incluidas en el api.php) 
+            // Servicios (se puede descomentar en caso se implementen los servicios em el dashboard; las rutas ya están incluidas en el api.php)
             'Ver servicios' => 'Permite ver los servicios',
             //'Crear servicios' => 'Permite crear nuevos servicios',
             //'Editar servicios' => 'Permite editar servicios existentes',
@@ -61,7 +61,7 @@ class PermisosSeeder extends Seeder
             // Tarjetas
             'Crear tarjetas' => 'Permite crear tarjetas',
             'Eliminar tarjetas' => 'Permite eliminar tarjetas',
-            
+
             'Permisos generales' => 'Permite acceder a los permisos básicos',
         ];
 
@@ -75,31 +75,31 @@ class PermisosSeeder extends Seeder
         $rolesPermisos = [
             'administrador' => array_keys($permisos), // todos
             'ventas' => [
-                'Ver contactos', 
+                'Ver contactos',
                 'Editar contactos',
 
-                'Ver modales', 
+                'Ver modales',
                 'Editar modales',
 
                 'Ver reclamaciones',
                 'Editar reclamaciones',
 
-                'Enviar mensajes', 
+                'Enviar mensajes',
                 'Permisos generales',
             ],
             'marketing' => [
-                'Ver contactos', 
+                'Ver contactos',
                 'Editar contactos',
 
-                'Ver modales', 
+                'Ver modales',
                 'Editar modales',
 
                 'Ver reclamaciones',
                 'Editar reclamaciones',
 
-                'Enviar mensajes', 
-                
-                'Ver blogs', 
+                'Enviar mensajes',
+
+                'Ver blogs',
                 'Editar blogs',
                 'Eliminar blogs',
                 'Crear blogs',
