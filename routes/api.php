@@ -19,7 +19,6 @@ use App\Http\Controllers\Api\BlogFooterController;
 use App\Http\Controllers\Api\ContactanosController;
 use App\Http\Controllers\Api\ReclamacionesController;
 use App\Http\Controllers\Api\CommendTarjetaController;
-use App\Http\Controllers\Api\ImageController;
 
 // rutas públicas
 Route::post('/register', [AuthController::class, 'register']);
@@ -53,7 +52,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // imágenes
     Route::post('/empleados/{id}/image', [EmpleadoController::class, 'updateProfileImage']);
     Route::delete('/empleados/{id}/image', [EmpleadoController::class, 'deleteProfileImage']);
-    Route::post('/delete_image', [ImageController::class, "deleteImage"]);
 
     Route::middleware('permission:ver-contactos')->get('/contactanos', [ContactanosController::class, "get"]);
     Route::middleware('permission:ver-reclamaciones')->get('/reclamaciones', [ReclamacionesController::class, "get"]);
