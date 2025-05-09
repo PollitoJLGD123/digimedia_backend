@@ -67,7 +67,7 @@ class CommendTarjetaController extends Controller
                     [
                         'status'=> 404,
                         'message'=> 'Tarjeta no encontrada'
-                    ],200
+                    ],404
                 );
             }
 
@@ -80,7 +80,7 @@ class CommendTarjetaController extends Controller
             return response()->json([
                 'status'=> 200,
                 'message'=> 'Tarjeta actualizada',
-                'id'=> $tarjeta->id_tarjeta
+                'id'=> $tarjeta->id_commend_tarjeta
             ],200);
 
         }catch(\Exception $e){

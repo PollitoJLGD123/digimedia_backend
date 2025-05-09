@@ -93,11 +93,9 @@ class CardController extends Controller
             ], 500);
         }
     }
-
     public function update(Request $request, $id)
     {
         try {
-
             $validator = Validator::make($request->all(), [
                 'titulo' => 'required|string|max:255',
                 'descripcion' => 'required|string',
@@ -107,32 +105,37 @@ class CardController extends Controller
                 'id_blog' => 'required|integer|exists:blogs,id_blog',
                 'id_empleado' => 'required|integer|exists:empleados,id_empleado',
             ]);
-
+    
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
-
+    
             $card = Card::findOrFail($id);
-
             if (!$card){
                 return response()->json([
                     'status'=> 404,
                     'message'=> 'Card no encontrada'
                 ], 404);
             }
-
+    
+            // Asegúrate de que la imagen esté presente
+            if (!$request->has('public_image') || empty($request->input('public_image'))) {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'La imagen no puede estar vacía'
+                ], 400);
+            }
+    
+            // Guarda la tarjeta
             $card->update($request->all());
-
-            DB::commit();
-
+            
             return response()->json([
                 'status'=> 200,
                 'message'=> 'Card actualizado',
                 'id'=> $card->id_card
             ], 200);
-
+    
         } catch (\Exception $ex) {
-            DB::rollback();
             return response()->json([
                 "status"=> 500,
                 "error"=> $ex->getMessage()
@@ -140,6 +143,7 @@ class CardController extends Controller
         }
     }
 
+    
     public function imageHeader(Request $request, int $id)
     {
         try {

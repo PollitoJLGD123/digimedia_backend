@@ -14,7 +14,7 @@ class TarjetaController extends Controller
     {
         try{
 
-            $tarjetas = Tarjeta::where('id_tarjeta', $id)->all();
+            $tarjetas = Tarjeta::where('id_tarjeta', $id)->get();
 
             if (!$tarjetas) {
                 return response()->json(['error' => 'No se encontraron tarjetas'], 404);
@@ -88,7 +88,7 @@ class TarjetaController extends Controller
 
             return response()->json([
                 "status" => 200,
-                "message" => "Tarjeta creada correctamente",
+                "message" => "Tarjeta actualizada correctamente",
                 "id" => $tarjeta->id_tarjeta
             ],200);
         }catch(\Exception $e){
