@@ -38,6 +38,8 @@ Route::get('/blog_head/{id}', [BlogHeadController::class, "show"]);
 Route::get('/blog_footer/{id}', [BlogFooterController::class, "show"]);
 Route::get('/blog_body/{id}', [BlogBodyController::class, "show"]);
 
+//Modelo       Controlador
+
 Route::get('/modales/send_wat/{id}', [ModalWatController::class, "sendWat"]);
 
 Route::middleware('ver-servicios')->get('/servicios', [ServiciosController::class, "get"]);

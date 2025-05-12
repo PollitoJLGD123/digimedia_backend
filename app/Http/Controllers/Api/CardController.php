@@ -376,7 +376,7 @@ class CardController extends Controller
                 return response()->json([
                     "status" => 404,
                     "message" => "Card no encontrada"
-                ]);
+                ],404);
             }
 
             $card->delete();
